@@ -8,6 +8,10 @@
       "name": "cargo watch -x run",
       "command": "cargo watch -x run",
       "runAtStart": true
+    },
+    "install stuff": {
+      "name": "install stuff",
+      "command": "cargo install quizx"
     }
   }
 }
