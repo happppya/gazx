@@ -18,35 +18,22 @@
 use quizx::circuit::*;
 use quizx::extract::*;
 use quizx::simplify::*;
+use quizx::util;
 use quizx::vec_graph::*;
 use std::time::Instant;
 // use quizx::tensor::*;
 
+mod utilities;
+use utilities::mutations;
+
 fn main() -> Result<(), Box<dyn std::error::Error>> {
-    let c = Circuit::from_file("circuits/large/hwb10.qasm")?.to_basic_gates();
-    println!("stats before: {}", c.stats());
-    let mut g: Graph = c.to_graph();
 
-    println!("simplifying...");
-    let time = Instant::now();
-    clifford_simp(&mut g);
-    println!("Done in {:.2?}", time.elapsed());
+  let circuit = Circuit::from_file("circuits/small/gf2^8_mult.qasm")?.to_basic_gates();
+  println!("stats before: {}", circuit.stats());
+  let mut graph: Graph = circuit.to_graph();
 
-    let time = Instant::now();
-    println!("extracting...");
+  mutations::complement(graph, 5);
 
-    let result = g.extractor().gflow().up_to_perm().extract();
+  Ok(())
 
-    match result {
-        Ok(c1) => {
-            println!("Done in {:.2?}", time.elapsed());
-            println!("extracted ok");
-            println!("stats after: {}", c1.stats());
-        }
-        Err(ExtractError(msg, _c, _g)) => {
-            println!("extract failed: {}", msg);
-            // println!("{}\n\n{}\n\n{}", msg, _c, _g.to_dot());
-        }
-    }
-    Ok(())
 }
