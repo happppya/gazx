@@ -28,11 +28,23 @@ use utilities::mutations;
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
 
-  let circuit = Circuit::from_file("circuits/small/gf2^8_mult.qasm")?.to_basic_gates();
-  println!("stats before: {}", circuit.stats());
-  let mut graph: Graph = circuit.to_graph();
+  let circuit = Circuit::from_file("circuits/small/grover_5.qasm")?.to_basic_gates();
+  let mut graph_control: Graph = circuit.to_graph();
+  let mut graph_experimental : Graph = circuit.to_graph();
 
-  mutations::complement(graph, 5);
+  clifford_simp(&mut graph_control);
+  clifford_simp(&mut graph_experimental);
+
+  let extracted_control = &graph_control.extractor().gflow().up_to_perm().extract()?;
+  
+  println!("control: {}", extracted_control.stats());
+
+  mutations::complement(&mut graph_experimental, 50);
+
+  clifford_simp(&mut graph_experimental);
+  let extracted_experimental = &graph_experimental.extractor().gflow().up_to_perm().extract()?;
+
+  println!("experimental: {}", extracted_experimental.stats());
 
   Ok(())
 
