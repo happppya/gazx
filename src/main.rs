@@ -39,7 +39,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
   
   println!("control: {}", extracted_control.stats());
 
-  mutations::complement(&mut graph_experimental, 50);
+  mutations::local_complement(&mut graph_experimental, Some(50));
 
   clifford_simp(&mut graph_experimental);
   let extracted_experimental = &graph_experimental.extractor().gflow().up_to_perm().extract()?;
