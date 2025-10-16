@@ -1,0 +1,101 @@
+use std::collections::HashSet;
+use quizx::vec_graph::*;
+
+use super::types::*;
+
+fn has_nonboundary_neighbors(graph : &Graph, vertex : usize) -> bool {
+
+    for neighbor_vertex in graph.neighbor_vec(vertex) {
+        if graph.vertex_type(neighbor_vertex) == VType::B {
+            return false;
+        }
+    }
+
+    return true;
+
+}
+
+///
+/// Returns vertices such that the vertex is non-boundary and all neighboring vertices are non-boundary
+///
+/// # Parameters
+/// * `graph` - Graph
+/// * `vertices` - Candidate vertices
+pub fn get_filtered_nonboundary_vertices(
+    graph: &Graph,
+    vertices: impl Iterator<Item = usize>
+) -> Vec<usize> {
+    let mut candidates: Vec<usize> = Vec::new();
+
+    for vertex in vertices {
+
+        if graph.vertex_type(vertex) == VType::B {
+            continue;
+        }
+        
+        if !has_nonboundary_neighbors(graph, vertex) {
+            continue;
+        }
+
+        candidates.push(vertex);
+
+    }
+
+    return candidates;
+}
+
+pub fn get_nonboundary_edges(graph: &Graph) -> Vec<EdgeSpecified> {
+
+    let mut candidates : Vec<EdgeSpecified> = Vec::new();
+
+    for edge in graph.edges() {
+
+        if graph.vertex_type(edge.0) == VType::B {continue;}
+        if graph.vertex_type(edge.1) == VType::B {continue;}
+
+        if !has_nonboundary_neighbors(graph, edge.0) {continue;}
+        if !has_nonboundary_neighbors(graph, edge.1) {continue;}
+
+        candidates.push(edge);
+
+    }
+
+    return candidates;
+
+}
+
+///
+/// Performs a complement
+///
+/// # Parameters
+/// * `graph` - Graph
+/// * `vertex` - The pivotal vertex
+pub fn complement(graph: &mut Graph, vertex: usize) -> () {
+    let neighbors: Vec<usize> = graph.neighbors(vertex).collect();
+    let mut done_neighbors: Vec<usize> = Vec::new();
+
+    let edge_iterator = graph.edges();
+    let mut edge_set: HashSet<EdgeGeneral> = HashSet::new();
+
+    for (n1, n2, _) in edge_iterator {
+        edge_set.insert((n1, n2));
+    }
+
+    for &n1 in &neighbors {
+        done_neighbors.push(n1);
+
+        for &n2 in &neighbors {
+            if done_neighbors.contains(&n2) {
+                continue;
+            }
+
+            let edge: EdgeGeneral = (n1, n2);
+
+            if edge_set.contains(&edge) {
+                graph.remove_edge(n1, n2);
+            } else {
+                graph.add_edge_with_type(n1, n2, EType::H);
+            }
+        }
+    }
+}

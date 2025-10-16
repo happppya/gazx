@@ -21,8 +21,8 @@ use quizx::simplify::*;
 use quizx::util;
 use quizx::vec_graph::*;
 use std::time::Instant;
-// use quizx::tensor::*;
 
+// use quizx::tensor::*;
 mod mutations;
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
