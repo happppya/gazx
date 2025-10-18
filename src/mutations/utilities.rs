@@ -70,6 +70,8 @@ pub fn default_edge(
     edge_option: Option<&EdgeSpecified>
 ) -> Box<EdgeSpecified> {
 
+
+    //TODO something is wrong with this. Maybe overhead from vector copying. Try hash graph.
     match edge_option {
         Some(&edge) => Box::new(edge),
         None => {
