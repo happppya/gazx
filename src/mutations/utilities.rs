@@ -112,18 +112,18 @@ pub fn get_default_or_random_edge_optimized(graph: &Graph, edge_option: Option<&
 /// * `graph` - Graph
 /// * `vertex` - The pivotal vertex
 pub fn complement(graph: &mut Graph, vertex: usize) -> () {
-    let neighbors: Vec<usize> = graph.neighbors(vertex).collect();
-    let mut done_neighbors: Vec<usize> = Vec::new();
+    
+    let neighbors: Vec<usize> = graph.neighbor_vec(vertex);
+    let mut done_neighbors: HashSet<usize> = HashSet::new();
 
-    let edge_iterator = graph.edges();
     let mut edge_set: HashSet<EdgeGeneral> = HashSet::new();
 
-    for (n1, n2, _) in edge_iterator {
+    for (n1, n2, _) in graph.edges() {
         edge_set.insert((n1, n2));
     }
 
     for &n1 in &neighbors {
-        done_neighbors.push(n1);
+        done_neighbors.insert(n1);
 
         for &n2 in &neighbors {
             if done_neighbors.contains(&n2) {
@@ -137,6 +137,7 @@ pub fn complement(graph: &mut Graph, vertex: usize) -> () {
             } else {
                 graph.add_edge_with_type(n1, n2, EType::H);
             }
+
         }
     }
 }
