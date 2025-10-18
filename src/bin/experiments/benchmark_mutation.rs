@@ -38,22 +38,18 @@ enum MutationType {
 
 fn run_mutation(
     circuit: &Circuit,
-    mutation: MutationType
+    mutation: &MutationType
 ) -> Result<Duration, Box<dyn std::error::Error>> {
-    let mut graph_control: Graph = circuit.to_graph();
-    let mut graph_experimental: Graph = circuit.to_graph();
 
-    clifford_simp(&mut graph_control);
+    let mut graph_experimental: Graph = circuit.to_graph();
     clifford_simp(&mut graph_experimental);
 
-    let extracted_control = &graph_control.extractor().gflow().up_to_perm().extract()?;
-
-    println!("control: {}", extracted_control.stats());
+    //println!("control: {}", extracted_control.stats());
 
     let test_edge: Option<&EdgeSpecified> = None;
     let test_vertex = Some(10usize);
-
     let time_start = Instant::now();
+
     match mutation {
         MutationType::LocalComplement =>
             mutations::local_complement(&mut graph_experimental, test_vertex),
@@ -63,20 +59,23 @@ fn run_mutation(
         MutationType::FlipEdge =>
             mutations::flip_edge(&mut graph_experimental, test_edge),
     }
+
     let duration = time_start.elapsed();
 
-    println!("used random edge: {:?}", test_edge);
-    println!("time elapsed: {:?}", duration);
+    //println!("used random edge: {:?}", test_edge);
+    //println!("time elapsed: {:?}", duration);
 
-    clifford_simp(&mut graph_experimental);
-    let extracted_experimental = &graph_experimental.extractor().gflow().up_to_perm().extract()?;
+    //clifford_simp(&mut graph_experimental);
+    //let extracted_experimental = &graph_experimental.extractor().gflow().up_to_perm().extract()?;
 
-    println!("experimental: {}", extracted_experimental.stats());
+    //println!("experimental: {}", extracted_experimental.stats());
 
     Ok(duration)
 }
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
+
+    const TRIALS : u32 = 32;
 
     let circuit = &Circuit::from_file("circuits/small/grover_5.qasm")?.to_basic_gates();
 
@@ -88,13 +87,29 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     ];
 
     for mutation in mutations_to_run {
-        println!("\nRunning new mutation: {:?}", mutation);
 
-        let duration = run_mutation(circuit, mutation);
-        match duration {
-            Ok(_) => println!("Mutation success"),
-            Err(e) => println!("Mutation failed: {:?}", e),
+        println!("\nRunning new mutation: {:?}", mutation);
+        println!("Trials: {:?}", TRIALS);
+
+        let mut total_nanoseconds : u128 = 0;
+        let mut total_success : u32 = 0;
+        let mut total_failure : u32 = 0;
+
+        for _ in 0..TRIALS {
+            let mutate_result = run_mutation(circuit, &mutation);
+            match mutate_result {
+                Ok(duration) => {total_success += 1; total_nanoseconds += duration.as_nanos()},
+                Err(e) => {total_failure += 1},
+            }
         }
+        
+        let average_nanoseconds = total_nanoseconds / TRIALS as u128;
+        let average_duration = Duration::from_nanos(average_nanoseconds as u64);
+        let percent_success : f64 = (total_success as f64) / (total_failure as f64) * 100.0;
+
+        println!("Average duration: {:?}", average_duration);
+        println!("Success rate: {:?} success / {:?} fail = {:?}%", total_success, total_failure, percent_success);
+
     }
 
     Ok(())

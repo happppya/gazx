@@ -112,9 +112,8 @@ pub fn get_default_or_random_edge_optimized(graph: &Graph, edge_option: Option<&
 /// * `graph` - Graph
 /// * `vertex` - The pivotal vertex
 pub fn complement(graph: &mut Graph, vertex: usize) -> () {
-    
+
     let neighbors: Vec<usize> = graph.neighbor_vec(vertex);
-    let mut done_neighbors: HashSet<usize> = HashSet::new();
 
     let mut edge_set: HashSet<EdgeGeneral> = HashSet::new();
 
@@ -122,13 +121,14 @@ pub fn complement(graph: &mut Graph, vertex: usize) -> () {
         edge_set.insert((n1, n2));
     }
 
-    for &n1 in &neighbors {
-        done_neighbors.insert(n1);
+    //todo just iterate from i to j where j starts at i, no need for hashset or vector
+    
+    for i in 0..neighbors.len() {
 
-        for &n2 in &neighbors {
-            if done_neighbors.contains(&n2) {
-                continue;
-            }
+        for j in (i+1)..neighbors.len() {
+
+            let n1 = neighbors[i];
+            let n2 = neighbors[j];
 
             let edge: EdgeGeneral = (n1, n2);
 
