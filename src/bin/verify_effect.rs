@@ -27,18 +27,11 @@ use std::time::Instant;
 
 // use quizx::tensor::*;
 use workspace::mutations;
-
-#[derive(Debug )]
-enum MutationType {
-    LocalComplement,
-    FullReduce,
-    Pivot,
-    FlipEdge,
-}
+use workspace::mutations::mutation_runner;
 
 fn run_mutation(
     circuit: &Circuit,
-    mutation: MutationType
+    mutation: &mutation_runner::MutationType,
 ) -> Result<Duration, Box<dyn std::error::Error>> {
     let mut graph_control: Graph = circuit.to_graph();
     let mut graph_experimental: Graph = circuit.to_graph();
@@ -55,12 +48,12 @@ fn run_mutation(
 
     let time_start = Instant::now();
     match mutation {
-        MutationType::LocalComplement =>
+        mutation_runner::MutationType::LocalComplement =>
             mutations::local_complement(&mut graph_experimental, test_vertex),
-        MutationType::FullReduce => mutations::full_reduce(&mut graph_experimental),
-        MutationType::Pivot =>
+        mutation_runner::MutationType::FullReduce => mutations::full_reduce(&mut graph_experimental),
+        mutation_runner::MutationType::Pivot =>
             mutations::pivot(&mut graph_experimental, test_edge),
-        MutationType::FlipEdge =>
+        mutation_runner::MutationType::FlipEdge =>
             mutations::flip_edge(&mut graph_experimental, test_edge),
     }
     let duration = time_start.elapsed();
@@ -80,14 +73,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     let circuit = &Circuit::from_file("circuits/small/grover_5.qasm")?.to_basic_gates();
 
-    let mutations_to_run = vec![
-        MutationType::LocalComplement,
-        MutationType::FullReduce,
-        MutationType::Pivot,
-        MutationType::FlipEdge,
-    ];
-
-    for mutation in mutations_to_run {
+    for mutation in mutation_runner::MUTATIONS_TO_RUN {
         println!("\nRunning new mutation: {:?}", mutation);
 
         let duration = run_mutation(circuit, mutation);

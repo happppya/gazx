@@ -7,9 +7,6 @@ use quizx::vec_graph::*;
 use rand::seq::IndexedRandom;
 use rand::{ rng };
 
-use crate::mutations::utilities::get_default_or_random_edge;
-use crate::mutations::utilities::get_default_or_random_edge_optimized;
-
 use super::types::*;
 use super::utilities;
 
@@ -58,7 +55,7 @@ pub fn pivot(graph: &mut Graph, edge_to_remove_option: Option<&EdgeSpecified>) -
 
 pub fn flip_edge(graph: &mut Graph, edge_to_flip_option: Option<&EdgeSpecified>) {
 
-    let edge_to_flip = get_default_or_random_edge_optimized(graph, edge_to_flip_option);
+    let edge_to_flip = utilities::get_default_or_random_edge_optimized(graph, edge_to_flip_option);
 
     match graph.edge_type(edge_to_flip.0, edge_to_flip.1) {
         EType::H => graph.set_edge_type(edge_to_flip.0, edge_to_flip.1, EType::N),

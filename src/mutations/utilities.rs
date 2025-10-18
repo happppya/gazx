@@ -1,6 +1,6 @@
 use std::collections::HashSet;
 use quizx::vec_graph::*;
-use rand::{rng, seq::IndexedRandom, Rng};
+use rand::{ rng, seq::IndexedRandom, Rng };
 
 use super::types::*;
 
@@ -38,7 +38,6 @@ fn get_nonboundary_edges(graph: &Graph) -> Vec<EdgeSpecified> {
     return candidates;
 }
 
-
 ///
 /// Returns vertices such that the vertex is non-boundary and all neighboring vertices are non-boundary
 ///
@@ -66,29 +65,32 @@ pub fn get_filtered_nonboundary_vertices(
     return candidates;
 }
 
-pub fn get_default_or_random_edge(graph: &Graph, edge_option: Option<&EdgeSpecified>) -> EdgeSpecified {
-
-    let candidates : Vec<EdgeSpecified>;
-    
-    match edge_option {
-        Some(edge) => *edge,
-        None => {
-            candidates = get_nonboundary_edges(graph);
-            *candidates.choose(&mut rng()).expect("Graph should have at least one edge")
-        }
-    }
-
-}
-
-pub fn get_default_or_random_edge_optimized(graph: &Graph, edge_option: Option<&EdgeSpecified>) -> EdgeSpecified {
-
+pub fn get_default_or_random_edge_optimized2(
+    graph: &Graph,
+    edge_option: Option<&EdgeSpecified>
+) -> EdgeSpecified {
     match edge_option {
         Some(edge) => *edge,
         None => {
             let mut i: usize = 0;
             let target_index = rng().random_range(0..graph.num_edges());
 
-            let mut result : Option<EdgeSpecified> = None;
+            graph.edge_vec()[target_index]
+        }
+    }
+}
+
+pub fn get_default_or_random_edge_optimized(
+    graph: &Graph,
+    edge_option: Option<&EdgeSpecified>
+) -> EdgeSpecified {
+    match edge_option {
+        Some(edge) => *edge,
+        None => {
+            let mut i: usize = 0;
+            let target_index = rng().random_range(0..graph.num_edges());
+
+            let mut result: Option<EdgeSpecified> = None;
 
             for edge in graph.edges() {
                 if i == target_index {
@@ -99,10 +101,8 @@ pub fn get_default_or_random_edge_optimized(graph: &Graph, edge_option: Option<&
             }
 
             result.expect("Graph should have at least one edge")
-
         }
     }
-
 }
 
 ///
@@ -112,7 +112,6 @@ pub fn get_default_or_random_edge_optimized(graph: &Graph, edge_option: Option<&
 /// * `graph` - Graph
 /// * `vertex` - The pivotal vertex
 pub fn complement(graph: &mut Graph, vertex: usize) -> () {
-
     let neighbors: Vec<usize> = graph.neighbor_vec(vertex);
 
     let mut edge_set: HashSet<EdgeGeneral> = HashSet::new();
@@ -122,11 +121,9 @@ pub fn complement(graph: &mut Graph, vertex: usize) -> () {
     }
 
     //todo just iterate from i to j where j starts at i, no need for hashset or vector
-    
+
     for i in 0..neighbors.len() {
-
-        for j in (i+1)..neighbors.len() {
-
+        for j in i + 1..neighbors.len() {
             let n1 = neighbors[i];
             let n2 = neighbors[j];
 
@@ -137,7 +134,6 @@ pub fn complement(graph: &mut Graph, vertex: usize) -> () {
             } else {
                 graph.add_edge_with_type(n1, n2, EType::H);
             }
-
         }
     }
 }
