@@ -1,5 +1,6 @@
-mod types;
-mod utilities;
+
+pub mod types;
+pub mod utilities;
 
 pub mod mutation_implementations;
 

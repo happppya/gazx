@@ -1,10 +1,10 @@
 use std::collections::HashSet;
 use quizx::vec_graph::*;
+use rand::{rng, seq::IndexedRandom, Rng};
 
 use super::types::*;
 
-fn has_nonboundary_neighbors(graph : &Graph, vertex : usize) -> bool {
-
+fn has_nonboundary_neighbors(graph: &Graph, vertex: usize) -> bool {
     for neighbor_vertex in graph.neighbor_vec(vertex) {
         if graph.vertex_type(neighbor_vertex) == VType::B {
             return false;
@@ -12,8 +12,32 @@ fn has_nonboundary_neighbors(graph : &Graph, vertex : usize) -> bool {
     }
 
     return true;
-
 }
+
+fn get_nonboundary_edges(graph: &Graph) -> Vec<EdgeSpecified> {
+    let mut candidates: Vec<EdgeSpecified> = Vec::new();
+
+    for edge in graph.edges() {
+        if graph.vertex_type(edge.0) == VType::B {
+            continue;
+        }
+        if graph.vertex_type(edge.1) == VType::B {
+            continue;
+        }
+
+        if !has_nonboundary_neighbors(graph, edge.0) {
+            continue;
+        }
+        if !has_nonboundary_neighbors(graph, edge.1) {
+            continue;
+        }
+
+        candidates.push(edge);
+    }
+
+    return candidates;
+}
+
 
 ///
 /// Returns vertices such that the vertex is non-boundary and all neighboring vertices are non-boundary
@@ -28,39 +52,56 @@ pub fn get_filtered_nonboundary_vertices(
     let mut candidates: Vec<usize> = Vec::new();
 
     for vertex in vertices {
-
         if graph.vertex_type(vertex) == VType::B {
             continue;
         }
-        
+
         if !has_nonboundary_neighbors(graph, vertex) {
             continue;
         }
 
         candidates.push(vertex);
-
     }
 
     return candidates;
 }
 
-pub fn get_nonboundary_edges(graph: &Graph) -> Vec<EdgeSpecified> {
+pub fn get_default_or_random_edge(graph: &Graph, edge_option: Option<&EdgeSpecified>) -> EdgeSpecified {
 
-    let mut candidates : Vec<EdgeSpecified> = Vec::new();
-
-    for edge in graph.edges() {
-
-        if graph.vertex_type(edge.0) == VType::B {continue;}
-        if graph.vertex_type(edge.1) == VType::B {continue;}
-
-        if !has_nonboundary_neighbors(graph, edge.0) {continue;}
-        if !has_nonboundary_neighbors(graph, edge.1) {continue;}
-
-        candidates.push(edge);
-
+    let candidates : Vec<EdgeSpecified>;
+    
+    match edge_option {
+        Some(edge) => *edge,
+        None => {
+            candidates = get_nonboundary_edges(graph);
+            *candidates.choose(&mut rng()).expect("Graph should have at least one edge")
+        }
     }
 
-    return candidates;
+}
+
+pub fn get_default_or_random_edge_optimized(graph: &Graph, edge_option: Option<&EdgeSpecified>) -> EdgeSpecified {
+
+    match edge_option {
+        Some(edge) => *edge,
+        None => {
+            let mut i: usize = 0;
+            let target_index = rng().random_range(0..graph.num_edges());
+
+            let mut result : Option<EdgeSpecified> = None;
+
+            for edge in graph.edges() {
+                if i == target_index {
+                    result = Some(edge);
+                    break;
+                }
+                i += 1;
+            }
+
+            result.expect("Graph should have at least one edge")
+
+        }
+    }
 
 }
 

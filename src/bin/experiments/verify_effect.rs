@@ -20,6 +20,8 @@ use quizx::extract::*;
 use quizx::simplify::*;
 use quizx::util;
 use quizx::vec_graph::*;
+use workspace::mutations::types::EdgeSpecified;
+use std::mem::uninitialized;
 use std::time::Instant;
 
 // use quizx::tensor::*;
@@ -30,6 +32,7 @@ enum MutationType {
     LocalComplement,
     FullReduce,
     Pivot,
+    FlipEdge,
 }
 
 fn verify_mutation(
@@ -46,13 +49,23 @@ fn verify_mutation(
 
     println!("control: {}", extracted_control.stats());
 
+    let test_edge: Option<&EdgeSpecified> = None;
+    let test_vertex = Some(10usize);
+
+    let time_start = Instant::now();
     match mutation {
         MutationType::LocalComplement =>
-            mutations::local_complement(&mut graph_experimental, Some(50)),
+            mutations::local_complement(&mut graph_experimental, test_vertex),
         MutationType::FullReduce => mutations::full_reduce(&mut graph_experimental),
         MutationType::Pivot =>
-            mutations::pivot(&mut graph_experimental, Some(&(1usize, 2usize, EType::N))),
+            mutations::pivot(&mut graph_experimental, test_edge),
+        MutationType::FlipEdge =>
+            mutations::flip_edge(&mut graph_experimental, test_edge),
     }
+    let duration = time_start.elapsed();
+
+    println!("used random edge: {:?}", test_edge);
+    println!("time elapsed: {:?}", duration);
 
     clifford_simp(&mut graph_experimental);
     let extracted_experimental = &graph_experimental.extractor().gflow().up_to_perm().extract()?;
@@ -63,12 +76,14 @@ fn verify_mutation(
 }
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
+
     let circuit = &Circuit::from_file("circuits/small/grover_5.qasm")?.to_basic_gates();
 
     let mutations_to_run = vec![
         MutationType::LocalComplement,
         MutationType::FullReduce,
-        MutationType::Pivot
+        MutationType::Pivot,
+        MutationType::FlipEdge,
     ];
 
     for mutation in mutations_to_run {
@@ -77,7 +92,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         let result = verify_mutation(circuit, mutation);
         match result {
             Ok(_) => println!("Mutation success"),
-            Err(e) => println!("Mutation failed: {}", e),
+            Err(e) => println!("Mutation failed: {:?}", e),
         }
     }
 
