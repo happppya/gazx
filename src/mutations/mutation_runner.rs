@@ -6,9 +6,14 @@ pub enum MutationType {
     FlipEdge,
 }
 
-pub const MUTATIONS_TO_RUN: &[MutationType] = &[
+pub const MUTATIONS_ALL: &[MutationType] = &[
     MutationType::LocalComplement,
     MutationType::FullReduce,
+    MutationType::Pivot,
+    MutationType::FlipEdge,
+];
+
+pub const MUTATIONS_EDGES: &[MutationType] = &[
     MutationType::Pivot,
     MutationType::FlipEdge,
 ];

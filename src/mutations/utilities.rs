@@ -1,5 +1,5 @@
 use std::collections::HashSet;
-use quizx::vec_graph::*;
+use quizx::{vec_graph::*};
 use rand::{ rng, seq::IndexedRandom, Rng };
 
 use super::types::*;
@@ -65,22 +65,21 @@ pub fn get_filtered_nonboundary_vertices(
     return candidates;
 }
 
-pub fn get_default_or_random_edge_optimized2(
+pub fn default_edge(
     graph: &Graph,
     edge_option: Option<&EdgeSpecified>
-) -> EdgeSpecified {
-    match edge_option {
-        Some(edge) => *edge,
-        None => {
-            let mut i: usize = 0;
-            let target_index = rng().random_range(0..graph.num_edges());
+) -> Box<EdgeSpecified> {
 
-            graph.edge_vec()[target_index]
+    match edge_option {
+        Some(&edge) => Box::new(edge),
+        None => {
+            let target_index = rng().random_range(0..graph.num_edges());
+            Box::new(graph.edge_vec()[target_index])
         }
     }
 }
 
-pub fn get_default_or_random_edge_optimized(
+pub fn default_edge_old(
     graph: &Graph,
     edge_option: Option<&EdgeSpecified>
 ) -> EdgeSpecified {

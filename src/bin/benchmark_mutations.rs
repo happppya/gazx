@@ -72,11 +72,11 @@ fn run_mutation(
 }
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
-    const TRIALS: u32 = 32;
+    const TRIALS: u32 = 100;
 
     let circuit = &Circuit::from_file("circuits/small/grover_5.qasm")?.to_basic_gates();
 
-    for mutation in mutation_runner::MUTATIONS_TO_RUN {
+    for mutation in mutation_runner::MUTATIONS_EDGES {
         println!("\nRunning new mutation: {:?}", mutation);
         println!("Trials: {:?}", TRIALS);
 

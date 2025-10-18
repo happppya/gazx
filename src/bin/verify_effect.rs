@@ -73,7 +73,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     let circuit = &Circuit::from_file("circuits/small/grover_5.qasm")?.to_basic_gates();
 
-    for mutation in mutation_runner::MUTATIONS_TO_RUN {
+    for mutation in mutation_runner::MUTATIONS_ALL {
         println!("\nRunning new mutation: {:?}", mutation);
 
         let duration = run_mutation(circuit, mutation);
