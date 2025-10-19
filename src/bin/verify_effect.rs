@@ -47,15 +47,7 @@ fn run_mutation(
     let test_vertex = Some(10usize);
 
     let time_start = Instant::now();
-    match mutation {
-        mutation_runner::MutationType::LocalComplement =>
-            mutations::local_complement(&mut graph_experimental, test_vertex),
-        mutation_runner::MutationType::FullReduce => mutations::full_reduce(&mut graph_experimental),
-        mutation_runner::MutationType::Pivot =>
-            mutations::pivot(&mut graph_experimental, test_edge),
-        mutation_runner::MutationType::FlipEdge =>
-            mutations::flip_edge(&mut graph_experimental, test_edge),
-    }
+    mutation_runner::run_mutation(&mut graph_experimental, mutation);
     let duration = time_start.elapsed();
 
     println!("used random edge: {:?}", test_edge);

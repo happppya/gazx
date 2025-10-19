@@ -5,7 +5,8 @@ use rand::{ rng, seq::IndexedRandom, Rng };
 use super::types::*;
 
 fn has_nonboundary_neighbors(graph: &Graph, vertex: usize) -> bool {
-    for neighbor_vertex in graph.neighbor_vec(vertex) {
+
+    for neighbor_vertex in graph.neighbors(vertex) {
         if graph.vertex_type(neighbor_vertex) == VType::B {
             return false;
         }
@@ -44,13 +45,17 @@ fn get_nonboundary_edges(graph: &Graph) -> Vec<EdgeSpecified> {
 /// # Parameters
 /// * `graph` - Graph
 /// * `vertices` - Candidate vertices
-pub fn get_filtered_nonboundary_vertices(
-    graph: &Graph,
-    vertices: impl Iterator<Item = usize>
-) -> Vec<usize> {
-    let mut candidates: Vec<usize> = Vec::new();
+/// 
+#[inline]
+fn push_nonboundary_vertices(
+    
+    candidates : &mut Vec<usize>,
+    graph: &Graph
 
-    for vertex in vertices {
+) -> () {
+
+    for vertex in graph.vertices() {
+
         if graph.vertex_type(vertex) == VType::B {
             continue;
         }
@@ -61,22 +66,38 @@ pub fn get_filtered_nonboundary_vertices(
 
         candidates.push(vertex);
     }
+}
 
-    return candidates;
+pub fn default_vertex(
+    graph : &Graph,
+    vertex_option : Option<usize>
+) -> usize {
+
+    match vertex_option {
+        Some(vertex) => vertex,
+        None => {
+            
+            let mut candidates = Vec::new();
+            push_nonboundary_vertices(&mut candidates, graph);
+            
+            *candidates.choose(&mut rng()).unwrap()
+            
+        }
+    };
+
+    0usize
+
 }
 
 pub fn default_edge(
     graph: &Graph,
     edge_option: Option<&EdgeSpecified>
-) -> Box<EdgeSpecified> {
+) -> EdgeSpecified {
 
-
-    //TODO something is wrong with this. Maybe overhead from vector copying. Try hash graph.
     match edge_option {
-        Some(&edge) => Box::new(edge),
+        Some(edge) => *edge,
         None => {
-            let target_index = rng().random_range(0..graph.num_edges());
-            Box::new(graph.edge_vec()[target_index])
+            *graph.edge_vec().choose(&mut rng()).unwrap()
         }
     }
 }
@@ -114,7 +135,7 @@ pub fn default_edge_old(
 /// * `vertex` - The pivotal vertex
 pub fn complement(graph: &mut Graph, vertex: usize) -> () {
     let neighbors: Vec<usize> = graph.neighbor_vec(vertex);
-
+    
     let mut edge_set: HashSet<EdgeGeneral> = HashSet::new();
 
     for (n1, n2, _) in graph.edges() {

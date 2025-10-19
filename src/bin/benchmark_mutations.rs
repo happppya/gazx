@@ -37,6 +37,7 @@ fn run_mutation(
     mutation: &mutation_runner::MutationType
 ) -> Result<Duration, Box<dyn std::error::Error>> {
     let mut graph_experimental: Graph = circuit.to_graph();
+
     clifford_simp(&mut graph_experimental);
 
     //println!("control: {}", extracted_control.stats());
@@ -45,16 +46,7 @@ fn run_mutation(
     let test_vertex = Some(10usize);
     let time_start = Instant::now();
 
-    match mutation {
-        mutation_runner::MutationType::LocalComplement =>
-            mutations::local_complement(&mut graph_experimental, test_vertex),
-        mutation_runner::MutationType::FullReduce =>
-            mutations::full_reduce(&mut graph_experimental),
-        mutation_runner::MutationType::Pivot =>
-            mutations::pivot(&mut graph_experimental, test_edge),
-        mutation_runner::MutationType::FlipEdge =>
-            mutations::flip_edge(&mut graph_experimental, test_edge),
-    }
+    mutation_runner::run_mutation(&mut graph_experimental, mutation);
 
     let duration = time_start.elapsed();
 
@@ -72,11 +64,12 @@ fn run_mutation(
 }
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
-    const TRIALS: u32 = 100;
+    const TRIALS: u32 = 512;
 
+    //let circuit = &Circuit::from_file("circuits/small/gf2^16_mult.qasm")?.to_basic_gates();
     let circuit = &Circuit::from_file("circuits/small/grover_5.qasm")?.to_basic_gates();
 
-    for mutation in mutation_runner::MUTATIONS_EDGES {
+    for mutation in mutation_runner::MUTATIONS_ALL {
         println!("\nRunning new mutation: {:?}", mutation);
         println!("Trials: {:?}", TRIALS);
 
@@ -102,7 +95,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         let percent_success: f64 = ((total_success as f64) / (total_failure as f64)) * 100.0;
 
         println!("Average duration: {:?}", average_duration);
-        
+
         if MEASURE_SUCCESS_RATE {
             println!(
                 "Success rate: {:?} success / {:?} fail = {:?}%",
