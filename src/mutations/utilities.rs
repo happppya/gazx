@@ -15,28 +15,10 @@ fn has_nonboundary_neighbors(graph: &Graph, vertex: usize) -> bool {
     return true;
 }
 
-fn get_nonboundary_edges(graph: &Graph) -> Vec<EdgeSpecified> {
-    let mut candidates: Vec<EdgeSpecified> = Vec::new();
+pub fn get_vertices_nonboundary<'a>(graph : &'a Graph) -> impl Iterator<Item=usize> + 'a {
 
-    for edge in graph.edges() {
-        if graph.vertex_type(edge.0) == VType::B {
-            continue;
-        }
-        if graph.vertex_type(edge.1) == VType::B {
-            continue;
-        }
-
-        if !has_nonboundary_neighbors(graph, edge.0) {
-            continue;
-        }
-        if !has_nonboundary_neighbors(graph, edge.1) {
-            continue;
-        }
-
-        candidates.push(edge);
-    }
-
-    return candidates;
+    graph.vertices().filter(move |v| graph.vertex_type(*v) == VType::B)
+    
 }
 
 ///

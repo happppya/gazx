@@ -43,14 +43,10 @@ fn run_mutation(
 
     println!("control: {}", extracted_control.stats());
 
-    let test_edge: Option<&EdgeSpecified> = None;
-    let test_vertex = Some(10usize);
-
     let time_start = Instant::now();
     mutation_runner::run_mutation(&mut graph_experimental, mutation);
     let duration = time_start.elapsed();
 
-    println!("used random edge: {:?}", test_edge);
     println!("time elapsed: {:?}", duration);
 
     clifford_simp(&mut graph_experimental);
