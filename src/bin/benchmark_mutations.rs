@@ -21,8 +21,10 @@ use quizx::simplify::*;
 use quizx::util;
 use quizx::vec_graph::*;
 
+use workspace::mutations::mutation_runner::MutationType;
 use workspace::mutations::types::EdgeSpecified;
 use std::mem::uninitialized;
+use std::thread;
 use std::time::Duration;
 use std::time::Instant;
 
@@ -30,7 +32,7 @@ use std::time::Instant;
 use workspace::mutations;
 use workspace::mutations::mutation_runner;
 
-static MEASURE_SUCCESS_RATE: bool = false;
+static MEASURE_SUCCESS_RATE: bool = true;
 
 fn run_mutation(
     circuit: &Circuit,
@@ -54,8 +56,23 @@ fn run_mutation(
     //println!("time elapsed: {:?}", duration);
 
     if MEASURE_SUCCESS_RATE {
-        clifford_simp(&mut graph_experimental);
-        graph_experimental.extractor().gflow().up_to_perm().extract()?;
+        
+        let extract_result = thread::spawn(move || {
+            clifford_simp(&mut graph_experimental);
+            graph_experimental.extractor().gflow().up_to_perm().extract()
+        }).join();
+
+        match extract_result {
+            Ok(Ok(_circuit)) => {
+                // succeeded
+            }
+            Ok(Err(e)) => {
+                return Err(Box::new(e));
+            }
+            Err(_) => {
+                return Err("Extractor panicked".into());
+            }
+        }
     }
 
     //println!("experimental: {}", extracted_experimental.stats());
@@ -69,7 +86,11 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     //let circuit = &Circuit::from_file("circuits/small/gf2^16_mult.qasm")?.to_basic_gates();
     let circuit = &Circuit::from_file("circuits/small/grover_5.qasm")?.to_basic_gates();
 
-    for mutation in mutation_runner::MUTATIONS_ALL {
+    let mutations_to_run = vec![
+        MutationType::InverseLocalComplement,
+    ];
+
+    for mutation in mutations_to_run {
         println!("\nRunning new mutation: {:?}", mutation);
         println!("Trials: {:?}", TRIALS);
 
@@ -92,7 +113,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
         let average_nanoseconds = total_nanoseconds / (TRIALS as u128);
         let average_duration = Duration::from_nanos(average_nanoseconds as u64);
-        let percent_success: f64 = ((total_success as f64) / (total_failure as f64)) * 100.0;
+        let percent_success: f64 = ((total_success as f64) / (TRIALS as f64)) * 100.0;
 
         println!("Average duration: {:?}", average_duration);
 

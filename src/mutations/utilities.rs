@@ -1,8 +1,14 @@
 use std::collections::HashSet;
-use quizx::{vec_graph::*};
+use quizx::{phase::Phase, vec_graph::*};
 use rand::{ rng, seq::IndexedRandom, Rng };
 
 use super::types::*;
+
+pub fn get_random_input_phase(graph : &Graph) -> Phase {
+    graph.phase(
+        *graph.inputs().choose(&mut rng()).expect("Graph should have at least one input.")
+    )
+}
 
 fn has_nonboundary_neighbors(graph: &Graph, vertex: usize) -> bool {
 
@@ -109,6 +115,16 @@ pub fn default_edge_old(
     }
 }
 
+pub fn get_edge_set(graph : &Graph) -> HashSet<EdgeGeneral> {
+    let mut edge_set: HashSet<EdgeGeneral> = HashSet::new();
+
+    for (n1, n2, _) in graph.edges() {
+        edge_set.insert((n1, n2));
+    }
+
+    edge_set
+}
+
 ///
 /// Performs a complement
 ///
@@ -116,19 +132,18 @@ pub fn default_edge_old(
 /// * `graph` - Graph
 /// * `vertex` - The pivotal vertex
 pub fn complement(graph: &mut Graph, vertex: usize) -> () {
-    let neighbors: Vec<usize> = graph.neighbor_vec(vertex);
     
-    let mut edge_set: HashSet<EdgeGeneral> = HashSet::new();
-
-    for (n1, n2, _) in graph.edges() {
-        edge_set.insert((n1, n2));
-    }
+    let neighbors: Vec<usize> = graph.neighbor_vec(vertex);
+    let edge_set = get_edge_set(graph);
 
     //todo just iterate from i to j where j starts at i, no need for hashset or vector
 
     for i in 0..neighbors.len() {
+
+        let n1 = neighbors[i];
+
         for j in i + 1..neighbors.len() {
-            let n1 = neighbors[i];
+            
             let n2 = neighbors[j];
 
             let edge: EdgeGeneral = (n1, n2);

@@ -47,8 +47,8 @@ fn run_mutation(
     mutation_runner::run_mutation(&mut graph_experimental, mutation);
     let duration = time_start.elapsed();
 
-    println!("time elapsed: {:?}", duration);
-
+    println!("mutation time elapsed: {:?}", duration);
+    
     clifford_simp(&mut graph_experimental);
     let extracted_experimental = &graph_experimental.extractor().gflow().up_to_perm().extract()?;
 

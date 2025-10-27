@@ -1,3 +1,5 @@
+use std::sync::LazyLock;
+
 use quizx::circuit::*;
 use quizx::extract::*;
 use quizx::gate::GType::HAD;
@@ -5,11 +7,18 @@ use quizx::graph;
 use quizx::simplify::*;
 use quizx::vec_graph::*;
 
+use rand::random;
 use rand::seq::IndexedRandom;
+use rand::seq::SliceRandom;
+use rand_distr::{ Poisson, Distribution };
 use rand::{ rng };
 
 use super::types::*;
 use super::utilities;
+
+static RNG_POISSON: LazyLock<Poisson<f64>> = std::sync::LazyLock::new(||
+    Poisson::new(3.0).unwrap()
+);
 
 pub fn full_reduce(graph: &mut Graph) -> () {
     full_simp(graph);
@@ -65,12 +74,50 @@ pub fn split_edge(graph: &mut Graph, edge_to_split_option: Option<&EdgeSpecified
 
     graph.remove_edge(edge_to_split.0, edge_to_split.1);
 
-    let random_input_phase = graph.phase(
-        *graph.inputs().choose(&mut rng()).expect("Graph should have at least one input.")
-    );
+    let random_input_phase = utilities::get_random_input_phase(graph);
     let new_vertex = graph.add_vertex_with_phase(VType::Z, random_input_phase);
 
     graph.add_edge_with_type(edge_to_split.0, new_vertex, edge_to_split.2);
     graph.add_edge_with_type(new_vertex, edge_to_split.1, edge_to_split.2);
-    
+}
+
+pub fn inverse_local_complement(graph: &mut Graph, vertices_to_attach_option: Option<&Vec<usize>>) {
+    let mut nonboundary_vertices: Vec<usize>;
+
+    let vertices_to_attach: &Vec<usize> = match vertices_to_attach_option {
+        Some(_) => { vertices_to_attach_option.unwrap() }
+        None => {
+            nonboundary_vertices = utilities::get_vertices_nonboundary(graph).collect();
+            let n_vertices_to_attach = std::cmp::min(
+                (RNG_POISSON.sample(&mut rng()) as usize) + 1usize,
+                nonboundary_vertices.len()
+            );
+
+            nonboundary_vertices.shuffle(&mut rng());
+            nonboundary_vertices.truncate(n_vertices_to_attach);
+
+            &nonboundary_vertices
+        }
+    };
+
+    let random_input_phase = utilities::get_random_input_phase(graph);
+    let new_vertex = graph.add_vertex_with_phase(VType::Z, random_input_phase);
+    let edge_set = utilities::get_edge_set(graph);
+
+    for i in 0..vertices_to_attach.len() {
+        let n1 = vertices_to_attach[i];
+        graph.add_edge_with_type(n1, new_vertex, EType::H);
+
+        for j in i + 1..vertices_to_attach.len() {
+            let n2 = vertices_to_attach[j];
+
+            let edge: EdgeGeneral = (n1, n2);
+
+            if edge_set.contains(&edge) {
+                graph.remove_edge(n1, n2);
+            } else {
+                graph.add_edge_with_type(n1, n2, EType::H);
+            }
+        }
+    }
 }

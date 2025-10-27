@@ -5,6 +5,7 @@ use super::mutation_implementations;
 #[derive(Debug)]
 pub enum MutationType {
     LocalComplement,
+    InverseLocalComplement,
     FullReduce,
     Pivot,
     FlipEdge,
@@ -15,6 +16,7 @@ pub enum MutationType {
 
 pub const MUTATIONS_ALL: &[MutationType] = &[
     MutationType::LocalComplement,
+    MutationType::InverseLocalComplement,
     MutationType::FullReduce,
     MutationType::Pivot,
     MutationType::FlipEdge,
@@ -34,6 +36,7 @@ pub const MUTATIONS_EDGES: &[MutationType] = &[
 pub fn run_mutation(graph: &mut Graph, mutation: &MutationType) {
     match mutation {
         MutationType::LocalComplement => mutation_implementations::local_complement(graph, None),
+        MutationType::InverseLocalComplement => mutation_implementations::inverse_local_complement(graph, None),
         MutationType::FullReduce => mutation_implementations::full_reduce(graph),
         MutationType::Pivot => mutation_implementations::pivot(graph, None),
         MutationType::FlipEdge => mutation_implementations::flip_edge(graph, None),
