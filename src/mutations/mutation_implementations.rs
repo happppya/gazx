@@ -1,5 +1,7 @@
 use std::sync::LazyLock;
 
+use genevo::random;
+use ndarray::MathCell;
 use quizx::circuit::*;
 use quizx::extract::*;
 use quizx::gate::GType::HAD;
@@ -8,6 +10,7 @@ use quizx::simplify::*;
 use quizx::vec_graph::*;
 
 use rand::Rng;
+use rand::random;
 use rand::seq::IndexedRandom;
 use rand::seq::SliceRandom;
 use rand_distr::{ Poisson, Distribution };
@@ -21,21 +24,19 @@ static RNG_POISSON: LazyLock<Poisson<f64>> = std::sync::LazyLock::new(||
 );
 
 #[inline]
-fn get_add_edge_candidates<'a>(
-    graph: &'a Graph,
-    first_vertex_candidate: usize
-) -> impl Iterator<Item = usize> + 'a {
-
+fn get_add_edge_candidates(graph: &Graph, first_vertex_candidate: usize) -> Vec<usize> {
     let neighbor_set = utilities::get_neighbor_set(graph, first_vertex_candidate);
 
-    graph.vertices().filter(move |vertex| {
-        if graph.vertex_type(first_vertex_candidate) == VType::B {
-            graph.vertex_type(*vertex) != VType::B && !neighbor_set.contains(vertex)
-        } else {
-            *vertex != first_vertex_candidate && !neighbor_set.contains(vertex)
-        }
-    })
-
+    graph
+        .vertices()
+        .filter(move |vertex| {
+            if graph.vertex_type(first_vertex_candidate) == VType::B {
+                graph.vertex_type(*vertex) != VType::B && !neighbor_set.contains(vertex)
+            } else {
+                *vertex != first_vertex_candidate && !neighbor_set.contains(vertex)
+            }
+        })
+        .collect()
 }
 
 pub fn add_edge(
@@ -43,20 +44,54 @@ pub fn add_edge(
     first_vertex_option: Option<usize>,
     second_vertex_option: Option<usize>
 ) {
+    let (first_vertex, second_vertex) = match first_vertex_option {
+        Some(first) => {
+            
+            let second : usize = match second_vertex_option {
+                Some(vertex) => {vertex}
+                None => {
+                    let candidates = get_add_edge_candidates(graph, first);
+                    *candidates.choose(&mut rng()).unwrap()
+                }
+            };
 
-    let first_vertex: usize = match first_vertex_option {
-        Some(vertex) => { vertex }
+            (first, second)
+        }
         None => {
-            let first_vertex_candidates = graph.vertex_vec();
-            while !first_vertex_candidates.is_empty() {
+            let mut first_vertex_candidates = graph.vertex_vec();
+            loop {
+                if first_vertex_candidates.is_empty() {
+                    panic!("No valid vertex found");
+                }
                 let random_index = rng().random_range(0..first_vertex_candidates.len());
-                let candidates 
-                    = get_add_edge_candidates(graph, first_vertex_candidates[random_index]);
-                
+                let candidates = get_add_edge_candidates(
+                    graph,
+                    first_vertex_candidates[random_index]
+                );
+                if !candidates.is_empty() {
+                    let second_vertex = *candidates.choose(&mut rng()).unwrap();
+                    break (first_vertex_candidates[random_index], second_vertex);
+                } else {
+                    first_vertex_candidates.remove(random_index);
+                }
             }
-            0
         }
     };
+
+    match graph.edge_type_opt(first_vertex, second_vertex) {
+        Some(_) => {
+            return;
+        }
+        None => {
+            let edge_type = match rng().random_range(0..=1) {
+                0 => EType::N,
+                1 => EType::H,
+                _ => unreachable!(),
+            };
+            graph.add_edge_with_type(first_vertex, second_vertex, edge_type);
+        }
+    }
+
 }
 
 pub fn full_reduce(graph: &mut Graph) -> () {

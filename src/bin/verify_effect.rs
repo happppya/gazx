@@ -69,6 +69,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
             Ok(_) => println!("Mutation success"),
             Err(e) => println!("Mutation failed: {:?}", e),
         }
+        
     }
 
     Ok(())

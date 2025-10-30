@@ -81,13 +81,13 @@ fn run_mutation(
 }
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
-    const TRIALS: u32 = 512;
+    const TRIALS: u32 = 128;
 
     //let circuit = &Circuit::from_file("circuits/small/gf2^16_mult.qasm")?.to_basic_gates();
     let circuit = &Circuit::from_file("circuits/small/grover_5.qasm")?.to_basic_gates();
 
     let mutations_to_run = vec![
-        MutationType::InverseLocalComplement,
+        MutationType::AddEdge,
     ];
 
     for mutation in mutations_to_run {

@@ -12,6 +12,7 @@ pub enum MutationType {
     RemoveEdge,
     RemoveVertex,
     SplitEdge,
+    AddEdge,
 }
 
 pub const MUTATIONS_ALL: &[MutationType] = &[
@@ -23,6 +24,7 @@ pub const MUTATIONS_ALL: &[MutationType] = &[
     MutationType::RemoveEdge,
     MutationType::RemoveVertex,
     MutationType::SplitEdge,
+    MutationType::AddEdge,
 ];
 
 pub const MUTATIONS_EDGES: &[MutationType] = &[
@@ -43,5 +45,6 @@ pub fn run_mutation(graph: &mut Graph, mutation: &MutationType) {
         MutationType::RemoveEdge => mutation_implementations::remove_edge(graph, None),
         MutationType::RemoveVertex => mutation_implementations::remove_vertex(graph, None),
         MutationType::SplitEdge => mutation_implementations::split_edge(graph, None),
+        MutationType::AddEdge => mutation_implementations::add_edge(graph, None, None),
     }
 }
