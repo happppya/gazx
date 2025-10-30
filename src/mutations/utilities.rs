@@ -1,4 +1,4 @@
-use std::collections::HashSet;
+use std::{collections::HashSet, hash::Hash};
 use quizx::{phase::Phase, vec_graph::*};
 use rand::{ rng, seq::IndexedRandom, Rng };
 
@@ -115,14 +115,18 @@ pub fn default_edge_old(
     }
 }
 
+#[inline]
 pub fn get_edge_set(graph : &Graph) -> HashSet<EdgeGeneral> {
-    let mut edge_set: HashSet<EdgeGeneral> = HashSet::new();
 
-    for (n1, n2, _) in graph.edges() {
-        edge_set.insert((n1, n2));
-    }
+    graph.edges()
+        .map(|(n1, n2, _)| (n1, n2)) 
+        .collect()
+    
+}
 
-    edge_set
+#[inline]
+pub fn get_neighbor_set(graph : &Graph, vertex : usize) -> HashSet<usize> {
+    HashSet::from_iter(graph.neighbors(vertex))
 }
 
 ///

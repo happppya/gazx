@@ -7,7 +7,7 @@ use quizx::graph;
 use quizx::simplify::*;
 use quizx::vec_graph::*;
 
-use rand::random;
+use rand::Rng;
 use rand::seq::IndexedRandom;
 use rand::seq::SliceRandom;
 use rand_distr::{ Poisson, Distribution };
@@ -19,6 +19,45 @@ use super::utilities;
 static RNG_POISSON: LazyLock<Poisson<f64>> = std::sync::LazyLock::new(||
     Poisson::new(3.0).unwrap()
 );
+
+#[inline]
+fn get_add_edge_candidates<'a>(
+    graph: &'a Graph,
+    first_vertex_candidate: usize
+) -> impl Iterator<Item = usize> + 'a {
+
+    let neighbor_set = utilities::get_neighbor_set(graph, first_vertex_candidate);
+
+    graph.vertices().filter(move |vertex| {
+        if graph.vertex_type(first_vertex_candidate) == VType::B {
+            graph.vertex_type(*vertex) != VType::B && !neighbor_set.contains(vertex)
+        } else {
+            *vertex != first_vertex_candidate && !neighbor_set.contains(vertex)
+        }
+    })
+
+}
+
+pub fn add_edge(
+    graph: &mut Graph,
+    first_vertex_option: Option<usize>,
+    second_vertex_option: Option<usize>
+) {
+
+    let first_vertex: usize = match first_vertex_option {
+        Some(vertex) => { vertex }
+        None => {
+            let first_vertex_candidates = graph.vertex_vec();
+            while !first_vertex_candidates.is_empty() {
+                let random_index = rng().random_range(0..first_vertex_candidates.len());
+                let candidates 
+                    = get_add_edge_candidates(graph, first_vertex_candidates[random_index]);
+                
+            }
+            0
+        }
+    };
+}
 
 pub fn full_reduce(graph: &mut Graph) -> () {
     full_simp(graph);
