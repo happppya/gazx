@@ -46,9 +46,8 @@ pub fn add_edge(
 ) {
     let (first_vertex, second_vertex) = match first_vertex_option {
         Some(first) => {
-            
-            let second : usize = match second_vertex_option {
-                Some(vertex) => {vertex}
+            let second: usize = match second_vertex_option {
+                Some(vertex) => { vertex }
                 None => {
                     let candidates = get_add_edge_candidates(graph, first);
                     *candidates.choose(&mut rng()).unwrap()
@@ -91,7 +90,6 @@ pub fn add_edge(
             graph.add_edge_with_type(first_vertex, second_vertex, edge_type);
         }
     }
-
 }
 
 pub fn full_reduce(graph: &mut Graph) -> () {
@@ -106,6 +104,16 @@ pub fn remove_edge(graph: &mut Graph, edge_to_remove_option: Option<&EdgeSpecifi
 pub fn remove_vertex(graph: &mut Graph, vertex_to_remove_option: Option<usize>) -> () {
     let vertex_to_remove = utilities::default_vertex(graph, vertex_to_remove_option);
     graph.remove_vertex(vertex_to_remove);
+}
+
+pub fn switch_edge(
+    graph: &mut Graph,
+    edge_to_remove_option: Option<&EdgeSpecified>,
+    edge_add_first_vertex_option: Option<usize>,
+    edge_add_second_vertex_option: Option<usize>
+) {
+    remove_edge(graph, edge_to_remove_option);
+    add_edge(graph, edge_add_first_vertex_option, edge_add_second_vertex_option);
 }
 
 ///

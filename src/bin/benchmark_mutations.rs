@@ -24,6 +24,7 @@ use quizx::vec_graph::*;
 use workspace::mutations::mutation_runner::MutationType;
 use workspace::mutations::types::EdgeSpecified;
 use std::mem::uninitialized;
+use std::panic;
 use std::thread;
 use std::time::Duration;
 use std::time::Instant;
@@ -56,11 +57,12 @@ fn run_mutation(
     //println!("time elapsed: {:?}", duration);
 
     if MEASURE_SUCCESS_RATE {
-        
-        let extract_result = thread::spawn(move || {
-            clifford_simp(&mut graph_experimental);
-            graph_experimental.extractor().gflow().up_to_perm().extract()
-        }).join();
+        let extract_result = panic::catch_unwind(
+            panic::AssertUnwindSafe(|| {
+                clifford_simp(&mut graph_experimental);
+                graph_experimental.extractor().gflow().up_to_perm().extract()
+            })
+        );
 
         match extract_result {
             Ok(Ok(_circuit)) => {
@@ -81,14 +83,12 @@ fn run_mutation(
 }
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
-    const TRIALS: u32 = 128;
+    const TRIALS: u32 = 256;
 
     //let circuit = &Circuit::from_file("circuits/small/gf2^16_mult.qasm")?.to_basic_gates();
     let circuit = &Circuit::from_file("circuits/small/grover_5.qasm")?.to_basic_gates();
 
-    let mutations_to_run = vec![
-        MutationType::AddEdge,
-    ];
+    let mutations_to_run = vec![MutationType::SwitchEdge];
 
     for mutation in mutations_to_run {
         println!("\nRunning new mutation: {:?}", mutation);

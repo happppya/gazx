@@ -88,6 +88,7 @@ pub fn default_edge(
             *graph.edge_vec().choose(&mut rng()).unwrap()
         }
     }
+    
 }
 
 pub fn default_edge_old(
