@@ -1,2 +1,2 @@
 pub mod mutations;
-pub mod genetic;
+pub mod geneticZX;
