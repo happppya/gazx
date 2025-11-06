@@ -1,6 +1,5 @@
 use std::sync::LazyLock;
 
-use genevo::random;
 use ndarray::MathCell;
 use quizx::circuit::*;
 use quizx::extract::*;
