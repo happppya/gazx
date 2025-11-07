@@ -115,6 +115,41 @@ pub fn switch_edge(
     add_edge(graph, edge_add_first_vertex_option, edge_add_second_vertex_option);
 }
 
+pub fn add_phase_gadget(graph : &mut Graph, vertices_to_attach_option : Option<&Vec<usize>>) {
+
+    let mut vertices_to_attach : Vec<usize> = Vec::new();
+
+    match vertices_to_attach_option {
+        Some(_) => {}
+        None => {
+
+            let nonboundary_vertices : Vec<usize> = utilities::get_vertices_nonboundary(graph).collect();
+            let n_vertices_to_attach = std::cmp::min(
+                (RNG_POISSON.sample(&mut rng()) as usize) + 1usize,
+                nonboundary_vertices.len()
+            );
+
+            for _ in 0..n_vertices_to_attach {
+                vertices_to_attach.push(
+                    *nonboundary_vertices.choose(&mut rng()).expect("Graph has insufficient vertices")
+                );
+            }
+        }
+    }
+
+    let random_input_phase = utilities::get_random_input_phase(graph);
+
+    let new_vertex_with_phase = graph.add_vertex_with_phase(VType::Z, random_input_phase);
+    let new_vertex_without_phase = graph.add_vertex(VType::Z);
+
+    graph.add_edge_with_type(new_vertex_with_phase, new_vertex_without_phase, EType::H);
+
+    for vertex in vertices_to_attach {
+        graph.add_edge_with_type(vertex, new_vertex_without_phase, EType::H);
+    }
+
+}
+
 ///
 /// [mutation 1] Performs local complementation
 /// If a vertex is not given, a random vertex is selected based on the criteria:
@@ -127,8 +162,12 @@ pub fn local_complement(graph: &mut Graph, vertex_to_remove_option: Option<usize
     utilities::complement(graph, vertex_to_remove);
 }
 
-pub fn pivot(graph: &mut Graph, edge_to_remove_option: Option<&EdgeSpecified>) -> () {
-    let edge_to_remove = utilities::default_edge_old(graph, edge_to_remove_option);
+pub fn pivot(graph: &mut Graph, vertex_pair_option: Option<&EdgeGeneral>) -> () {
+    let edge_to_remove = utilities::default_pivot_vertex_pair(graph, vertex_pair_option);
+
+    let data1 = graph.vertex_data(edge_to_remove.0);
+    let data2 = graph.vertex_data(edge_to_remove.1);
+    let edgedata = graph.edge_type(edge_to_remove.0, edge_to_remove.1);
 
     utilities::complement(graph, edge_to_remove.0);
     utilities::complement(graph, edge_to_remove.1);
@@ -136,6 +175,7 @@ pub fn pivot(graph: &mut Graph, edge_to_remove_option: Option<&EdgeSpecified>) -
 
     graph.remove_vertex(edge_to_remove.0);
     graph.remove_vertex(edge_to_remove.1);
+
 }
 
 pub fn flip_edge(graph: &mut Graph, edge_to_flip_option: Option<&EdgeSpecified>) {

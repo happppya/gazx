@@ -48,11 +48,23 @@ fn run_mutation(
     let duration = time_start.elapsed();
 
     println!("mutation time elapsed: {:?}", duration);
-    
-    clifford_simp(&mut graph_experimental);
-    let extracted_experimental = &graph_experimental.extractor().gflow().up_to_perm().extract()?;
 
-    println!("experimental: {}", extracted_experimental.stats());
+    let extract_experimental_result = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        clifford_simp(&mut graph_experimental);
+        graph_experimental.extractor().gflow().up_to_perm().extract()
+    }));
+
+    match extract_experimental_result {
+        Ok(Ok(circuit)) => {
+            println!("experimental circuit extract success: {}", circuit.stats());
+        }
+        Ok(Err(e)) => {
+            println!("experimental circuit extract error {:?}", e);
+        }
+        Err(_) => {
+            println!("experimental circuit extract error");
+        }
+    }
 
     Ok(duration)
 }
@@ -65,11 +77,6 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         println!("\nRunning new mutation: {:?}", mutation);
 
         let duration = run_mutation(circuit, mutation);
-        match duration {
-            Ok(_) => println!("Mutation success"),
-            Err(e) => println!("Mutation failed: {:?}", e),
-        }
-        
     }
 
     Ok(())

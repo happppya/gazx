@@ -14,6 +14,7 @@ pub enum MutationType {
     SplitEdge,
     AddEdge,
     SwitchEdge,
+    AddPhaseGadget,
 }
 
 pub const MUTATIONS_ALL: &[MutationType] = &[
@@ -27,6 +28,7 @@ pub const MUTATIONS_ALL: &[MutationType] = &[
     MutationType::SplitEdge,
     MutationType::AddEdge,
     MutationType::SwitchEdge,
+    MutationType::AddPhaseGadget,
 ];
 
 pub const MUTATIONS_EDGES: &[MutationType] = &[
@@ -50,5 +52,6 @@ pub fn run_mutation(graph: &mut Graph, mutation: &MutationType) {
         MutationType::SplitEdge => mutation_implementations::split_edge(graph, None),
         MutationType::AddEdge => mutation_implementations::add_edge(graph, None, None),
         MutationType::SwitchEdge => mutation_implementations::switch_edge(graph, None, None, None),
+        MutationType::AddPhaseGadget => mutation_implementations::add_phase_gadget(graph, None),
     }
 }

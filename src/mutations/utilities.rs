@@ -98,6 +98,7 @@ pub fn default_edge_old(
     match edge_option {
         Some(edge) => *edge,
         None => {
+
             let mut i: usize = 0;
             let target_index = rng().random_range(0..graph.num_edges());
 
@@ -112,6 +113,33 @@ pub fn default_edge_old(
             }
 
             result.expect("Graph should have at least one edge")
+        }
+    }
+}
+
+pub fn default_pivot_vertex_pair(
+    graph : &mut Graph,
+    vertex_pair_option : Option<&(usize, usize)>
+) -> (usize, usize) {
+    match vertex_pair_option {
+        Some(pair) => {*pair},
+        None => {
+
+            let mut valid_edges : Vec<EdgeSpecified> = Vec::new();
+            for edge in graph.edges() {
+                if 
+                graph.vertex_type(edge.0) != VType::B &&
+                graph.vertex_type(edge.1) != VType::B &&
+                has_nonboundary_neighbors(graph, edge.0) &&
+                has_nonboundary_neighbors(graph, edge.1) {
+                    valid_edges.push(edge);
+                }
+            }
+
+            let random_edge = valid_edges.choose(&mut rng()).unwrap();
+
+            (random_edge.0, random_edge.1)
+
         }
     }
 }
@@ -140,8 +168,6 @@ pub fn complement(graph: &mut Graph, vertex: usize) -> () {
     
     let neighbors: Vec<usize> = graph.neighbor_vec(vertex);
     let edge_set = get_edge_set(graph);
-
-    //todo just iterate from i to j where j starts at i, no need for hashset or vector
 
     for i in 0..neighbors.len() {
 
