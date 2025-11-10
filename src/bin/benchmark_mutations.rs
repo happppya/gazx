@@ -21,6 +21,7 @@ use quizx::simplify::*;
 use quizx::util;
 use quizx::vec_graph::*;
 
+use workspace::geneticZX::genetic_implementations;
 use workspace::mutations::mutation_runner::MutationType;
 use workspace::mutations::types::EdgeSpecified;
 use std::mem::uninitialized;
@@ -69,7 +70,8 @@ fn run_mutation(
                 // succeeded
             }
             Ok(Err(e)) => {
-                return Err(Box::new(e));
+                //println!("err: {:?}", e);
+                return Err(Box::new(e));genetic_implementations
             }
             Err(_) => {
                 return Err("Extractor panicked".into());
@@ -83,13 +85,15 @@ fn run_mutation(
 }
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
-    const TRIALS: u32 = 128;
+    const TRIALS: u32 = 256;
 
     //let circuit = &Circuit::from_file("circuits/small/gf2^16_mult.qasm")?.to_basic_gates();
     let circuit = &Circuit::from_file("circuits/small/grover_5.qasm")?.to_basic_gates();
 
-    //let mutations_to_run = vec![MutationType::Pivot];
-    let mutations_to_run = mutation_runner::MUTATIONS_ALL;
+    let mutations_to_run = vec![MutationType::RemoveEdge];
+    //let mutations_to_run = mutation_runner::MUTATIONS_ALL;
+
+    panic::set_hook(Box::new(|_| {})); // silence panic message
 
     for mutation in mutations_to_run {
         println!("\nRunning new mutation: {:?}", mutation);
