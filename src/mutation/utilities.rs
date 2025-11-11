@@ -1,6 +1,6 @@
 use std::{collections::HashSet, hash::Hash};
 use quizx::{phase::Phase, vec_graph::*};
-use rand::{ rng, seq::IndexedRandom, Rng };
+use rand::{ rng, seq::IndexedRandom, Rng, seq::IteratorRandom };
 
 use super::types::*;
 
@@ -67,8 +67,8 @@ pub fn default_vertex(
             
             let mut candidates = Vec::new();
             push_nonboundary_vertices(&mut candidates, graph);
-            
-            *candidates.choose(&mut rng()).unwrap()
+
+            return *candidates.choose(&mut rng()).unwrap()
             
         }
     };
@@ -77,18 +77,22 @@ pub fn default_vertex(
 
 }
 
-pub fn default_edge(
+pub fn default_edge_nth(
     graph: &Graph,
     edge_option: Option<&EdgeSpecified>
 ) -> EdgeSpecified {
-
     match edge_option {
         Some(edge) => *edge,
         None => {
-            *graph.edge_vec().choose(&mut rng()).unwrap()
+
+            let mut i: usize = 0;
+            let target_index = rng().random_range(0..graph.num_edges());
+
+            let result: Option<EdgeSpecified> = graph.edges().nth(target_index);
+
+            return result.expect("Graph should have at least one edge")
         }
     }
-    
 }
 
 pub fn default_edge_old(
@@ -112,9 +116,31 @@ pub fn default_edge_old(
                 i += 1;
             }
 
-            result.expect("Graph should have at least one edge")
+            return result.expect("Graph should have at least one edge")
         }
     }
+}
+
+pub fn default_edge_remove(
+    graph : &Graph,
+    edge_option: Option<&EdgeSpecified>
+) -> EdgeSpecified {
+
+    match edge_option {
+        Some(edge) => *edge,
+        None => {
+
+            let candidates : Vec<EdgeSpecified> = 
+                graph
+                    .edges()
+                    .filter(|e| graph.degree(e.0) > 1 && graph.degree(e.1) > 1)
+                    .collect();
+
+            return *candidates.choose(&mut rng()).unwrap()
+            
+        }
+    }
+
 }
 
 pub fn default_pivot_vertex_pair(
@@ -126,6 +152,7 @@ pub fn default_pivot_vertex_pair(
         None => {
 
             let mut valid_edges : Vec<EdgeSpecified> = Vec::new();
+            
             for edge in graph.edges() {
                 if 
                 graph.vertex_type(edge.0) != VType::B &&
@@ -136,6 +163,9 @@ pub fn default_pivot_vertex_pair(
                 }
             }
 
+
+            // TODO maybe return -1 and do nothing if valid edges is empty
+            
             let random_edge = valid_edges.choose(&mut rng()).unwrap();
 
             (random_edge.0, random_edge.1)

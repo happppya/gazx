@@ -23,7 +23,7 @@ use quizx::vec_graph::*;
 use std::time::Instant;
 // use quizx::tensor::*;
 
-mod mutations;
+use workspace::mutation::mutations;
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
 

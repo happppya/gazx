@@ -2,24 +2,28 @@ use quizx::{
     circuit::Circuit
 };
 
-use workspace::geneticZX;
-use geneticZX::{types, population, output};
+use workspace::geneticZX::{self, step::step_population};
+use geneticZX::{models, population, output};
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
-    let population_size: u32 = 10000;
+
+    let population_size: u32 = 100;
     let num_qubits: usize = 10usize;
+    let generations : u32 = 10;
 
     let goal_circuit = &Circuit::from_file("circuits/small/grover_5.qasm")?.to_basic_gates();
 
     let (graphs, graph_millis) = output::benchmark(|| {population::build_population(population_size, num_qubits)});
     
-    let population: types::GraphPopulation = types::GraphPopulation {
+    let population: &mut models::GraphPopulation = &mut models::GraphPopulation {
         graphs: graphs,
     };
 
-    let (_, extract_millis) = output::benchmark(|| {output::print_population(population)});
+    println!("Population build time (ms): {:?}", graph_millis);
 
-    println!("Population build time (ms): {:?}\nPrinting time (ms): {:?}", graph_millis, extract_millis);
+    for generation in 0..generations {
+        step_population(population);
+    }
 
     Ok(())
 }

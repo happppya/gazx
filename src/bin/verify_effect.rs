@@ -20,14 +20,14 @@ use quizx::extract::*;
 use quizx::simplify::*;
 use quizx::util;
 use quizx::vec_graph::*;
-use workspace::mutations::types::EdgeSpecified;
+use workspace::mutation::types::EdgeSpecified;
 use std::mem::uninitialized;
 use std::time::Duration;
 use std::time::Instant;
 
 // use quizx::tensor::*;
-use workspace::mutations;
-use workspace::mutations::mutation_runner;
+use workspace::mutation;
+use workspace::mutation::mutation_runner;
 
 fn run_mutation(
     circuit: &Circuit,

@@ -2,7 +2,7 @@ use indicatif::ProgressBar;
 use quizx::extract::ToCircuit;
 use quizx::simplify::clifford_simp;
 
-use super::types::GraphPopulation;
+use super::models::GraphPopulation;
 use super::bar_styles;
 
 pub fn benchmark<F, R>(f: F) -> (R, f64)
@@ -16,7 +16,7 @@ where
     (result, millis)
 }
 
-pub fn print_population(mut population: GraphPopulation) {
+pub fn print_population(population: &mut GraphPopulation) {
 
     let population_size = population.graphs.len();
     

@@ -25,11 +25,12 @@ static RNG_POISSON: LazyLock<Poisson<f64>> = std::sync::LazyLock::new(||
 #[inline]
 fn get_add_edge_candidates(graph: &Graph, first_vertex_candidate: usize) -> Vec<usize> {
     let neighbor_set = utilities::get_neighbor_set(graph, first_vertex_candidate);
+    let is_boundary = graph.vertex_type(first_vertex_candidate) == VType::B;
 
     graph
         .vertices()
         .filter(move |vertex| {
-            if graph.vertex_type(first_vertex_candidate) == VType::B {
+            if is_boundary {
                 graph.vertex_type(*vertex) != VType::B && !neighbor_set.contains(vertex)
             } else {
                 *vertex != first_vertex_candidate && !neighbor_set.contains(vertex)
@@ -96,7 +97,7 @@ pub fn full_reduce(graph: &mut Graph) -> () {
 }
 
 pub fn remove_edge(graph: &mut Graph, edge_to_remove_option: Option<&EdgeSpecified>) -> () {
-    let edge_to_remove = utilities::default_edge_old(graph, edge_to_remove_option);
+    let edge_to_remove = utilities::default_edge_remove(graph, edge_to_remove_option);
     graph.remove_edge(edge_to_remove.0, edge_to_remove.1);
 }
 
@@ -179,7 +180,7 @@ pub fn pivot(graph: &mut Graph, vertex_pair_option: Option<&EdgeGeneral>) -> () 
 }
 
 pub fn flip_edge(graph: &mut Graph, edge_to_flip_option: Option<&EdgeSpecified>) {
-    let edge_to_flip = utilities::default_edge_old(graph, edge_to_flip_option);
+    let edge_to_flip = utilities::default_edge_nth(graph, edge_to_flip_option);
 
     match graph.edge_type(edge_to_flip.0, edge_to_flip.1) {
         EType::H => graph.set_edge_type(edge_to_flip.0, edge_to_flip.1, EType::N),
@@ -191,7 +192,7 @@ pub fn flip_edge(graph: &mut Graph, edge_to_flip_option: Option<&EdgeSpecified>)
 }
 
 pub fn split_edge(graph: &mut Graph, edge_to_split_option: Option<&EdgeSpecified>) {
-    let edge_to_split = utilities::default_edge(graph, edge_to_split_option);
+    let edge_to_split = utilities::default_edge_nth(graph, edge_to_split_option);
 
     graph.remove_edge(edge_to_split.0, edge_to_split.1);
 

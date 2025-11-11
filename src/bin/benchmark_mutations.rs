@@ -21,18 +21,15 @@ use quizx::simplify::*;
 use quizx::util;
 use quizx::vec_graph::*;
 
-use workspace::geneticZX::genetic_implementations;
-use workspace::mutations::mutation_runner::MutationType;
-use workspace::mutations::types::EdgeSpecified;
-use std::mem::uninitialized;
+use workspace::mutation::mutation_runner::MutationType;
+use workspace::mutation::types::EdgeSpecified;
 use std::panic;
-use std::thread;
 use std::time::Duration;
 use std::time::Instant;
 
 // use quizx::tensor::*;
-use workspace::mutations;
-use workspace::mutations::mutation_runner;
+use workspace::mutation;
+use workspace::mutation::mutation_runner;
 
 static MEASURE_SUCCESS_RATE: bool = true;
 
@@ -71,7 +68,7 @@ fn run_mutation(
             }
             Ok(Err(e)) => {
                 //println!("err: {:?}", e);
-                return Err(Box::new(e));genetic_implementations
+                return Err(Box::new(e));
             }
             Err(_) => {
                 return Err("Extractor panicked".into());
@@ -90,7 +87,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     //let circuit = &Circuit::from_file("circuits/small/gf2^16_mult.qasm")?.to_basic_gates();
     let circuit = &Circuit::from_file("circuits/small/grover_5.qasm")?.to_basic_gates();
 
-    let mutations_to_run = vec![MutationType::RemoveEdge];
+    let mutations_to_run = vec![MutationType::FlipEdge, MutationType::SplitEdge];
     //let mutations_to_run = mutation_runner::MUTATIONS_ALL;
 
     panic::set_hook(Box::new(|_| {})); // silence panic message
