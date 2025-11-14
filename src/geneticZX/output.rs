@@ -2,6 +2,8 @@ use indicatif::ProgressBar;
 use quizx::extract::ToCircuit;
 use quizx::simplify::clifford_simp;
 
+use colored::Colorize;
+
 use super::models::GraphPopulation;
 use super::bar_styles;
 
@@ -21,11 +23,11 @@ pub fn print_population(population: &mut GraphPopulation) {
     let population_size = population.graphs.len();
     
     let progress_bar = ProgressBar::new( population_size as u64);
-
     progress_bar.set_style(bar_styles::style_print_population());
     progress_bar.set_message("Extracting circuits");
 
     for (i, graph) in population.graphs.iter_mut().enumerate() {
+        
         let extract_result = std::panic::catch_unwind(
             std::panic::AssertUnwindSafe(
                 || -> Result<_, _> {
@@ -37,13 +39,14 @@ pub fn print_population(population: &mut GraphPopulation) {
 
         match extract_result {
             Ok(Ok(circuit)) => {
-                println!("Extract success: {:?} at index {}", circuit.stats(), i);
+                println!("{} Extract success: {:?} at index {} when running mutation {:?}", "[S]".green(), circuit.stats(), i, population.last_mutations[i]);
             }
-            Ok(Err(_e)) => {
+            Ok(Err(e)) => {
                 // Extract error
+                println!("{} Extract fail: at index {} when running mutation {:?}", "[F]".yellow(), i, population.last_mutations[i]);
             }
-            Err(_) => {
-                // Panic occurred
+            Err(e) => {
+                println!("{} Panic: at index {} when running mutation {:?}", "[P]".red(), i, population.last_mutations[i]);
             }
         }
         

@@ -1,6 +1,6 @@
 use std::{collections::HashSet, hash::Hash};
 use quizx::{phase::Phase, vec_graph::*};
-use rand::{ rng, seq::IndexedRandom, Rng, seq::IteratorRandom };
+use rand::{ Rng, random, rng, seq::{IndexedRandom, IteratorRandom} };
 
 use super::types::*;
 
@@ -23,7 +23,7 @@ fn has_nonboundary_neighbors(graph: &Graph, vertex: usize) -> bool {
 
 pub fn get_vertices_nonboundary<'a>(graph : &'a Graph) -> impl Iterator<Item=usize> + 'a {
 
-    graph.vertices().filter(move |v| graph.vertex_type(*v) == VType::B)
+    graph.vertices().filter(move |v| graph.vertex_type(*v) != VType::B)
     
 }
 
@@ -59,21 +59,25 @@ fn push_nonboundary_vertices(
 pub fn default_vertex(
     graph : &Graph,
     vertex_option : Option<usize>
-) -> usize {
+) -> Option<usize> {
 
     match vertex_option {
         Some(vertex) => vertex,
         None => {
             
-            let mut candidates = Vec::new();
+            let mut candidates: Vec<usize> = Vec::new();
             push_nonboundary_vertices(&mut candidates, graph);
 
-            return *candidates.choose(&mut rng()).unwrap()
+            if candidates.is_empty() {
+                return None;
+            }
+
+            return candidates.choose(&mut rng()).copied();
             
         }
     };
 
-    0usize
+    None
 
 }
 
@@ -124,10 +128,10 @@ pub fn default_edge_old(
 pub fn default_edge_remove(
     graph : &Graph,
     edge_option: Option<&EdgeSpecified>
-) -> EdgeSpecified {
+) -> Option<EdgeSpecified> {
 
     match edge_option {
-        Some(edge) => *edge,
+        Some(edge) => Some(*edge),
         None => {
 
             let candidates : Vec<EdgeSpecified> = 
@@ -136,7 +140,7 @@ pub fn default_edge_remove(
                     .filter(|e| graph.degree(e.0) > 1 && graph.degree(e.1) > 1)
                     .collect();
 
-            return *candidates.choose(&mut rng()).unwrap()
+            return candidates.choose(&mut rng()).copied()
             
         }
     }
@@ -146,9 +150,9 @@ pub fn default_edge_remove(
 pub fn default_pivot_vertex_pair(
     graph : &mut Graph,
     vertex_pair_option : Option<&(usize, usize)>
-) -> (usize, usize) {
+) -> Option<(usize, usize)> {
     match vertex_pair_option {
-        Some(pair) => {*pair},
+        Some(pair) => {Some(*pair)},
         None => {
 
             let mut valid_edges : Vec<EdgeSpecified> = Vec::new();
@@ -163,12 +167,12 @@ pub fn default_pivot_vertex_pair(
                 }
             }
 
+            let random_edge = valid_edges.choose(&mut rng());
 
-            // TODO maybe return -1 and do nothing if valid edges is empty
-            
-            let random_edge = valid_edges.choose(&mut rng()).unwrap();
-
-            (random_edge.0, random_edge.1)
+            match random_edge {
+                Some(edge) => return Some((edge.0, edge.1)),
+                None => return None,
+            }
 
         }
     }
@@ -212,7 +216,10 @@ pub fn complement(graph: &mut Graph, vertex: usize) -> () {
             if edge_set.contains(&edge) {
                 graph.remove_edge(n1, n2);
             } else {
+
+                println!("Complement adding edge between vertices {:?} and {:?}", graph.vertex_type(n1), graph.vertex_type(n2));
                 graph.add_edge_with_type(n1, n2, EType::H);
+                
             }
         }
     }

@@ -2,8 +2,9 @@ use quizx::{
     circuit::Circuit
 };
 
-use workspace::geneticZX::{self, step::step_population};
+use workspace::{geneticZX::{self, step::step_population}, mutation::mutation_runner::MutationType};
 use geneticZX::{models, population, output};
+use workspace::mutation::mutation_runner;
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
 
@@ -17,6 +18,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     
     let population: &mut models::GraphPopulation = &mut models::GraphPopulation {
         graphs: graphs,
+        last_mutations: vec![&MutationType::NoMutation; population_size as usize],
     };
 
     println!("Population build time (ms): {:?}", graph_millis);

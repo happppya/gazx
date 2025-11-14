@@ -8,17 +8,15 @@ use super::output;
 use crate::mutation;
 use crate::mutation::mutation_runner;
 
-fn mutate_graph(graph : &mut Graph) {
-
-  let mutation = mutation_runner::MUTATIONS_ALL.choose(&mut rng()).unwrap();
-  mutation_runner::run_mutation(graph, mutation);
-
-}
-
 pub fn step_population(population : &mut GraphPopulation) {
 
-  for graph in &mut population.graphs {
-    mutate_graph(graph);
+  for (i, graph) in population.graphs.iter_mut().enumerate() {
+
+    let mutation = mutation_runner::MUTATIONS_ALL.choose(&mut rng()).unwrap();
+    population.last_mutations[i] = mutation;
+    
+    mutation_runner::run_mutation(graph, mutation);
+    
   }
 
   let (_, extract_millis) = output::benchmark(|| {output::print_population(population)});

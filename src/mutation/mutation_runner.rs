@@ -4,6 +4,7 @@ use super::mutations;
 
 #[derive(Debug)]
 pub enum MutationType {
+
     LocalComplement,
     InverseLocalComplement,
     FullReduce,
@@ -15,6 +16,9 @@ pub enum MutationType {
     AddEdge,
     SwitchEdge,
     AddPhaseGadget,
+
+    NoMutation,
+
 }
 
 pub const MUTATIONS_ALL: &[MutationType] = &[
@@ -53,5 +57,6 @@ pub fn run_mutation(graph: &mut Graph, mutation: &MutationType) {
         MutationType::AddEdge => mutations::add_edge(graph, None, None),
         MutationType::SwitchEdge => mutations::switch_edge(graph, None, None, None),
         MutationType::AddPhaseGadget => mutations::add_phase_gadget(graph, None),
+        MutationType::NoMutation => {},
     }
 }

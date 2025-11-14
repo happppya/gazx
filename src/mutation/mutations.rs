@@ -60,18 +60,19 @@ pub fn add_edge(
             let mut first_vertex_candidates = graph.vertex_vec();
             loop {
                 if first_vertex_candidates.is_empty() {
-                    panic!("No valid vertex found");
+                    //panic!("No valid vertex found"); // TODO how are there no vertices?
+                    return;
                 }
                 let random_index = rng().random_range(0..first_vertex_candidates.len());
                 let candidates = get_add_edge_candidates(
                     graph,
                     first_vertex_candidates[random_index]
                 );
-                if !candidates.is_empty() {
+                if candidates.is_empty() {
+                    first_vertex_candidates.remove(random_index);
+                } else {
                     let second_vertex = *candidates.choose(&mut rng()).unwrap();
                     break (first_vertex_candidates[random_index], second_vertex);
-                } else {
-                    first_vertex_candidates.remove(random_index);
                 }
             }
         }
@@ -87,6 +88,9 @@ pub fn add_edge(
                 1 => EType::H,
                 _ => unreachable!(),
             };
+
+            //println!("Adding edge between two VTypes {:?}, {:?}", graph.vertex_type(first_vertex), graph.vertex_type(second_vertex));
+
             graph.add_edge_with_type(first_vertex, second_vertex, edge_type);
         }
     }
@@ -98,12 +102,18 @@ pub fn full_reduce(graph: &mut Graph) -> () {
 
 pub fn remove_edge(graph: &mut Graph, edge_to_remove_option: Option<&EdgeSpecified>) -> () {
     let edge_to_remove = utilities::default_edge_remove(graph, edge_to_remove_option);
-    graph.remove_edge(edge_to_remove.0, edge_to_remove.1);
+    match edge_to_remove {
+        Some(edge) => graph.remove_edge(edge.0, edge.1),
+        None => return,
+    }
 }
 
 pub fn remove_vertex(graph: &mut Graph, vertex_to_remove_option: Option<usize>) -> () {
     let vertex_to_remove = utilities::default_vertex(graph, vertex_to_remove_option);
-    graph.remove_vertex(vertex_to_remove);
+    match vertex_to_remove {
+        Some(vertex) =>graph.remove_vertex(vertex),
+        None => return,
+    }
 }
 
 pub fn switch_edge(
@@ -159,23 +169,32 @@ pub fn add_phase_gadget(graph : &mut Graph, vertices_to_attach_option : Option<&
 ///
 pub fn local_complement(graph: &mut Graph, vertex_to_remove_option: Option<usize>) {
     let vertex_to_remove = utilities::default_vertex(graph, vertex_to_remove_option);
-
-    utilities::complement(graph, vertex_to_remove);
+    match vertex_to_remove {
+        Some(vertex) => utilities::complement(graph, vertex),
+        None => return,
+    }
 }
 
 pub fn pivot(graph: &mut Graph, vertex_pair_option: Option<&EdgeGeneral>) -> () {
-    let edge_to_remove = utilities::default_pivot_vertex_pair(graph, vertex_pair_option);
 
-    let data1 = graph.vertex_data(edge_to_remove.0);
-    let data2 = graph.vertex_data(edge_to_remove.1);
-    let edgedata = graph.edge_type(edge_to_remove.0, edge_to_remove.1);
+    let edge_to_remove_default: Option<(usize, usize)> = utilities::default_pivot_vertex_pair(graph, vertex_pair_option);
+    match edge_to_remove_default {
+        Some(edge_to_remove) => {
 
-    utilities::complement(graph, edge_to_remove.0);
-    utilities::complement(graph, edge_to_remove.1);
-    utilities::complement(graph, edge_to_remove.0);
+            let data1 = graph.vertex_data(edge_to_remove.0);
+            let data2 = graph.vertex_data(edge_to_remove.1);
+            let edgedata = graph.edge_type(edge_to_remove.0, edge_to_remove.1);
 
-    graph.remove_vertex(edge_to_remove.0);
-    graph.remove_vertex(edge_to_remove.1);
+            utilities::complement(graph, edge_to_remove.0);
+            utilities::complement(graph, edge_to_remove.1);
+            utilities::complement(graph, edge_to_remove.0);
+
+            graph.remove_vertex(edge_to_remove.0);
+            graph.remove_vertex(edge_to_remove.1);
+
+        },
+        None => return,
+    }
 
 }
 
@@ -238,6 +257,7 @@ pub fn inverse_local_complement(graph: &mut Graph, vertices_to_attach_option: Op
             if edge_set.contains(&edge) {
                 graph.remove_edge(n1, n2);
             } else {
+                println!("Inv Comp adding edge between vertices {:?} and {:?}", graph.vertex_type(n1), graph.vertex_type(n2));
                 graph.add_edge_with_type(n1, n2, EType::H);
             }
         }
