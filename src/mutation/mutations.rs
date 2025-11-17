@@ -1,3 +1,5 @@
+
+use std::panic::AssertUnwindSafe;
 use std::sync::LazyLock;
 
 use ndarray::MathCell;
@@ -97,7 +99,20 @@ pub fn add_edge(
 }
 
 pub fn full_reduce(graph: &mut Graph) -> () {
-    full_simp(graph);
+
+    let simplification_result = std::panic::catch_unwind(std::panic::AssertUnwindSafe(
+        || full_simp(graph)
+    ));
+
+    match simplification_result {
+        Ok(_res) => {
+            return;
+        }
+        Err(_e) => {
+            return;
+        }
+    }
+    
 }
 
 pub fn remove_edge(graph: &mut Graph, edge_to_remove_option: Option<&EdgeSpecified>) -> () {

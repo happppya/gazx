@@ -1,10 +1,7 @@
 use indicatif::ProgressBar;
-use quizx::extract::ToCircuit;
-use quizx::simplify::clifford_simp;
-
 use colored::Colorize;
 
-use super::models::GraphPopulation;
+use super::models::{GraphPopulation, ExtractStatus};
 use super::bar_styles;
 
 pub fn benchmark<F, R>(f: F) -> (R, f64)
@@ -20,37 +17,22 @@ where
 
 pub fn print_population(population: &mut GraphPopulation) {
 
-    let population_size = population.graphs.len();
-    
-    let progress_bar = ProgressBar::new( population_size as u64);
-    progress_bar.set_style(bar_styles::style_print_population());
-    progress_bar.set_message("Extracting circuits");
-
-    for (i, graph) in population.graphs.iter_mut().enumerate() {
+    for (i, extract_status) in population.extract_statuses.iter_mut().enumerate() {
         
-        let extract_result = std::panic::catch_unwind(
-            std::panic::AssertUnwindSafe(
-                || -> Result<_, _> {
-                    clifford_simp(graph);
-                    graph.extractor().gflow().up_to_perm().extract()
-                }
-            )
-        );
-
-        match extract_result {
-            Ok(Ok(circuit)) => {
+        match extract_status {
+            ExtractStatus::Success => {
+                let circuit = &population.circuits[i];
                 println!("{} Extract success: {:?} at index {} when running mutation {:?}", "[S]".green(), circuit.stats(), i, population.last_mutations[i]);
             }
-            Ok(Err(e)) => {
+            ExtractStatus::Fail => {
                 // Extract error
                 println!("{} Extract fail: at index {} when running mutation {:?}", "[F]".yellow(), i, population.last_mutations[i]);
             }
-            Err(e) => {
+            ExtractStatus::Panic => {
                 println!("{} Panic: at index {} when running mutation {:?}", "[P]".red(), i, population.last_mutations[i]);
             }
         }
         
     }
 
-    progress_bar.finish();
 }

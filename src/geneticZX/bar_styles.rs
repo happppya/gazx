@@ -5,7 +5,7 @@ pub fn style_build_population() -> ProgressStyle {
   return style;
 }
 
-pub fn style_print_population() -> ProgressStyle {
+pub fn style_extract_population() -> ProgressStyle {
   let style = ProgressStyle::with_template("[{elapsed_precise}] {msg} {bar:40.cyan/blue}").unwrap().progress_chars("##-");
   return style;
 }

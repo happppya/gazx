@@ -1,6 +1,6 @@
 pub mod output;
-pub mod population;
+pub mod population_util;
 pub mod models;
 pub mod bar_styles;
 
-pub mod step;
+pub mod genetic_main;
