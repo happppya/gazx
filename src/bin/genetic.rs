@@ -1,11 +1,8 @@
 use quizx::circuit::Circuit;
 
-use geneticZX::{models, output, population_util};
-use workspace::mutation::mutation_runner;
-use workspace::{
-    geneticZX::{self, genetic_main::step_population, models::ExtractStatus},
-    mutation::mutation_runner::MutationType,
-};
+use geneticZX::{genetic_util, models, models::ExtractStatus, output};
+use workspace::geneticZX;
+use workspace::mutation::mutation_runner::MutationType;
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     let population_size: u32 = 50;
@@ -15,7 +12,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     let goal_circuit = &Circuit::from_file("circuits/small/grover_5.qasm")?.to_basic_gates();
 
     let (graphs, graph_millis) =
-        output::benchmark(|| population_util::build_population(population_size, num_qubits));
+        output::benchmark(|| genetic_util::build_population(population_size, num_qubits));
 
     let population: &mut models::GraphPopulation = &mut models::GraphPopulation {
         graphs: graphs,
@@ -28,7 +25,15 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     println!("Population build time (ms): {:?}", graph_millis);
 
     for generation in 0..generations {
-        step_population(population);
+        genetic_util::mutate_population(population);
+
+        let (_, extract_millis) = output::benchmark(|| {
+            genetic_util::extract_population(population);
+        });
+
+        output::print_population(population);
+
+        println!("Population extraction time: {:?}", extract_millis);
     }
 
     Ok(())
