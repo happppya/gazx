@@ -1,8 +1,8 @@
 use quizx::circuit::Circuit;
 
-use geneticZX::{fitness, genetic_util, models, models::ExtractStatus, output};
-use workspace::geneticZX;
-use workspace::geneticZX::fitness::set_fitness_values;
+use genetic_zx::{fitness, genetic_util, models, models::ExtractStatus, output};
+use workspace::genetic_zx;
+use workspace::genetic_zx::fitness::set_fitness_values;
 use workspace::mutation::mutation_runner::MutationType;
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
