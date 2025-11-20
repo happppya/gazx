@@ -11,11 +11,10 @@ pub enum ExtractStatus {
 
 #[derive(Debug)]
 pub struct GraphPopulation<'a> {
-
     pub graphs: Vec<Graph>,
     pub circuits: Vec<Circuit>,
-    
-    pub last_mutations : Vec<&'a MutationType>,
-    pub extract_statuses : Vec<&'a ExtractStatus>,
 
+    pub last_mutations: Vec<&'a MutationType>,
+    pub extract_statuses: Vec<&'a ExtractStatus>,
+    pub fitness_values: Vec<i64>,
 }

@@ -1,7 +1,8 @@
 use quizx::circuit::Circuit;
 
-use geneticZX::{genetic_util, models, models::ExtractStatus, output};
+use geneticZX::{fitness, genetic_util, models, models::ExtractStatus, output};
 use workspace::geneticZX;
+use workspace::geneticZX::fitness::set_fitness_values;
 use workspace::mutation::mutation_runner::MutationType;
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
@@ -20,6 +21,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
         circuits: vec![Circuit::new(0); population_size as usize],
         extract_statuses: vec![&ExtractStatus::Success; population_size as usize],
+        fitness_values: vec![0; population_size as usize],
     };
 
     println!("Population build time (ms): {:?}", graph_millis);
@@ -30,6 +32,8 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         let (_, extract_millis) = output::benchmark(|| {
             genetic_util::extract_population(population);
         });
+
+        fitness::set_fitness_values(population);
 
         output::print_population(population);
 
