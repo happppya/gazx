@@ -17,6 +17,10 @@ fn get_component_approximation_error(graph: &Graph, circuit: &Circuit) -> i64 {
     0
 }
 
+fn get_component_depth(graph: &Graph, circuit: &Circuit) -> i64 {
+    0
+}
+
 fn get_component_complex_gates(graph: &Graph, circuit: &Circuit) -> i64 {
     let stats = circuit.stats();
     let two_qubit_diff = stats.twoq - GOAL_CIRCUIT_STATS.twoq;
@@ -25,13 +29,6 @@ fn get_component_complex_gates(graph: &Graph, circuit: &Circuit) -> i64 {
 
 fn get_component_input_encodings(graph: &Graph, circuit: &Circuit) -> i64 {
     -1 * graph.inputs().len() as i64
-}
-
-fn get_component_complex_gates(circuit: Circuit) -> i64 {
-    let stats = circuit.stats();
-    let two_qubit_diff = GOAL_STATS.twoq - stats.twoq;
-
-    return two_qubit_diff as i64;
 }
 
 pub fn get_fitness(graph: Graph, circuit: Circuit) -> i64 {

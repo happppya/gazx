@@ -1,8 +1,5 @@
-use indicatif::{ProgressBar, ProgressState};
-use quizx::{
-    generate::RandomCircuitBuilder, random_graph::EquatorialStabilizerStateBuilder,
-    vec_graph::Graph,
-};
+use indicatif::ProgressBar;
+use quizx::{generate::RandomCircuitBuilder, vec_graph::Graph};
 
 use rand::{prelude::IndexedRandom, rng, rngs::StdRng, SeedableRng};
 
@@ -35,7 +32,7 @@ pub fn build_population(population_size: u32, num_qubits: usize) -> Vec<Graph> {
     progress_bar.set_style(bar_styles::style_build_population());
     progress_bar.set_message(format!("Building population with size {}", population_size));
 
-    for i in 0..population_size {
+    for _i in 0..population_size {
         let graph = random_circuit_builder.build().to_graph();
 
         random_population.push(graph);
@@ -78,10 +75,10 @@ pub fn extract_population(population: &mut GraphPopulation) {
                 population.extract_statuses[i] = &ExtractStatus::Success;
                 population.circuits[i] = circuit;
             }
-            Ok(Err(e)) => {
+            Ok(Err(_e)) => {
                 population.extract_statuses[i] = &ExtractStatus::Fail;
             }
-            Err(e) => {
+            Err(_e) => {
                 population.extract_statuses[i] = &ExtractStatus::Panic;
                 println!("{} with {:?}", "PANIC".red(), population.last_mutations[i]);
             }

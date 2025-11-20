@@ -24,7 +24,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     println!("Population build time (ms): {:?}", graph_millis);
 
-    for generation in 0..generations {
+    for _generation in 0..generations {
         genetic_util::mutate_population(population);
 
         let (_, extract_millis) = output::benchmark(|| {
