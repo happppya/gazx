@@ -2,7 +2,7 @@ use quizx::{circuit::Circuit, vec_graph::Graph};
 
 use crate::mutation::mutation_runner::MutationType;
 
-#[derive(Debug)]
+#[derive(Clone, Copy, Debug)]
 pub enum ExtractStatus {
     Success,
     Fail,
@@ -10,11 +10,10 @@ pub enum ExtractStatus {
 }
 
 #[derive(Debug)]
-pub struct GraphPopulation<'a> {
+pub struct GraphPopulation {
     pub graphs: Vec<Graph>,
     pub circuits: Vec<Circuit>,
-
-    pub last_mutations: Vec<&'a MutationType>,
-    pub extract_statuses: Vec<&'a ExtractStatus>,
+    pub last_mutations: Vec<MutationType>,
+    pub extract_statuses: Vec<ExtractStatus>,
     pub fitness_values: Vec<i64>,
 }

@@ -2,7 +2,7 @@ use quizx::vec_graph::Graph;
 
 use super::mutations;
 
-#[derive(Debug)]
+#[derive(Clone, Copy, Debug)]
 pub enum MutationType {
 
     LocalComplement,
