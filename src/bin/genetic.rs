@@ -34,7 +34,6 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         });
 
         fitness::set_fitness_values(population);
-
         output::print_population(population);
 
         println!("Population extraction time: {:?}", extract_millis);
