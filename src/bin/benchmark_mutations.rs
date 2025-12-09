@@ -67,7 +67,7 @@ fn run_mutation(
                 // succeeded
             }
             Ok(Err(e)) => {
-                //println!("err: {:?}", e);
+                println!("err: {:?}", e);
                 return Err(Box::new(e));
             }
             Err(_) => {
@@ -82,7 +82,7 @@ fn run_mutation(
 }
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
-    const TRIALS: u32 = 256;
+    const TRIALS: u32 = 16;
 
     //let circuit = &Circuit::from_file("circuits/small/gf2^16_mult.qasm")?.to_basic_gates();
     let circuit = &Circuit::from_file("circuits/small/grover_5.qasm")?.to_basic_gates();
@@ -90,7 +90,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     let mutations_to_run = vec![MutationType::FlipEdge, MutationType::SplitEdge];
     //let mutations_to_run = mutation_runner::MUTATIONS_ALL;
 
-    panic::set_hook(Box::new(|_| {})); // silence panic message
+    //panic::set_hook(Box::new(|_| {})); // silence panic message
 
     for mutation in mutations_to_run {
         println!("\nRunning new mutation: {:?}", mutation);
