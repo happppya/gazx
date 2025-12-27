@@ -14,11 +14,16 @@ use quizx::simplify::clifford_simp;
 use crate::mutation::mutation_runner;
 
 use super::bar_styles;
-use super::models::{ExtractStatus, GraphPopulation};
+use super::models::{ExtractStatus, PopulationComponents};
 
-static TARGET_GRAPH : LazyLock<Graph> = LazyLock::new(|| {
-    Circuit::from_file("circuits/small/grover_5.qasm").unwrap().to_basic_gates().to_graph()
+static TARGET_GRAPH: LazyLock<Graph> = LazyLock::new(|| {
+    Circuit::from_file("circuits/small/grover_5.qasm")
+        .unwrap()
+        .to_basic_gates()
+        .to_graph()
 });
+
+static MUTATION_RETRIES: u32 = 10;
 
 pub fn build_population(population_size: u32, num_qubits: usize) -> Vec<Graph> {
     let mut random_population: Vec<Graph> = Vec::new();
@@ -51,17 +56,64 @@ pub fn build_population(population_size: u32, num_qubits: usize) -> Vec<Graph> {
     random_population
 }
 
-pub fn mutate_population(population: &mut GraphPopulation) {
-    for (i, graph) in population.graphs.iter_mut().enumerate() {
+pub fn mutate_and_extract(population: &mut PopulationComponents) {
+    for (i, graph) in population.graph.iter_mut().enumerate() {
         let mutation = mutation_runner::MUTATIONS_ALL.choose(&mut rng()).unwrap();
-        population.last_mutations[i] = *mutation;
+        population.last_mutation[i] = *mutation;
+        population.extract_status[i] = ExtractStatus::Panic;
+        population.mutation_retries[i] = 0;
+    }
+
+    for _ in 1..MUTATION_RETRIES + 1 {
+        for (i, graph) in population.graph.iter_mut().enumerate() {
+            if population.extract_status[i] == ExtractStatus::Success {
+                continue;
+            }
+
+            population.mutation_retries[i] += 1;
+
+            // work on a temporary graph
+            let mut candidate = graph.clone();
+
+            mutation_runner::run_mutation(&mut candidate, &population.last_mutation[i]);
+
+            let extract_result =
+                std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| -> Result<_, _> {
+                    let mut clone = candidate.clone();
+                    clifford_simp(&mut clone);
+                    clone.extractor().gflow().up_to_perm().extract()
+                }));
+            
+            match extract_result {
+                Ok(Ok(circuit)) => {
+                    *graph = candidate;
+                    population.extract_status[i] = ExtractStatus::Success;
+                    population.circuit[i] = circuit;
+                }
+                Ok(Err(_)) => {
+                    population.extract_status[i] = ExtractStatus::Fail;
+                }
+                Err(_) => {
+                    population.extract_status[i] = ExtractStatus::Panic;
+                    println!("{} with {:?}", "PANIC".red(), population.last_mutation[i]);
+                }
+            }
+        }
+    }
+
+}
+
+pub fn mutate_population(population: &mut PopulationComponents) {
+    for (i, graph) in population.graph.iter_mut().enumerate() {
+        let mutation = mutation_runner::MUTATIONS_ALL.choose(&mut rng()).unwrap();
+        population.last_mutation[i] = *mutation;
 
         mutation_runner::run_mutation(graph, mutation);
     }
 }
 
-pub fn extract_population(population: &mut GraphPopulation) {
-    let population_size = population.graphs.len();
+pub fn extract_population(population: &mut PopulationComponents) {
+    let population_size = population.graph.len();
     let progress_bar = ProgressBar::new(population_size as u64);
 
     progress_bar.set_style(bar_styles::style_build_population());
@@ -70,7 +122,7 @@ pub fn extract_population(population: &mut GraphPopulation) {
         population_size
     ));
 
-    for (i, graph) in population.graphs.iter_mut().enumerate() {
+    for (i, graph) in population.graph.iter_mut().enumerate() {
         let extract_result =
             std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| -> Result<_, _> {
                 let mut clone = graph.clone();
@@ -80,15 +132,15 @@ pub fn extract_population(population: &mut GraphPopulation) {
 
         match extract_result {
             Ok(Ok(circuit)) => {
-                population.extract_statuses[i] = ExtractStatus::Success;
-                population.circuits[i] = circuit;
+                population.extract_status[i] = ExtractStatus::Success;
+                population.circuit[i] = circuit;
             }
             Ok(Err(_e)) => {
-                population.extract_statuses[i] = ExtractStatus::Fail;
+                population.extract_status[i] = ExtractStatus::Fail;
             }
             Err(_e) => {
-                population.extract_statuses[i] = ExtractStatus::Panic;
-                println!("{} with {:?}", "PANIC".red(), population.last_mutations[i]);
+                population.extract_status[i] = ExtractStatus::Panic;
+                println!("{} with {:?}", "PANIC".red(), population.last_mutation[i]);
             }
         }
 

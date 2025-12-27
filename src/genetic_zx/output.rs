@@ -2,7 +2,7 @@ use crate::mutation;
 
 use super::{
     fitness,
-    models::{ExtractStatus, GraphPopulation},
+    models::{ExtractStatus, PopulationComponents},
 };
 use colored::Colorize;
 use quizx::circuit::CircuitStats;
@@ -18,12 +18,12 @@ where
     (result, millis)
 }
 
-fn print_at_index(population: &GraphPopulation, i: usize) {
-    let extract_status = population.extract_statuses[i];
+fn print_at_index(population: &PopulationComponents, i: usize) {
+    let extract_status = population.extract_status[i];
 
     match extract_status {
         ExtractStatus::Success => {
-            let circuit = &population.circuits[i];
+            let circuit = &population.circuit[i];
             println!(
                 "{} {} Extract Success {:?}",
                 "[S]".green(),
@@ -39,14 +39,16 @@ fn print_at_index(population: &GraphPopulation, i: usize) {
         }
     }
 
-    let mutation = population.last_mutations[i];
-    let fitness_value = population.fitness_values[i];
-    println!("\tMutation {:?}", mutation);
+    let mutation = population.last_mutation[i];
+    let fitness_value = population.fitness[i];
+    let mutation_retries = population.mutation_retries[i];
+    
+    println!("\tMutation {:?} with {} tries", mutation, mutation_retries);
     println!("\tFitness {:?}", fitness_value);
 }
 
-pub fn print_population(population: &mut GraphPopulation) {
-    for i in 0..population.graphs.len() {
+pub fn print_population(population: &mut PopulationComponents) {
+    for i in 0..population.graph.len() {
         print_at_index(population, i);
     }
 }

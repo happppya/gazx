@@ -1,7 +1,7 @@
 use quizx::{circuit::{Circuit, CircuitStats}, graph::GraphLike, vec_graph::Graph};
 use std::sync::LazyLock;
 
-use super::models::{GraphPopulation, ExtractStatus};
+use super::models::{PopulationComponents, ExtractStatus};
 
 static GOAL_CIRCUIT : LazyLock<Circuit> = LazyLock::new(|| {
     Circuit::from_file("circuits/small/grover_5.qasm").unwrap().to_basic_gates()
@@ -32,35 +32,35 @@ fn get_input_encodings(graph : &Graph, _circuit : &Circuit) -> i64 {
     graph.inputs().len() as i64 - GOAL_GRAPH.inputs().len() as i64
 }
 
-fn get_fitness(population : &GraphPopulation, i : usize) -> i64 {
+fn get_fitness(population : &PopulationComponents, i : usize) -> i64 {
 
-    let graph = &population.graphs[i];
-    let circuit = &population.circuits[i];
+    let graph = &population.graph[i];
+    let circuit = &population.circuit[i];
 
     let approximation_error = get_approximation_error(graph, circuit);
     let depth = get_depth(graph, circuit);
     let complex_gates = get_complex_gates(graph, circuit);
     let input_encodings = get_input_encodings(graph, circuit);
 
-    let fail_penalty = match population.extract_statuses[i] {
+    let fail_penalty = match population.extract_status[i] {
         ExtractStatus::Success => 0,
         ExtractStatus::Fail => -100000,
         ExtractStatus::Panic => -100000,
     };
 
-    println!("Getting fitness\nstats {:?}\n components {} {} {} {}", circuit.stats(),
-        approximation_error, depth, complex_gates, input_encodings);
+    //println!("Getting fitness\nstats {:?}\n components {} {} {} {}", circuit.stats(),
+    //   approximation_error, depth, complex_gates, input_encodings);
 
     return 
-        0 * approximation_error + // unimplemented
+        0 * approximation_error + // not implemented
         -10 * depth +
         -10 * complex_gates + 
         -10 * input_encodings +
         fail_penalty;
 }
 
-pub fn set_fitness_values(population : &mut GraphPopulation) {
-    for i in 0..population.graphs.len() {
-        population.fitness_values[i] = get_fitness(population, i);
+pub fn set_fitness_values(population : &mut PopulationComponents) {
+    for i in 0..population.graph.len() {
+        population.fitness[i] = get_fitness(population, i);
     }
 }
