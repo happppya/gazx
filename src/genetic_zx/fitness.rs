@@ -8,7 +8,7 @@ static GOAL_CIRCUIT : LazyLock<Circuit> = LazyLock::new(|| {
 });
 
 static GOAL_GRAPH : LazyLock<Graph> = LazyLock::new(|| {
-    GOAL_CIRCUIT.to_graph_with_options(true, true)
+    GOAL_CIRCUIT.to_graph_with_options(false, false)
 });
 
 static GOAL_CIRCUIT_STATS : LazyLock<CircuitStats> = LazyLock::new(|| {

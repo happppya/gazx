@@ -162,7 +162,8 @@ pub fn default_pivot_vertex_pair(
                 graph.vertex_type(edge.0) != VType::B &&
                 graph.vertex_type(edge.1) != VType::B &&
                 has_nonboundary_neighbors(graph, edge.0) &&
-                has_nonboundary_neighbors(graph, edge.1) {
+                has_nonboundary_neighbors(graph, edge.1) 
+                {
                     valid_edges.push(edge);
                 }
             }
@@ -217,7 +218,7 @@ pub fn complement(graph: &mut Graph, vertex: usize) -> () {
                 graph.remove_edge(n1, n2);
             } else {
 
-                println!("Complement adding edge between vertices {:?} and {:?}", graph.vertex_type(n1), graph.vertex_type(n2));
+                //println!("Complement adding edge between vertices {:?} and {:?}", graph.vertex_type(n1), graph.vertex_type(n2));
                 graph.add_edge_with_type(n1, n2, EType::H);
                 
             }

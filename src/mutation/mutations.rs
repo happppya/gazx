@@ -1,8 +1,10 @@
 
+use std::f64::consts::PI;
 use std::panic::AssertUnwindSafe;
 use std::sync::LazyLock;
 
 use ndarray::MathCell;
+use quizx::basic_rules;
 use quizx::circuit::*;
 use quizx::extract::*;
 use quizx::gate::GType::HAD;
@@ -200,10 +202,14 @@ pub fn pivot(graph: &mut Graph, vertex_pair_option: Option<&EdgeGeneral>) -> () 
             let data2 = graph.vertex_data(edge_to_remove.1);
             let edgedata = graph.edge_type(edge_to_remove.0, edge_to_remove.1);
 
-            utilities::complement(graph, edge_to_remove.0);
-            utilities::complement(graph, edge_to_remove.1);
-            utilities::complement(graph, edge_to_remove.0);
+            //utilities::complement(graph, edge_to_remove.0);
+            //utilities::complement(graph, edge_to_remove.1);
+            //utilities::complement(graph, edge_to_remove.0);
 
+            basic_rules::local_comp(graph, edge_to_remove.0);
+            basic_rules::local_comp(graph, edge_to_remove.1);
+            basic_rules::local_comp(graph, edge_to_remove.0);
+            
             graph.remove_vertex(edge_to_remove.0);
             graph.remove_vertex(edge_to_remove.1);
 
@@ -227,7 +233,6 @@ pub fn flip_edge(graph: &mut Graph, edge_to_flip_option: Option<&EdgeSpecified>)
 
 pub fn split_edge(graph: &mut Graph, edge_to_split_option: Option<&EdgeSpecified>) {
     let edge_to_split = utilities::default_edge_nth(graph, edge_to_split_option);
-
     graph.remove_edge(edge_to_split.0, edge_to_split.1);
 
     let random_input_phase = utilities::get_random_input_phase(graph);
@@ -272,7 +277,7 @@ pub fn inverse_local_complement(graph: &mut Graph, vertices_to_attach_option: Op
             if edge_set.contains(&edge) {
                 graph.remove_edge(n1, n2);
             } else {
-                println!("Inv Comp adding edge between vertices {:?} and {:?}", graph.vertex_type(n1), graph.vertex_type(n2));
+                //println!("Inv Comp adding edge between vertices {:?} and {:?}", graph.vertex_type(n1), graph.vertex_type(n2));
                 graph.add_edge_with_type(n1, n2, EType::H);
             }
         }
