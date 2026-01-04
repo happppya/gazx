@@ -4,6 +4,7 @@ mod fitness;
 mod genetic_util;
 mod output;
 mod selection;
+mod crossover;
 
 pub mod algorithm {
   pub use super::genetic_util::build_population;
