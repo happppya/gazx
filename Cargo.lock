@@ -1740,6 +1740,7 @@ dependencies = [
  "colored",
  "indicatif",
  "ndarray",
+ "num-complex",
  "quizx",
  "rand",
  "rand_distr",

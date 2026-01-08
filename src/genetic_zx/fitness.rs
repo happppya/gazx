@@ -1,10 +1,16 @@
-use quizx::{circuit::{Circuit, CircuitStats}, graph::GraphLike, vec_graph::Graph};
+use quizx::{circuit::{Circuit, CircuitStats}, fscalar::FScalar, graph::GraphLike, tensor::{TensorF, ToTensor}, vec_graph::Graph};
 use std::sync::LazyLock;
+
+use num_complex::Complex;
 
 use super::models::{PopulationComponents, ExtractStatus};
 
 static GOAL_CIRCUIT : LazyLock<Circuit> = LazyLock::new(|| {
     Circuit::from_file("circuits/small/grover_5.qasm").unwrap().to_basic_gates()
+});
+
+static GOAL_TENSOR : LazyLock<TensorF> = LazyLock::new(|| {
+    GOAL_CIRCUIT.to_tensorf()
 });
 
 static GOAL_GRAPH : LazyLock<Graph> = LazyLock::new(|| {
@@ -15,9 +21,30 @@ static GOAL_CIRCUIT_STATS : LazyLock<CircuitStats> = LazyLock::new(|| {
     GOAL_CIRCUIT.stats()
 });
 
-fn get_approximation_error(graph : &Graph, circuit : &Circuit) -> i64 {
-    0
+fn get_approximation_error(graph: &Graph, circuit: &Circuit) -> i64 {
+
+    let prediction: TensorF = circuit.to_tensorf();
+    let target: TensorF = GOAL_CIRCUIT.to_tensorf();
+
+    // inner product = sum over i of conj(prediction_i) * target_i
+    let inner: Complex<f64> = prediction
+        .iter()
+        .zip(target.iter())
+        .map(|(a, b)| a.conj() * b)
+        .sum();
+
+    // fidelity = |<prediction|target>|^2 = real^2 + imag^2
+    // in [0,1]
+    let fidelity = inner.norm_sqr();
+
+    // scale and convert to int
+    let scale= f64::powf(2.0, 32.0);
+    let approximation_error = ((1.0 - fidelity) * scale).round() as i64;
+    
+    approximation_error
+
 }
+
 
 fn get_depth(graph : &Graph, _circuit : &Circuit) -> i64 {
     (graph.depth() - GOAL_GRAPH.depth()) as i64
@@ -52,7 +79,7 @@ fn get_fitness(population : &PopulationComponents, i : usize) -> i64 {
     //   approximation_error, depth, complex_gates, input_encodings);
 
     return 
-        0 * approximation_error + // not implemented
+        -10 * approximation_error
         -10 * depth +
         -10 * complex_gates + 
         -10 * input_encodings +

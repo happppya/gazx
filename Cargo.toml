@@ -10,6 +10,7 @@ ndarray = "0.16.1"
 quizx = {git = "https://github.com/zxcalc/quizx"}
 rand = "0.9.2"
 rand_distr = "0.5.1"
+num-complex = "0.4.6"
 
 [profile.dev]
 panic = "unwind"
