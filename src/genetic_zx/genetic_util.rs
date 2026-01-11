@@ -57,12 +57,17 @@ pub fn build_population(population_size: u32, num_qubits: usize) -> Vec<Graph> {
 }
 
 pub fn mutate_and_extract(population: &mut PopulationComponents) {
+
+    println!("1");
+
     for (i, graph) in population.graph.iter_mut().enumerate() {
         let mutation = mutation_runner::MUTATIONS_ALL.choose(&mut rng()).unwrap();
         population.last_mutation[i] = *mutation;
         population.extract_status[i] = ExtractStatus::Panic;
         population.mutation_retries[i] = 0;
     }
+
+    println!("2");
 
     for _ in 1..MUTATION_RETRIES + 1 {
         for (i, graph) in population.graph.iter_mut().enumerate() {

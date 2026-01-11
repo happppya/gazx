@@ -12,10 +12,14 @@ pub mod algorithm {
   pub use super::genetic_util::mutate_population;
   pub use super::genetic_util::mutate_and_extract;
   pub use super::fitness::set_fitness_values;
-  pub use super::output::benchmark;
-  pub use super::output::print_population;
   pub use super::selection::repopulate;
   pub use super::selection::worst_individuals_iter;
+}
+
+pub mod results {
+    pub use super::output::benchmark;
+    pub use super::output::print_population;
+    pub use super::output::Logger;
 }
 
 pub mod models;
