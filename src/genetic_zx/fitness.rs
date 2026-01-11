@@ -79,7 +79,7 @@ fn get_fitness(population : &PopulationComponents, i : usize) -> i64 {
     //   approximation_error, depth, complex_gates, input_encodings);
 
     return 
-        -10 * approximation_error
+        approximation_error / 1000
         -10 * depth +
         -10 * complex_gates + 
         -10 * input_encodings +
