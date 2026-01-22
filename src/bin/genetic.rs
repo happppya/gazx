@@ -2,6 +2,7 @@ use quizx::circuit::Circuit;
 
 use workspace::genetic_zx;
 use genetic_zx::algorithm;
+use genetic_zx::results;
 use genetic_zx::models::{ ExtractStatus, PopulationComponents };
 use workspace::genetic_zx::algorithm::mutate_and_extract;
 use workspace::mutation::mutation_runner::MutationType;
@@ -41,17 +42,25 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     //println!("Population build time (ms): {:?}", graph_millis);
 
+    let mut logger= results::Logger::new("genetic_log.txt");
+    logger.begin();
+
     for generation in 0..generations {
+        
+        println!("Generation {}", generation);
+
         algorithm::mutate_and_extract(population);
 
         algorithm::set_fitness_values(population);
-        algorithm::print_population(population);
+        results::print_population(population);
 
         algorithm::repopulate(
             population, 
             algorithm::worst_individuals_iter(population, (population_size/2) as usize),
         );
 
+        logger.log(population, generation);
+        
         //pause();
 
     }
