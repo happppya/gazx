@@ -18,9 +18,9 @@ fn pause() {
 }
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
-    let population_size: u32 = 20;
+    let population_size: u32 = 25;
     let num_qubits: usize = 4usize;
-    let generations: u32 = 100;
+    let generations: u32 = 10000;
 
     //let goal_circuit = &Circuit::from_file("circuits/small/grover_5.qasm")?.to_basic_gates();
     let goal_circuit = &Circuit::from_file("circuits/small/tof_10.qasm")?.to_basic_gates();
