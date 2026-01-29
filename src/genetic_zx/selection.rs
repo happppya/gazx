@@ -3,20 +3,37 @@ use rand::{ rng, seq::SliceRandom };
 
 use crate::genetic_zx::models::PopulationComponents;
 
-pub fn worst_individuals_iter<'a>(
-  population: &PopulationComponents,
-  individuals: usize
-) -> impl Iterator<Item = usize> + 'a {
-  let mut indices: Vec<usize> = (0..population.fitness.len()).collect();
+pub fn worst_individuals_iter(
+    population: &PopulationComponents,
+    individuals: usize,
+) -> impl Iterator<Item = usize> {
+    let mut indices: Vec<usize> = (0..population.fitness.len()).collect();
 
-  // sort indices by fitness values
-  indices.sort_by(|&a, &b| {
-      population.fitness[a].partial_cmp(&population.fitness[b]).unwrap()
-  });
+    // sort indices by fitness (worst first)
+    indices.sort_by(|&a, &b| {
+        population.fitness[a]
+            .partial_cmp(&population.fitness[b])
+            .unwrap()
+    });
 
-  // return iterator of first n elements
-  indices.into_iter().take(individuals)
+    let worst_count = (individuals as f32 * 0.8).round() as usize;
+    let random_count = individuals - worst_count;
+
+    // split worst vs remaining
+    let (worst, rest) = indices.split_at(worst_count.min(indices.len()));
+
+    // pick random individuals from the remaining population
+    let mut random_selection: Vec<usize> = rest.to_vec();
+    random_selection.shuffle(&mut rng());
+
+    // combine results
+    let mut selected = Vec::with_capacity(individuals);
+    selected.extend_from_slice(worst);
+    selected.extend(random_selection.into_iter().take(random_count));
+
+    selected.into_iter()
 }
+
 
 pub fn repopulate(
   population: &mut PopulationComponents,
