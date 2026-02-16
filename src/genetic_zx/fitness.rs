@@ -1,5 +1,5 @@
 use quizx::{
-    circuit::{ Circuit, CircuitStats }, cli, decompose::{BssWithCatsDriver, Decomposer, Driver}, fscalar::FScalar, graph::{ self, BasisElem, GraphLike }, scalar::Scalar4, simplify, tensor::{ TensorF, ToTensor }, vec_graph::Graph
+    circuit::{ self, Circuit, CircuitStats }, cli, decompose::{BssWithCatsDriver, Decomposer, Driver}, fscalar::FScalar, graph::{ self, BasisElem, GraphLike }, scalar::Scalar4, simplify, tensor::{ TensorF, ToTensor }, vec_graph::Graph
 };
 use std::sync::LazyLock;
 
@@ -61,7 +61,7 @@ fn get_approximation_error_fidelity(
     circ_u: &Circuit,
     circ_v: &Circuit,
     parallel: Option<usize>
-) -> f64 {
+) -> i64 {
 
     let mut decomposer: Decomposer<Graph> = Decomposer::empty();
     decomposer.with_full_simp();
@@ -76,6 +76,53 @@ fn get_approximation_error_fidelity(
 
     let scalar = decomp_graph(graph_u, &mut decomposer, &driver, parallel);
     let amp = scalar * scalar.conj();
+    (amp.complex_value().re * 2147483648.0).round() as i64
+}
+
+/// Computes the probability amplitude of an output given an input
+fn amplitude(
+    circuit: &Circuit,
+    graph_original : &Graph,
+    decomposer: &mut Decomposer<Graph>,
+    driver: &impl Driver,
+    input: &[bool],
+    output: &[bool],
+) -> f64 {
+
+    let mut graph = graph_original.clone();
+
+    let qs = circuit.num_qubits();
+
+    if qs == 0 {
+        return 0.0; // TODO why is qs 0
+    }
+    
+    assert_eq!(input.len(), qs);
+    assert_eq!(output.len(), qs);
+
+    //println!("stats {} ", circuit.stats());
+    //println!("length of input and output should be {}, got {}", qs, input.len());
+
+    graph.plug_inputs(
+    &input
+        .iter()
+        .map(|b| if *b { BasisElem::Z1 } else { BasisElem::Z0 })
+        .collect::<Vec<_>>(),
+    );
+
+    graph.plug_outputs(
+        &output
+            .iter()
+            .map(|x| if *x { BasisElem::Z1 } else { BasisElem::Z0 })
+            .collect::<Vec<_>>(),
+    );
+
+    simplify::full_simp(&mut graph);
+
+    decomposer.set_target(graph);
+    let scalar = decomposer.decompose_parallel(driver).scalar();
+
+    let amp = scalar * scalar.conj();
     amp.complex_value().re
 }
 
@@ -83,7 +130,34 @@ fn get_approximation_error_testcases(graph: &Graph, circuit: &Circuit) -> i64 {
     //TODO https://github.com/Qiskit/qiskit-rs for simulation
     // maybe https://docs.rs/quantr/latest/quantr/#example
     // https://docs.rs/quizx/latest/quizx/cli/sim/struct.SimArgs.html
-    unimplemented!();
+
+    let mut decomposer: Decomposer<Graph> = Decomposer::empty();
+    decomposer.with_full_simp();
+
+    let driver = BssWithCatsDriver { random_t: false };
+
+    let test_amplitude = amplitude(
+        circuit,
+        graph,
+        &mut decomposer,
+        &driver,
+        &vec![false; circuit.num_qubits()],
+        &vec![false; circuit.num_qubits()],
+    );
+
+    let goal_amplitude = amplitude(
+        &GOAL_CIRCUIT,
+        &GOAL_GRAPH,
+        &mut decomposer,
+        &driver,
+        &vec![false; GOAL_CIRCUIT.num_qubits()],
+        &vec![false; GOAL_CIRCUIT.num_qubits()],
+    );
+
+    println!("test amplitude {} goal amplitude {}", test_amplitude, goal_amplitude);
+    
+    let error = (test_amplitude - goal_amplitude).abs();
+    (error * -10000.0).round() as i64
 }
 
 fn get_depth(graph: &Graph, _circuit: &Circuit) -> i64 {
@@ -108,7 +182,7 @@ fn get_fitness(population: &PopulationComponents, i: usize) -> i64 {
     let graph = &population.graph[i];
     let circuit = &population.circuit[i];
 
-    let approximation_error = 1; //get_approximation_error_tensor(graph, circuit);
+    let approximation_error = get_approximation_error_testcases(graph, circuit);
     let depth = get_depth(graph, circuit);
     let complex_gates = get_complex_gates(graph, circuit);
     let oneq_gates = get_oneq_gates(graph, circuit);
@@ -120,17 +194,16 @@ fn get_fitness(population: &PopulationComponents, i: usize) -> i64 {
         ExtractStatus::Panic => -100000,
     };
 
-    //println!("Getting fitness\nstats {:?}\n components {} {} {} {}", circuit.stats(),
-    //   approximation_error, depth, complex_gates, input_encodings);
+    println!("Getting fitness\nstats {:?}\n components STAT {} DEP {} CMP {} INP {} ERR {}", circuit.stats(),
+    approximation_error, depth, complex_gates, input_encodings, approximation_error);
 
-    return (
-        approximation_error / 1000 -
+    return
+        approximation_error -
         10 * depth +
         -3 * oneq_gates +
         -10 * complex_gates +
         -10 * input_encodings +
-        fail_penalty
-    );
+        fail_penalty;
 }
 
 pub fn set_fitness_values(population: &mut PopulationComponents) {
