@@ -44,7 +44,7 @@ pub fn repopulate(
   let population_size = population.graph.len();
 
   for individual in worst_set.clone() {
-    println!("removing {}", individual);
+    //println!("removing {}", individual);
   }
 
   let mut good_indices: Vec<usize> = (0..population_size).filter(|i| !worst_set.contains(i)).collect();

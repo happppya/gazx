@@ -52,6 +52,8 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         algorithm::mutate_and_extract(population);
 
         algorithm::set_fitness_values(population);
+
+        pause();
         results::print_population(population);
 
         algorithm::repopulate(

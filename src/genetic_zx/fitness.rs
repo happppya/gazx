@@ -1,7 +1,7 @@
 use quizx::{
     circuit::{ self, Circuit, CircuitStats }, cli, decompose::{BssWithCatsDriver, Decomposer, Driver}, fscalar::FScalar, graph::{ self, BasisElem, GraphLike }, scalar::Scalar4, simplify, tensor::{ TensorF, ToTensor }, vec_graph::Graph
 };
-use rand::Rng;
+use rand::{Rng, seq::IndexedRandom};
 use std::{panic, sync::LazyLock};
 
 use num_complex::Complex;
@@ -20,17 +20,26 @@ static GOAL_GRAPH: LazyLock<Graph> = LazyLock::new(|| {
 
 static GOAL_CIRCUIT_STATS: LazyLock<CircuitStats> = LazyLock::new(|| { GOAL_CIRCUIT.stats() });
 
-const NUM_CASES: usize = 10;
+const NUM_CASES: usize = 1;
 
 static TESTCASES: LazyLock<Vec<(Vec<bool>, Vec<bool>)>> = LazyLock::new(|| {
-    let qs = GOAL_CIRCUIT.num_qubits();
-    (0..NUM_CASES)
-        .map(|_| {
-            let input: Vec<bool> = (0..qs).map(|_| rand::rng().random_bool(0.5)).collect();
-            let output: Vec<bool> = (0..qs).map(|_| rand::rng().random_bool(0.5)).collect();
-            (input, output)
-        })
-        .collect()
+    let mut testcases = vec![];
+    for (idx, &amp) in GOAL_TENSOR.iter().enumerate() {
+        if amp.norm_sqr() > 1e-4 {
+            let output = (0..GOAL_CIRCUIT.num_qubits())
+                .map(|q| (idx >> q) & 1 == 1)
+                .collect::<Vec<bool>>();
+
+            println!("created output {} with amp {}", output.iter().map(|b| if *b { "1" } else { "0" }).collect::<String>(), amp);
+
+            testcases.push((vec![false; GOAL_CIRCUIT.num_qubits()], output));
+        }
+    }
+    
+    //testcases.choose_multiple(&mut rand::rng(), NUM_CASES).cloned().collect()
+
+    // using zero input and output for now
+    vec![(vec![false; GOAL_CIRCUIT.num_qubits()], vec![false; GOAL_CIRCUIT.num_qubits()])]
 });
 
 static GOAL_AMPLITUDES: LazyLock<Vec<f64>> = LazyLock::new(|| {
@@ -76,13 +85,14 @@ fn decomp_graph(
     driver: &impl Driver,
     parallel: Option<usize>
 ) -> Scalar4 {
-    simplify::full_simp(&mut g);
+
     decomposer.set_target(g);
     if let Some(_depth) = parallel {
         decomposer.decompose_parallel(driver).scalar()
     } else {
         decomposer.decompose(driver).scalar()
     }
+
 }
 
 fn get_approximation_error_fidelity(
@@ -175,14 +185,19 @@ fn get_approximation_error_testcases(graph: &Graph, circuit: &Circuit) -> i64 {
 
     let mut total_error = 0.0;
 
+    println!("new comparison");
+
     for ((input, output), &goal_amp) in TESTCASES.iter().zip(GOAL_AMPLITUDES.iter()) {
         let test_amplitude = amplitude(circuit, graph, &mut decomposer, &driver, input, output);
+        println!("  comparing amplitudes: {} vs {}", test_amplitude, goal_amp);
         total_error += (test_amplitude - goal_amp).abs();
     }
 
+    //let test_amplitude = amplitude( circuit, graph, &mut decomposer, &driver, &vec![false; circuit.num_qubits()], &vec![false; circuit.num_qubits()], );
+
     // Scale and convert to i64
     (total_error * -25000.0).round() as i64
-    
+
 }
 
 fn get_depth(graph: &Graph, _circuit: &Circuit) -> i64 {
