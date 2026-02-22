@@ -18,7 +18,6 @@
 use quizx::circuit::*;
 use quizx::extract::*;
 use quizx::simplify::*;
-use quizx::util;
 use quizx::vec_graph::*;
 
 use workspace::mutation::mutation_runner::MutationType;
@@ -28,7 +27,6 @@ use std::time::Duration;
 use std::time::Instant;
 
 // use quizx::tensor::*;
-use workspace::mutation;
 use workspace::mutation::mutation_runner;
 
 static MEASURE_SUCCESS_RATE: bool = true;
@@ -43,8 +41,6 @@ fn run_mutation(
 
     //println!("control: {}", extracted_control.stats());
 
-    let test_edge: Option<&EdgeSpecified> = None;
-    let test_vertex = Some(10usize);
     let time_start = Instant::now();
 
     mutation_runner::run_mutation(&mut graph_experimental, mutation);
@@ -82,12 +78,12 @@ fn run_mutation(
 }
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
-    const TRIALS: u32 = 256;
+    const TRIALS: u32 = 10;
 
     //let circuit = &Circuit::from_file("circuits/small/gf2^16_mult.qasm")?.to_basic_gates();
     let circuit = &Circuit::from_file("circuits/small/grover_5.qasm")?.to_basic_gates();
 
-    let mutations_to_run = vec![MutationType::FullReduce];
+    let mutations_to_run = vec![MutationType::Pivot];
     //let mutations_to_run = mutation_runner::MUTATIONS_ALL;
 
     panic::set_hook(Box::new(|_| {})); // silence panic message

@@ -1,14 +1,15 @@
 use quizx::{
     circuit::{ self, Circuit, CircuitStats }, cli, decompose::{BssWithCatsDriver, Decomposer, Driver}, fscalar::FScalar, graph::{ self, BasisElem, GraphLike }, scalar::Scalar4, simplify, tensor::{ TensorF, ToTensor }, vec_graph::Graph
 };
-use std::sync::LazyLock;
+use rand::Rng;
+use std::{panic, sync::LazyLock};
 
 use num_complex::Complex;
 
 use super::models::{ PopulationComponents, ExtractStatus };
 
 static GOAL_CIRCUIT: LazyLock<Circuit> = LazyLock::new(|| {
-    Circuit::from_file("circuits/small/grover_5.qasm").unwrap().to_basic_gates()
+    Circuit::from_file("circuits/small/tof_5.qasm").unwrap().to_basic_gates()
 });
 
 static GOAL_TENSOR: LazyLock<TensorF> = LazyLock::new(|| { GOAL_CIRCUIT.to_tensorf() });
@@ -18,6 +19,33 @@ static GOAL_GRAPH: LazyLock<Graph> = LazyLock::new(|| {
 });
 
 static GOAL_CIRCUIT_STATS: LazyLock<CircuitStats> = LazyLock::new(|| { GOAL_CIRCUIT.stats() });
+
+const NUM_CASES: usize = 10;
+
+static TESTCASES: LazyLock<Vec<(Vec<bool>, Vec<bool>)>> = LazyLock::new(|| {
+    let qs = GOAL_CIRCUIT.num_qubits();
+    (0..NUM_CASES)
+        .map(|_| {
+            let input: Vec<bool> = (0..qs).map(|_| rand::rng().random_bool(0.5)).collect();
+            let output: Vec<bool> = (0..qs).map(|_| rand::rng().random_bool(0.5)).collect();
+            (input, output)
+        })
+        .collect()
+});
+
+static GOAL_AMPLITUDES: LazyLock<Vec<f64>> = LazyLock::new(|| {
+    let mut decomposer: Decomposer<Graph> = Decomposer::empty();
+    decomposer.with_full_simp();
+    let driver = BssWithCatsDriver { random_t: false };
+
+    TESTCASES
+        .iter()
+        .map(|(input, output)| {
+            amplitude(&GOAL_CIRCUIT, &GOAL_GRAPH, &mut decomposer, &driver, input, output)
+        })
+        .collect()
+});
+
 
 fn get_approximation_error_tensor(graph: &Graph, circuit: &Circuit) -> i64 {
     let prediction: TensorF = circuit.to_tensorf();
@@ -117,13 +145,22 @@ fn amplitude(
             .collect::<Vec<_>>(),
     );
 
-    simplify::full_simp(&mut graph);
+    let simplify_result = panic::catch_unwind(
+        panic::AssertUnwindSafe(|| {
+            simplify::full_simp(&mut graph);
+            decomposer.set_target(graph);
+            decomposer.decompose_parallel(driver).scalar()
+        })
+    );
 
-    decomposer.set_target(graph);
-    let scalar = decomposer.decompose_parallel(driver).scalar();
-
-    let amp = scalar * scalar.conj();
-    amp.complex_value().re
+    match simplify_result {
+        Ok(scalar) => {
+            let amp = scalar * scalar.conj();
+            return amp.complex_value().re;
+        },
+        Err(_) => return 0.0,
+    }
+    
 }
 
 fn get_approximation_error_testcases(graph: &Graph, circuit: &Circuit) -> i64 {
@@ -136,28 +173,16 @@ fn get_approximation_error_testcases(graph: &Graph, circuit: &Circuit) -> i64 {
 
     let driver = BssWithCatsDriver { random_t: false };
 
-    let test_amplitude = amplitude(
-        circuit,
-        graph,
-        &mut decomposer,
-        &driver,
-        &vec![false; circuit.num_qubits()],
-        &vec![false; circuit.num_qubits()],
-    );
+    let mut total_error = 0.0;
 
-    let goal_amplitude = amplitude(
-        &GOAL_CIRCUIT,
-        &GOAL_GRAPH,
-        &mut decomposer,
-        &driver,
-        &vec![false; GOAL_CIRCUIT.num_qubits()],
-        &vec![false; GOAL_CIRCUIT.num_qubits()],
-    );
+    for ((input, output), &goal_amp) in TESTCASES.iter().zip(GOAL_AMPLITUDES.iter()) {
+        let test_amplitude = amplitude(circuit, graph, &mut decomposer, &driver, input, output);
+        total_error += (test_amplitude - goal_amp).abs();
+    }
 
-    println!("test amplitude {} goal amplitude {}", test_amplitude, goal_amplitude);
+    // Scale and convert to i64
+    (total_error * -25000.0).round() as i64
     
-    let error = (test_amplitude - goal_amplitude).abs();
-    (error * -10000.0).round() as i64
 }
 
 fn get_depth(graph: &Graph, _circuit: &Circuit) -> i64 {
@@ -194,12 +219,12 @@ fn get_fitness(population: &PopulationComponents, i: usize) -> i64 {
         ExtractStatus::Panic => -100000,
     };
 
-    println!("Getting fitness\nstats {:?}\n components STAT {} DEP {} CMP {} INP {} ERR {}", circuit.stats(),
-    approximation_error, depth, complex_gates, input_encodings, approximation_error);
+    println!("Getting fitness\nstats {:?}\n components DEP {} CMP {} INP {} approxError {}", circuit.stats(),
+    depth, complex_gates, input_encodings, approximation_error);
 
     return
-        approximation_error -
-        10 * depth +
+        approximation_error +
+        -10 * depth +
         -3 * oneq_gates +
         -10 * complex_gates +
         -10 * input_encodings +

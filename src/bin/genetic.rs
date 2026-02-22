@@ -4,7 +4,7 @@ use workspace::genetic_zx;
 use genetic_zx::algorithm;
 use genetic_zx::results;
 use genetic_zx::models::{ ExtractStatus, PopulationComponents };
-use workspace::genetic_zx::algorithm::mutate_and_extract;
+
 use workspace::mutation::mutation_runner::MutationType;
 
 use std::io::{self, Write};
@@ -18,12 +18,12 @@ fn pause() {
 }
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
-    let population_size: u32 = 25;
+    let population_size: u32 = 100;
     let num_qubits: usize = 4usize;
     let generations: u32 = 10000;
 
     //let goal_circuit = &Circuit::from_file("circuits/small/grover_5.qasm")?.to_basic_gates();
-    let goal_circuit = &Circuit::from_file("circuits/small/tof_10.qasm")?.to_basic_gates();
+    let goal_circuit = &Circuit::from_file("circuits/small/tof_5.qasm")?.to_basic_gates();
     println!("starting stats {:?}", goal_circuit.stats());
 
     /*let (graphs, graph_millis) =

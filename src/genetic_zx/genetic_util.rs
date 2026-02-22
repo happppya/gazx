@@ -17,7 +17,7 @@ use super::bar_styles;
 use super::models::{ExtractStatus, PopulationComponents};
 
 static TARGET_GRAPH: LazyLock<Graph> = LazyLock::new(|| {
-    Circuit::from_file("circuits/small/grover_5.qasm")
+    Circuit::from_file("circuits/small/tof_5.qasm")
         .unwrap()
         .to_basic_gates()
         .to_graph()
@@ -58,16 +58,12 @@ pub fn build_population(population_size: u32, num_qubits: usize) -> Vec<Graph> {
 
 pub fn mutate_and_extract(population: &mut PopulationComponents) {
 
-    println!("1");
-
     for (i, graph) in population.graph.iter_mut().enumerate() {
         let mutation = mutation_runner::MUTATIONS_ALL.choose(&mut rng()).unwrap();
         population.last_mutation[i] = *mutation;
         population.extract_status[i] = ExtractStatus::Panic;
         population.mutation_retries[i] = 0;
     }
-
-    println!("2");
 
     for _ in 1..MUTATION_RETRIES + 1 {
         for (i, graph) in population.graph.iter_mut().enumerate() {
@@ -80,10 +76,9 @@ pub fn mutate_and_extract(population: &mut PopulationComponents) {
             // work on a temporary graph
             let mut candidate = graph.clone();
 
-            mutation_runner::run_mutation(&mut candidate, &population.last_mutation[i]);
-
             let extract_result =
                 std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| -> Result<_, _> {
+                    mutation_runner::run_mutation(&mut candidate, &population.last_mutation[i]);
                     let mut clone = candidate.clone();
                     clifford_simp(&mut clone);
                     clone.extractor().gflow().up_to_perm().extract()

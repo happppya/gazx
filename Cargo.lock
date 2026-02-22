@@ -948,7 +948,6 @@ dependencies = [
 [[package]]
 name = "quizx"
 version = "0.3.0"
-source = "git+https://github.com/zxcalc/quizx#d75f041ebb73ec896909922b2c3b549958af1686"
 dependencies = [
  "approx",
  "bitgauss",

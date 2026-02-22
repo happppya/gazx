@@ -7,7 +7,8 @@ edition = "2021"
 colored = "3.0.0"
 indicatif = "0.18.2"
 ndarray = "0.16.1"
-quizx = {git = "https://github.com/zxcalc/quizx"}
+# quizx = {git = "https://github.com/zxcalc/quizx"}
+quizx = {path = "C:\\Users\\mkim3\\Documents\\code\\quizxFork\\quizx"}
 rand = "0.9.2"
 rand_distr = "0.5.1"
 num-complex = "0.4.6"

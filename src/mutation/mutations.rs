@@ -198,18 +198,10 @@ pub fn pivot(graph: &mut Graph, vertex_pair_option: Option<&EdgeGeneral>) -> () 
     match edge_to_remove_default {
         Some(edge_to_remove) => {
 
-            let data1 = graph.vertex_data(edge_to_remove.0);
-            let data2 = graph.vertex_data(edge_to_remove.1);
-            let edgedata = graph.edge_type(edge_to_remove.0, edge_to_remove.1);
+            utilities::complement(graph, edge_to_remove.0);
+            utilities::complement(graph, edge_to_remove.1);
+            utilities::complement(graph, edge_to_remove.0);
 
-            //utilities::complement(graph, edge_to_remove.0);
-            //utilities::complement(graph, edge_to_remove.1);
-            //utilities::complement(graph, edge_to_remove.0);
-
-            basic_rules::local_comp(graph, edge_to_remove.0);
-            basic_rules::local_comp(graph, edge_to_remove.1);
-            basic_rules::local_comp(graph, edge_to_remove.0);
-            
             graph.remove_vertex(edge_to_remove.0);
             graph.remove_vertex(edge_to_remove.1);
 

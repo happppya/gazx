@@ -193,16 +193,20 @@ pub fn get_neighbor_set(graph : &Graph, vertex : usize) -> HashSet<usize> {
     HashSet::from_iter(graph.neighbors(vertex))
 }
 
+fn canon(a: usize, b: usize) -> (usize, usize) {
+    if a < b { (a, b) } else { (b, a) }
+}
+
 ///
 /// Performs a complement
 ///
 /// # Parameters
 /// * `graph` - Graph
 /// * `vertex` - The pivotal vertex
-pub fn complement(graph: &mut Graph, vertex: usize) -> () {
-    
+/// pub fn complement(graph: &mut Graph, vertex: usize) -> () {
+
+pub fn complement(graph: &mut Graph, vertex: usize) {
     let neighbors: Vec<usize> = graph.neighbor_vec(vertex);
-    let edge_set = get_edge_set(graph);
 
     for i in 0..neighbors.len() {
 
@@ -211,17 +215,44 @@ pub fn complement(graph: &mut Graph, vertex: usize) -> () {
         for j in i + 1..neighbors.len() {
             
             let n2 = neighbors[j];
-
-            let edge: EdgeGeneral = (n1, n2);
-
-            if edge_set.contains(&edge) {
+            if graph.connected(n1, n2) {
                 graph.remove_edge(n1, n2);
             } else {
-
-                //println!("Complement adding edge between vertices {:?} and {:?}", graph.vertex_type(n1), graph.vertex_type(n2));
                 graph.add_edge_with_type(n1, n2, EType::H);
-                
             }
         }
     }
 }
+
+/*
+
+TODO why does this panic
+has "Vertex 71 not found" in the debug vec graph function
+
+pub fn complement(graph: &mut Graph, vertex: usize) {
+
+    let neighbors: Vec<usize> = graph.neighbor_vec(vertex);
+    
+    let mut edge_set = get_edge_set(graph);
+
+    for i in 0..neighbors.len() {
+        let n1 = neighbors[i];
+
+        for j in i + 1..neighbors.len() {
+            let n2 = neighbors[j];
+
+            let edge = canon(n1, n2);
+
+            if edge_set.contains(&edge) {
+
+                graph.remove_edge(n1, n2);
+                edge_set.remove(&edge); 
+
+            } else {
+
+                graph.add_edge_with_type(n1, n2, EType::H);
+                edge_set.insert(edge);
+            }
+        }
+    }
+}*/

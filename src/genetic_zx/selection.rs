@@ -16,7 +16,7 @@ pub fn worst_individuals_iter(
             .unwrap()
     });
 
-    let worst_count = (individuals as f32 * 0.8).round() as usize;
+    let worst_count = (individuals as f32 * 0.9).round() as usize;
     let random_count = individuals - worst_count;
 
     // split worst vs remaining
