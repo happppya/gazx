@@ -15,8 +15,14 @@ pub fn benchmark<F, R>(f: F) -> (R, f64) where F: FnOnce() -> R {
     (result, millis)
 }
 
-fn get_highest_fitness(population: &PopulationComponents) -> i64 {
-    *population.fitness.iter().max().expect("population has no fitness values")
+fn get_highest_fitness_index(population: &PopulationComponents) -> usize {
+    population
+        .fitness
+        .iter()
+        .enumerate()
+        .max_by_key(|(_, &fitness)| fitness)
+        .map(|(idx, _)| idx)
+        .expect("population has no fitness values")
 }
 
 fn print_at_index(population: &PopulationComponents, i: usize) {
@@ -51,6 +57,7 @@ pub fn print_population(population: &mut PopulationComponents) {
 
 pub struct Logger {
     file: std::fs::File,
+    overall_highest_fitness : i64,
 }
 
 impl Logger {
@@ -61,7 +68,7 @@ impl Logger {
             .truncate(true)
             .open(path)
             .expect("failed to open log file");
-        Logger { file }
+        Logger { file: file, overall_highest_fitness: i64::MIN }
     }
 
     pub fn begin(&mut self) {
@@ -72,10 +79,22 @@ impl Logger {
     }
 
     pub fn log(&mut self, population: &PopulationComponents, generation: u32) {
-        let highest_fitness = get_highest_fitness(population);
+
+        let most_fit_individual = get_highest_fitness_index(population);
+        let highest_fitness = population.fitness[most_fit_individual];
         writeln!(self.file, "{}\t{}", generation, highest_fitness)
             .expect("failed to write log");
+        
+        if highest_fitness > self.overall_highest_fitness {
+            self.overall_highest_fitness = highest_fitness;
 
-        // File writes are immediate (unbuffered)
+            let qasm = population.circuit[most_fit_individual].to_qasm();
+            let stats = population.circuit[most_fit_individual].stats();
+
+            writeln!(self.file, "New best circuit with stats: {}\n", stats)
+                .expect("failed to write log");
+            writeln!(self.file, "And has qasm:\n{}", qasm)
+                .expect("failed to write qasm");
+        }
     }
 }

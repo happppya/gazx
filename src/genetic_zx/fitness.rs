@@ -9,6 +9,7 @@ use num_complex::Complex;
 use super::models::{ PopulationComponents, ExtractStatus };
 
 static GOAL_CIRCUIT: LazyLock<Circuit> = LazyLock::new(|| {
+    //Circuit::from_file("circuits/small/tof_5.qasm").unwrap().to_basic_gates()
     Circuit::from_file("circuits/small/tof_5.qasm").unwrap().to_basic_gates()
 });
 
@@ -154,7 +155,7 @@ fn amplitude(
             .map(|x| if *x { BasisElem::Z1 } else { BasisElem::Z0 })
             .collect::<Vec<_>>(),
     );
-
+    
     let simplify_result = panic::catch_unwind(
         panic::AssertUnwindSafe(|| {
             simplify::full_simp(&mut graph);
@@ -162,6 +163,8 @@ fn amplitude(
             decomposer.decompose_parallel(driver).scalar()
         })
     );
+
+    //TODO normalize the graph, dividing by the scalar?
 
     match simplify_result {
         Ok(scalar) => {

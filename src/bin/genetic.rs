@@ -17,6 +17,8 @@ fn pause() {
     io::stdin().read_line(&mut input).unwrap();
 }
 
+//TODO visualizer with https://quantum.cloud.ibm.com/composer
+
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     let population_size: u32 = 100;
     let num_qubits: usize = 4usize;
@@ -53,7 +55,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
         algorithm::set_fitness_values(population);
 
-        pause();
+        //pause();
         results::print_population(population);
 
         algorithm::repopulate(
