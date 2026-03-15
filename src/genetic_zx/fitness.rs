@@ -37,10 +37,10 @@ static TESTCASES: LazyLock<Vec<(Vec<bool>, Vec<bool>)>> = LazyLock::new(|| {
         }
     }
     
-    //testcases.choose_multiple(&mut rand::rng(), NUM_CASES).cloned().collect()
+    testcases.choose_multiple(&mut rand::rng(), NUM_CASES).cloned().collect()
 
-    // using zero input and output for now
-    vec![(vec![false; GOAL_CIRCUIT.num_qubits()], vec![false; GOAL_CIRCUIT.num_qubits()])]
+    // using zero input and output
+    // vec![(vec![false; GOAL_CIRCUIT.num_qubits()], vec![false; GOAL_CIRCUIT.num_qubits()])]
 });
 
 static GOAL_AMPLITUDES: LazyLock<Vec<f64>> = LazyLock::new(|| {

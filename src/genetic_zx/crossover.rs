@@ -1,6 +1,9 @@
 use std::collections::VecDeque;
 
-use quizx::{ circuit::Circuit, extract::ToCircuit, simplify::clifford_simp, vec_graph::Graph };
+use quizx::{ circuit::Circuit, extract::ToCircuit, graph::GraphLike, simplify::clifford_simp, vec_graph::Graph };
+use rand::{Rng, rng, seq::IndexedRandom};
+
+use super::models::PopulationComponents;
 
 fn extract(graph: &mut Graph) -> Option<Circuit> {
     let extract_result = std::panic::catch_unwind(
@@ -26,35 +29,100 @@ fn extract(graph: &mut Graph) -> Option<Circuit> {
     }
 }
 
-pub fn crossover_gate_list(parentA: &mut Graph, parentB: &mut Graph) -> Graph {
-    let circuit_a_option = extract(parentA);
-    let circuit_b_option = extract(parentB);
+pub fn crossover_gate_list(population: PopulationComponents, parent_a: usize, parent_b: usize) -> (Circuit, Graph) {
+    let circuit_a = &population.circuit[parent_a];
+    let circuit_b = &population.circuit[parent_b];
 
-    match (circuit_a_option, circuit_b_option) {
-        (Some(circuit_a), Some(circuit_b)) => {
-            let gate_list_a = circuit_a.to_basic_gates().gates;
-            let gate_list_b = circuit_b.to_basic_gates().gates;
+    let gate_list_a = circuit_a.to_basic_gates().gates;
+    let gate_list_b = circuit_b.to_basic_gates().gates;
 
-            let split_point_a = gate_list_a.len() / 2;
-            let split_point_b = gate_list_b.len() / 2;
+    let mut rng = rng();
 
-            let mut gate_vec = Vec::new();
+    // Generate random split points
+    let split_point_a: usize = if gate_list_a.is_empty() { 
+        0 
+    } else {
+        rng.random_range(0..=gate_list_a.len()) 
+    };
+    
+    let split_point_b = if gate_list_b.is_empty() { 
+        0 
+    } else {
+        rng.random_range(0..=gate_list_b.len()) 
+    };
+    
+    // Recombine gates
+    let mut gate_vec = Vec::new();
+    gate_vec.extend(gate_list_a.iter().take(split_point_a).cloned());
+    gate_vec.extend(gate_list_b.iter().skip(split_point_b).cloned());
 
-            gate_vec.extend(gate_list_a.iter().take(split_point_a).cloned());
-            gate_vec.extend(gate_list_b.iter().skip(split_point_b).cloned());
+    let gate_vec_deque = VecDeque::from(gate_vec);
 
-            let gate_vec_deque = VecDeque::from(gate_vec);
+    let nqubits = usize::max(circuit_a.num_qubits(), circuit_b.num_qubits());
+    let mut new_circuit = Circuit::new(nqubits);
 
-            let nqubits = usize::max(circuit_a.num_qubits(), circuit_b.num_qubits());
-            let mut new_circuit = Circuit::new(nqubits);
+    new_circuit.gates = gate_vec_deque;
+    
+    (new_circuit.clone(), new_circuit.to_graph())
+}
 
-            new_circuit.gates = gate_vec_deque;
+pub fn crossover_subgraph(population: &PopulationComponents, parent_a: usize, parent_b: usize) -> (Circuit, Graph) {
+    let mut rng = rand::rng();
 
-            return new_circuit.to_graph();
+    let graph_b = &population.graph[parent_b];
+    let verts_b = graph_b.vertex_vec();
+
+    for _ in 0..10 {
+        let mut graph_a = population.graph[parent_a].clone();
+
+        // Select and remove random vertices from Graph A
+        let verts_a = graph_a.vertex_vec();
+        let num_remove = rng.random_range(1..=std::cmp::max(1, verts_a.len() / 3)); 
+        let to_remove: Vec<_> = verts_a.choose_multiple(&mut rng, num_remove).cloned().collect();
+        
+        for v in to_remove {
+            graph_a.remove_vertex(v);
         }
-        _ => {
-            // if extraction fails return the parent
-            return parentA.clone();
+
+        // Cache the remaining vertices in A, the valid targets for stitching
+        let remaining_verts_a = graph_a.vertex_vec();
+
+        // Select random vertices to extract from Graph B
+        let num_extract = rng.random_range(1..=std::cmp::max(1, verts_b.len() / 3));
+        let to_extract: Vec<_> = verts_b.choose_multiple(&mut rng, num_extract).cloned().collect();
+
+        let target_degrees: Vec<usize> = to_extract.iter().map(|&v| graph_b.degree(v)).collect();
+
+        let subgraph_b = graph_b.subgraph_from_vertices(to_extract);
+        let vertex_map = graph_a.append_graph(&subgraph_b);
+
+        let new_verts: Vec<_> = vertex_map.values().cloned().collect();
+        
+        // Stitch the new floating vertices
+        for (i, &v_new) in new_verts.iter().enumerate() {
+
+            let target_degree = *target_degrees.get(i).unwrap_or(&0);
+            
+            // Add random edges until the current degree matches the target degree
+            while graph_a.degree(v_new) < target_degree {
+
+                if let Some(&target_v) = remaining_verts_a.choose(&mut rng) {
+                    // Prevent self-loop
+                    if v_new != target_v {
+                        graph_a.add_edge(v_new, target_v);
+                    }
+                } else {
+                    break; 
+                }
+            }
         }
+
+        let mut extract_graph = graph_a.clone();
+        if let Some(new_circuit) = extract(&mut extract_graph) {
+            return (new_circuit, graph_a);
+        }
+        
     }
+
+    (population.circuit[parent_a].clone(), population.graph[parent_a].clone())
 }
