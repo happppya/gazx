@@ -1,9 +1,8 @@
 use std::{ fs::OpenOptions };
-use std::io::{ BufWriter, Write };
+use std::io::{ Write };
 
 use super::{ models::{ ExtractStatus, PopulationComponents } };
 use colored::Colorize;
-use quizx::circuit::CircuitStats;
 
 const TAB: &'static str = "	";
 

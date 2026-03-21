@@ -5,6 +5,7 @@ mod genetic_util;
 mod output;
 mod selection;
 mod crossover;
+mod parameters;
 
 pub mod algorithm {
   pub use super::genetic_util::build_population;

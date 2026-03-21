@@ -7,19 +7,7 @@ use std::{panic, sync::LazyLock};
 use num_complex::Complex;
 
 use super::models::{ PopulationComponents, ExtractStatus };
-
-static GOAL_CIRCUIT: LazyLock<Circuit> = LazyLock::new(|| {
-    //Circuit::from_file("circuits/small/tof_5.qasm").unwrap().to_basic_gates()
-    Circuit::from_file("circuits/small/tof_5.qasm").unwrap().to_basic_gates()
-});
-
-static GOAL_TENSOR: LazyLock<TensorF> = LazyLock::new(|| { GOAL_CIRCUIT.to_tensorf() });
-
-static GOAL_GRAPH: LazyLock<Graph> = LazyLock::new(|| {
-    GOAL_CIRCUIT.to_graph_with_options(false, false)
-});
-
-static GOAL_CIRCUIT_STATS: LazyLock<CircuitStats> = LazyLock::new(|| { GOAL_CIRCUIT.stats() });
+use super::parameters::{ GOAL_CIRCUIT, GOAL_GRAPH, GOAL_TENSOR, GOAL_CIRCUIT_STATS };
 
 const NUM_CASES: usize = 1;
 

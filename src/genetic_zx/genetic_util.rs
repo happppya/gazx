@@ -15,15 +15,9 @@ use crate::mutation::mutation_runner;
 
 use super::bar_styles;
 use super::models::{ExtractStatus, PopulationComponents};
+use super::parameters::{ GOAL_GRAPH };
 
-static TARGET_GRAPH: LazyLock<Graph> = LazyLock::new(|| {
-    Circuit::from_file("circuits/small/tof_5.qasm")
-        .unwrap()
-        .to_basic_gates()
-        .to_graph()
-});
-
-static MUTATION_RETRIES: u32 = 10;
+const MUTATION_RETRIES: u32 = 10;
 
 pub fn build_population(population_size: u32, num_qubits: usize) -> Vec<Graph> {
     let mut random_population: Vec<Graph> = Vec::new();
@@ -46,7 +40,7 @@ pub fn build_population(population_size: u32, num_qubits: usize) -> Vec<Graph> {
 
     for _i in 0..population_size {
         //let graph = random_circuit_builder.build().to_graph_with_options(false, true);
-        let graph = TARGET_GRAPH.clone();
+        let graph = GOAL_GRAPH.clone();
         random_population.push(graph);
         progress_bar.inc(1);
     }
