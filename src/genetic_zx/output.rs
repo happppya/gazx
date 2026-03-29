@@ -1,3 +1,5 @@
+use std::fs::File;
+use std::time::SystemTime;
 use std::{ fs::OpenOptions };
 use std::io::{ Write };
 
@@ -55,45 +57,79 @@ pub fn print_population(population: &mut PopulationComponents) {
 }
 
 pub struct Logger {
-    file: std::fs::File,
-    overall_highest_fitness : i64,
+    fitness_file: File,
+    circuits_file: File,
+    pub overall_highest_fitness: i64,
 }
 
 impl Logger {
-    pub fn new(path: &str) -> Self {
-        let file = OpenOptions::new()
-            .create(true)
-            .write(true)
-            .truncate(true)
-            .open(path)
-            .expect("failed to open log file");
-        Logger { file: file, overall_highest_fitness: i64::MIN }
+    
+    pub fn new(base_path: &str) -> Self {
+        let fitness_path = format!("{}_fitness_table.txt", base_path);
+        let circuits_path = format!("{}_best_circuits.txt", base_path);
+
+        let open_file = |path: &str| -> File {
+            OpenOptions::new()
+                .create(true)
+                .write(true)
+                .truncate(true)
+                .open(path)
+                .unwrap_or_else(|_| panic!("failed to open log file at {}", path))
+        };
+
+        Logger { 
+            fitness_file: open_file(&fitness_path),
+            circuits_file: open_file(&circuits_path),
+            overall_highest_fitness: i64::MIN,
+        }
     }
 
-    pub fn begin(&mut self) {
-        writeln!(self.file, "New log started at {:?}", std::time::SystemTime::now())
-            .expect("failed to write log header");
-        writeln!(self.file, "Generation\tHighest Fitness")
-            .expect("failed to write log header");
+    pub fn begin(&mut self, run_info: &String) {
+        let now = SystemTime::now();
+        
+        // Setup fitness table
+        writeln!(self.fitness_file, "# Log started at {:?}", now)
+            .expect("failed to write fitness header");
+        writeln!(self.fitness_file, "Generation\tHighest_Fitness")
+            .expect("failed to write fitness columns");
+
+        // Setup circuits log
+        writeln!(self.fitness_file, "# Log started at {:?}", now)
+            .expect("failed to write circuits header");
+
+        writeln!(self.circuits_file, "RUN INFO:\n{}", run_info).expect("failed to write run info");
+        
+        writeln!(self.circuits_file, "BEST CIRCUITS LOG - Started at {:?}", now)
+            .expect("failed to write circuits header");
+        writeln!(self.circuits_file, "==================================================")
+            .expect("failed to write circuits header");
     }
 
     pub fn log(&mut self, population: &PopulationComponents, generation: u32) {
 
         let most_fit_individual = get_highest_fitness_index(population);
         let highest_fitness = population.fitness[most_fit_individual];
-        writeln!(self.file, "{}\t{}", generation, highest_fitness)
-            .expect("failed to write log");
         
+        // Write to the table every generation
+        writeln!(self.fitness_file, "{}\t{}", generation, highest_fitness)
+            .expect("failed to write fitness log");
+        
+        // Write to best circuits only if a new best is found
         if highest_fitness > self.overall_highest_fitness {
             self.overall_highest_fitness = highest_fitness;
 
             let qasm = population.circuit[most_fit_individual].to_qasm();
             let stats = population.circuit[most_fit_individual].stats();
 
-            writeln!(self.file, "New best circuit with stats: {}\n", stats)
-                .expect("failed to write log");
-            writeln!(self.file, "And has qasm:\n{}", qasm)
-                .expect("failed to write qasm");
+            writeln!(
+                self.circuits_file,
+                "\n### New best found at generation {} ###\n\
+                Fitness Value: {}\n\
+                Stats: {}\n\
+                QASM:\n{}\n\
+                --------------------------------------------------",
+                generation, highest_fitness, stats, qasm
+            ).expect("failed to write best circuit log");
         }
     }
 }

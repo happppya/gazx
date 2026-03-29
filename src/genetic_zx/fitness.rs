@@ -1,16 +1,55 @@
+use itertools::sorted_unstable;
 use quizx::{
-    circuit::{ self, Circuit, CircuitStats }, cli, decompose::{BssWithCatsDriver, Decomposer, Driver}, fscalar::FScalar, graph::{ self, BasisElem, GraphLike }, scalar::Scalar4, simplify, tensor::{ TensorF, ToTensor }, vec_graph::Graph
+    circuit::{ self, Circuit }, cli, decompose::{BssWithCatsDriver, Decomposer, Driver}, graph::{ BasisElem, GraphLike }, scalar::Scalar4, tensor::{ TensorF, ToTensor }, vec_graph::Graph
 };
 use rand::{Rng, seq::IndexedRandom};
-use std::{panic, sync::LazyLock};
+use std::{collections::HashMap, sync::LazyLock};
 
 use num_complex::Complex;
 
 use super::models::{ PopulationComponents, ExtractStatus };
-use super::parameters::{ GOAL_CIRCUIT, GOAL_GRAPH, GOAL_TENSOR, GOAL_CIRCUIT_STATS };
+use super::constants::{ GOAL_CIRCUIT, GOAL_GRAPH, GOAL_TENSOR, GOAL_CIRCUIT_STATS };
+use super::simulator;
 
-const NUM_CASES: usize = 1;
+const NUM_CASES: usize = 8;
 
+static TESTCASES: LazyLock<Vec<(Vec<bool>, String)>> = LazyLock::new(|| {
+    let mut testcases = Vec::with_capacity(NUM_CASES);
+    let mut rng = rand::rng();
+    let num_qubits = GOAL_CIRCUIT.num_qubits();
+
+    let mut decomposer: Decomposer<Graph> = Decomposer::empty();
+    decomposer.with_full_simp();
+    let driver = BssWithCatsDriver { random_t: false };
+
+    for _ in 0..NUM_CASES {
+        // Random input state
+        let input_bits: Vec<bool> = (0..num_qubits)
+            .map(|_| rng.random_bool(0.5))
+            .collect();
+
+        // Sample the circuit mimicking what a call to QPU would do
+        let output_str = simulator::sample_with_input(
+            &GOAL_CIRCUIT,
+            &input_bits,
+            &mut decomposer,
+            &driver,
+            Some(4),
+        );
+
+        println!("Generated testcase | Input: {:?}, Sampled Output: {:?}", input_bits, output_str);
+
+        testcases.push((input_bits, output_str));
+    }
+
+    testcases
+});
+
+pub fn get_fitness_info() -> String {
+    format!("NUM CASES: {}\n TESTCASES: {:?}\n GOAL CIRCUIT: {:?}\n GOAL GRAPH: {:?}\n GOAL CIRCUIT STATS: {:?}", NUM_CASES, *TESTCASES, *GOAL_CIRCUIT, *GOAL_GRAPH, *GOAL_CIRCUIT_STATS)
+}
+
+/*
 static TESTCASES: LazyLock<Vec<(Vec<bool>, Vec<bool>)>> = LazyLock::new(|| {
     let mut testcases = vec![];
     for (idx, &amp) in GOAL_TENSOR.iter().enumerate() {
@@ -24,14 +63,12 @@ static TESTCASES: LazyLock<Vec<(Vec<bool>, Vec<bool>)>> = LazyLock::new(|| {
             testcases.push((vec![false; GOAL_CIRCUIT.num_qubits()], output));
         }
     }
-    
+     
     testcases.choose_multiple(&mut rand::rng(), NUM_CASES).cloned().collect()
 
-    // using zero input and output
-    // vec![(vec![false; GOAL_CIRCUIT.num_qubits()], vec![false; GOAL_CIRCUIT.num_qubits()])]
-});
+});*/
 
-static GOAL_AMPLITUDES: LazyLock<Vec<f64>> = LazyLock::new(|| {
+/*static GOAL_AMPLITUDES: LazyLock<Vec<f64>> = LazyLock::new(|| {
     let mut decomposer: Decomposer<Graph> = Decomposer::empty();
     decomposer.with_full_simp();
     let driver = BssWithCatsDriver { random_t: false };
@@ -39,11 +76,10 @@ static GOAL_AMPLITUDES: LazyLock<Vec<f64>> = LazyLock::new(|| {
     TESTCASES
         .iter()
         .map(|(input, output)| {
-            amplitude(&GOAL_CIRCUIT, &GOAL_GRAPH, &mut decomposer, &driver, input, output)
+            simulator::amplitude_variable(&GOAL_CIRCUIT, &GOAL_GRAPH, &mut decomposer, &driver, input, output)
         })
         .collect()
-});
-
+});*/
 
 fn get_approximation_error_tensor(graph: &Graph, circuit: &Circuit) -> i64 {
     let prediction: TensorF = circuit.to_tensorf();
@@ -67,23 +103,6 @@ fn get_approximation_error_tensor(graph: &Graph, circuit: &Circuit) -> i64 {
     approximation_error
 }
 
-/// Run the provided decomposer on a graph.
-fn decomp_graph(
-    mut g: Graph,
-    decomposer: &mut Decomposer<Graph>,
-    driver: &impl Driver,
-    parallel: Option<usize>
-) -> Scalar4 {
-
-    decomposer.set_target(g);
-    if let Some(_depth) = parallel {
-        decomposer.decompose_parallel(driver).scalar()
-    } else {
-        decomposer.decompose(driver).scalar()
-    }
-
-}
-
 fn get_approximation_error_fidelity(
     circ_u: &Circuit,
     circ_v: &Circuit,
@@ -101,67 +120,9 @@ fn get_approximation_error_fidelity(
     graph_u.plug(&graph_v_adjoint);
     graph_u.plug_inputs(&vec![BasisElem::Z0; circ_u.num_qubits()]);
 
-    let scalar = decomp_graph(graph_u, &mut decomposer, &driver, parallel);
+    let scalar = simulator::decomp_graph(graph_u, &mut decomposer, &driver, parallel);
     let amp = scalar * scalar.conj();
     (amp.complex_value().re * 2147483648.0).round() as i64
-}
-
-/// Computes the probability amplitude of an output given an input
-fn amplitude(
-    circuit: &Circuit,
-    graph_original : &Graph,
-    decomposer: &mut Decomposer<Graph>,
-    driver: &impl Driver,
-    input: &[bool],
-    output: &[bool],
-) -> f64 {
-
-    let mut graph = graph_original.clone();
-
-    let qs = circuit.num_qubits();
-
-    if qs == 0 {
-        return 0.0; // TODO why is qs 0
-    }
-    
-    assert_eq!(input.len(), qs);
-    assert_eq!(output.len(), qs);
-
-    //println!("stats {} ", circuit.stats());
-    //println!("length of input and output should be {}, got {}", qs, input.len());
-
-    graph.plug_inputs(
-    &input
-        .iter()
-        .map(|b| if *b { BasisElem::Z1 } else { BasisElem::Z0 })
-        .collect::<Vec<_>>(),
-    );
-
-    graph.plug_outputs(
-        &output
-            .iter()
-            .map(|x| if *x { BasisElem::Z1 } else { BasisElem::Z0 })
-            .collect::<Vec<_>>(),
-    );
-    
-    let simplify_result = panic::catch_unwind(
-        panic::AssertUnwindSafe(|| {
-            simplify::full_simp(&mut graph);
-            decomposer.set_target(graph);
-            decomposer.decompose_parallel(driver).scalar()
-        })
-    );
-
-    //TODO normalize the graph, dividing by the scalar?
-
-    match simplify_result {
-        Ok(scalar) => {
-            let amp = scalar * scalar.conj();
-            return amp.complex_value().re;
-        },
-        Err(_) => return 0.0,
-    }
-    
 }
 
 fn get_approximation_error_testcases(graph: &Graph, circuit: &Circuit) -> i64 {
@@ -174,17 +135,20 @@ fn get_approximation_error_testcases(graph: &Graph, circuit: &Circuit) -> i64 {
 
     let driver = BssWithCatsDriver { random_t: false };
 
-    let mut total_error = 0.0;
+    let mut total_error: f64 = 0.0;
+    
+    for (input, output) in TESTCASES.iter() {
 
-    println!("new comparison");
+        let test_result: String = simulator::sample_with_input(circuit, input, &mut decomposer, &driver, Some(4));
+        let matched = test_result == *output;
+        println!("{} matched goal {} / result {}", matched, output, test_result);
 
-    for ((input, output), &goal_amp) in TESTCASES.iter().zip(GOAL_AMPLITUDES.iter()) {
-        let test_amplitude = amplitude(circuit, graph, &mut decomposer, &driver, input, output);
-        println!("  comparing amplitudes: {} vs {}", test_amplitude, goal_amp);
-        total_error += (test_amplitude - goal_amp).abs();
+        total_error += if matched {
+            0.0
+        } else {
+            1.0 / NUM_CASES as f64
+        };
     }
-
-    //let test_amplitude = amplitude( circuit, graph, &mut decomposer, &driver, &vec![false; circuit.num_qubits()], &vec![false; circuit.num_qubits()], );
 
     // Scale and convert to i64
     (total_error * -25000.0).round() as i64
@@ -225,8 +189,7 @@ fn get_fitness(population: &PopulationComponents, i: usize) -> i64 {
         ExtractStatus::Panic => -100000,
     };
 
-    println!("Getting fitness\nstats {:?}\n components DEP {} CMP {} INP {} approxError {}", circuit.stats(),
-    depth, complex_gates, input_encodings, approximation_error);
+    //println!("Getting fitness\nstats {:?}\n components DEP {} CMP {} INP {} approxError {}", circuit.stats(),depth, complex_gates, input_encodings, approximation_error);
 
     return
         approximation_error +

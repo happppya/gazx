@@ -19,3 +19,13 @@ pub struct PopulationComponents {
     pub extract_status: Vec<ExtractStatus>,
     pub fitness: Vec<i64>,
 }
+
+#[derive(Debug)]
+pub struct Hyperparameters {
+
+    pub elitism_rate: f64,
+    pub tournament_size: usize,
+
+    pub crossover_rate: f64,
+    
+}

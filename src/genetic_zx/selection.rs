@@ -1,58 +1,47 @@
 use std::collections::HashSet;
-use rand::{ rng, seq::SliceRandom };
+use rand::{rng, seq::SliceRandom, Rng};
 
-use crate::genetic_zx::models::PopulationComponents;
+use crate::genetic_zx::models::{PopulationComponents, Hyperparameters};
 
-pub fn worst_individuals_iter(
-    population: &PopulationComponents,
-    individuals: usize,
-) -> impl Iterator<Item = usize> {
-    let mut indices: Vec<usize> = (0..population.fitness.len()).collect();
+pub fn repopulate(
+    population: &mut PopulationComponents,
+    parameters: &Hyperparameters,
+) {
+    let population_size = population.graph.len();
 
-    // sort indices by fitness (worst first)
-    indices.sort_by(|&a, &b| {
-        population.fitness[a]
-            .partial_cmp(&population.fitness[b])
+    let mut indices: Vec<usize> = (0..population_size).collect();
+    let elitism_count = (population_size as f64 * parameters.elitism_rate) as usize;
+
+    // Sort descending to put the best individuals at the start of the array.
+    let (_, pivot, non_elites) = indices.select_nth_unstable_by(elitism_count, |&a, &b| {
+        population.fitness[b]
+            .partial_cmp(&population.fitness[a])
             .unwrap()
     });
 
-    let worst_count = (individuals as f32 * 0.9).round() as usize;
-    let random_count = individuals - worst_count;
+    // The individuals to replace are the pivot and everything after it
+    let mut target_indices = vec![*pivot];
+    target_indices.extend_from_slice(non_elites);
 
-    // split worst vs remaining
-    let (worst, rest) = indices.split_at(worst_count.min(indices.len()));
+    let mut rng = rng();
 
-    // pick random individuals from the remaining population
-    let mut random_selection: Vec<usize> = rest.to_vec();
-    random_selection.shuffle(&mut rng());
+    for target_idx in target_indices {
+        let mut best_parent_idx = 0;
+        let mut best_fitness = population.fitness[0];
 
-    // combine results
-    let mut selected = Vec::with_capacity(individuals);
-    selected.extend_from_slice(worst);
-    selected.extend(random_selection.into_iter().take(random_count));
+        // Tournament selection
+        for i in 0..parameters.tournament_size {
+            let competitor_idx = rng.random_range(0..population_size);
+            let fitness = population.fitness[competitor_idx];
 
-    selected.into_iter()
-}
+            if i == 0 || fitness > best_fitness {
+                best_fitness = fitness;
+                best_parent_idx = competitor_idx;
+            }
+        }
 
-
-pub fn repopulate(
-  population: &mut PopulationComponents,
-  worst_individuals_iter: impl Iterator<Item = usize>
-) {
-
-  let worst_set: HashSet<usize> = worst_individuals_iter.collect();
-  let population_size = population.graph.len();
-
-  for individual in worst_set.clone() {
-    //println!("removing {}", individual);
-  }
-
-  let mut good_indices: Vec<usize> = (0..population_size).filter(|i| !worst_set.contains(i)).collect();
-
-  good_indices.shuffle(&mut rng());
-
-  // replace each worst individual with a randomly chosen good one
-  for (target_idx, &replacement_idx) in worst_set.iter().zip(good_indices.iter()) {
-    population.graph[*target_idx] = population.graph[replacement_idx].clone();
-  }
+        // Overwrite the individual with the tournament winner
+        population.graph[target_idx] = population.graph[best_parent_idx].clone();
+        population.fitness[target_idx] = population.fitness[best_parent_idx];
+    }
 }

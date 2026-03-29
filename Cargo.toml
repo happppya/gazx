@@ -12,6 +12,8 @@ quizx = {path = "C:\\Users\\mkim3\\Documents\\code\\quizxFork\\quizx"}
 rand = "0.9.2"
 rand_distr = "0.5.1"
 num-complex = "0.4.6"
+itertools = "0.14.0"
+num = "0.4.3"
 
 [profile.dev]
 panic = "unwind"

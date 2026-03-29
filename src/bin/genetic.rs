@@ -5,6 +5,8 @@ use genetic_zx::algorithm;
 use genetic_zx::results;
 use genetic_zx::models::{ ExtractStatus, PopulationComponents };
 
+use workspace::genetic_zx::algorithm::init_goal_circuit;
+use workspace::genetic_zx::models::Hyperparameters;
 use workspace::mutation::mutation_runner::MutationType;
 
 use std::io::{self, Write};
@@ -20,18 +22,15 @@ fn pause() {
 //TODO visualizer with https://quantum.cloud.ibm.com/composer
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
-    let population_size: u32 = 100;
-    let num_qubits: usize = 4usize;
+    let population_size: u32 = 80;
     let generations: u32 = 10000;
 
-    //let goal_circuit = &Circuit::from_file("circuits/small/grover_5.qasm")?.to_basic_gates();
-    let goal_circuit = &Circuit::from_file("circuits/small/tof_5.qasm")?.to_basic_gates();
-    println!("starting stats {:?}", goal_circuit.stats());
+    init_goal_circuit("circuits/small/tof_3.qasm");
 
     /*let (graphs, graph_millis) =
         output::benchmark(|| genetic_util::build_population(population_size, num_qubits));*/
 
-    let graphs = algorithm::build_population(population_size, num_qubits);
+    let graphs = algorithm::build_population(population_size);
 
     let population: &mut PopulationComponents = &mut (PopulationComponents {
         graph: graphs,
@@ -42,10 +41,16 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         mutation_retries: vec![0; population_size as usize],
     });
 
+    let parameters: &mut Hyperparameters = &mut Hyperparameters {
+        elitism_rate: 0.1,
+        crossover_rate: 0.5,
+        tournament_size: 3,
+    };
+
     //println!("Population build time (ms): {:?}", graph_millis);
 
-    let mut logger= results::Logger::new("genetic_log.txt");
-    logger.begin();
+    let mut logger= results::Logger::new("results");
+    logger.begin(&results::get_fitness_info());
 
     for generation in 0..generations {
         
@@ -55,13 +60,16 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
         algorithm::set_fitness_values(population);
 
-        pause();
+        //pause();
+
         results::print_population(population);
 
         algorithm::repopulate(
-            population, 
-            algorithm::worst_individuals_iter(population, (population_size/2) as usize),
+            population,
+            parameters,
         );
+
+        //pause();
 
         logger.log(population, generation);
         

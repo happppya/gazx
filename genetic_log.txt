@@ -1,2 +1,3359 @@
-New log started at SystemTime { intervals: 134173985389739505 }
+New log started at SystemTime { intervals: 134185898983941748 }
 Generation	Highest Fitness
+0	-210
+New best circuit with stats: Circuit with 0 qubits, 0 gates
+  1-qubit: 0
+  2-qubit: 0
+  n-qubit: 0
+  clifford: 0
+  non-clifford: 0
+
+And has qasm:
+OPENQASM 2.0;
+include "qelib1.inc";
+qreg q[0];
+
+1	-151
+New best circuit with stats: Circuit with 9 qubits, 173 gates
+  1-qubit: 98
+  2-qubit: 75
+  n-qubit: 0
+  clifford: 142
+  non-clifford: 31
+
+And has qasm:
+OPENQASM 2.0;
+include "qelib1.inc";
+qreg q[9];
+h q[6];
+h q[2];
+cz q[6], q[2];
+h q[5];
+h q[4];
+h q[2];
+h q[0];
+h q[8];
+cz q[5], q[0];
+cz q[4], q[0];
+cz q[2], q[0];
+h q[0];
+cz q[8], q[0];
+h q[8];
+h q[1];
+cz q[8], q[0];
+cz q[1], q[0];
+rz(0.75*pi) q[0];
+h q[0];
+cz q[8], q[1];
+cz q[8], q[2];
+cz q[8], q[0];
+rz(0.25*pi) q[8];
+h q[8];
+cz q[8], q[5];
+cz q[5], q[2];
+cz q[5], q[1];
+h q[5];
+cz q[8], q[1];
+cz q[5], q[1];
+cz q[2], q[1];
+cz q[1], q[0];
+rz(0.25*pi) q[1];
+h q[1];
+cx q[1], q[8];
+h q[0];
+cz q[8], q[0];
+cz q[6], q[0];
+cz q[2], q[0];
+rz(-0.25*pi) q[0];
+h q[0];
+h q[7];
+cz q[6], q[0];
+cz q[2], q[0];
+rz(-0.25*pi) q[0];
+h q[0];
+cz q[7], q[6];
+cz q[6], q[0];
+cz q[6], q[2];
+rz(-0.75*pi) q[6];
+h q[6];
+cz q[8], q[2];
+cz q[7], q[2];
+cz q[6], q[2];
+cz q[5], q[2];
+cz q[2], q[0];
+cz q[2], q[1];
+rz(-0.25*pi) q[2];
+h q[2];
+h q[0];
+cz q[7], q[0];
+cz q[2], q[0];
+rz(0.25*pi) q[0];
+h q[0];
+cx q[0], q[8];
+cx q[0], q[6];
+h q[3];
+cz q[7], q[3];
+h q[3];
+cz q[7], q[0];
+cz q[3], q[0];
+rz(-0.25*pi) q[0];
+h q[0];
+cz q[7], q[0];
+cz q[7], q[3];
+cz q[7], q[4];
+rz(-0.75*pi) q[7];
+h q[7];
+cz q[7], q[3];
+cz q[4], q[3];
+cz q[3], q[0];
+rz(-0.25*pi) q[3];
+h q[3];
+h q[0];
+cz q[4], q[0];
+cz q[3], q[0];
+rz(0.25*pi) q[0];
+h q[0];
+cx q[0], q[7];
+cx q[0], q[4];
+cz q[8], q[0];
+rz(-0.25*pi) q[0];
+h q[0];
+cx q[0], q[8];
+h q[8];
+rz(-0.25*pi) q[8];
+h q[8];
+cz q[8], q[4];
+cz q[4], q[0];
+rz(0.25*pi) q[4];
+h q[4];
+h q[0];
+cz q[4], q[0];
+rz(0.25*pi) q[0];
+h q[0];
+rz(-0.25*pi) q[0];
+h q[0];
+cx q[0], q[7];
+h q[0];
+cz q[3], q[0];
+rz(0.25*pi) q[0];
+h q[0];
+cx q[0], q[3];
+rz(-0.25*pi) q[0];
+h q[0];
+cx q[0], q[6];
+h q[0];
+cz q[2], q[0];
+rz(0.25*pi) q[0];
+h q[0];
+cx q[0], q[2];
+rz(-0.25*pi) q[0];
+h q[0];
+cx q[0], q[5];
+cx q[0], q[4];
+h q[0];
+rz(0.25*pi) q[0];
+h q[0];
+cx q[0], q[4];
+cx q[0], q[1];
+h q[2];
+cz q[6], q[2];
+rz(-0.25*pi) q[2];
+h q[2];
+cx q[2], q[6];
+h q[3];
+cz q[7], q[3];
+rz(-0.25*pi) q[3];
+h q[3];
+cx q[3], q[7];
+h q[0];
+cz q[5], q[0];
+rz(-0.25*pi) q[0];
+h q[0];
+cx q[0], q[5];
+h q[8];
+rz(0.25*pi) q[8];
+h q[8];
+h q[4];
+cz q[8], q[4];
+cz q[5], q[4];
+cz q[4], q[1];
+cz q[4], q[0];
+rz(0.75*pi) q[4];
+h q[4];
+h q[8];
+h q[7];
+h q[6];
+h q[5];
+cz q[8], q[4];
+rz(0.25*pi) q[8];
+h q[8];
+rz(0.25*pi) q[7];
+h q[7];
+rz(0.25*pi) q[6];
+h q[6];
+rz(0.25*pi) q[5];
+h q[5];
+h q[4];
+h q[3];
+h q[2];
+h q[1];
+h q[0];
+
+2	-99
+New best circuit with stats: Circuit with 9 qubits, 145 gates
+  1-qubit: 94
+  2-qubit: 51
+  n-qubit: 0
+  clifford: 117
+  non-clifford: 28
+
+And has qasm:
+OPENQASM 2.0;
+include "qelib1.inc";
+qreg q[9];
+h q[5];
+h q[3];
+h q[5];
+h q[3];
+cz q[5], q[3];
+h q[5];
+h q[1];
+cz q[5], q[1];
+cz q[3], q[1];
+h q[1];
+cx q[1], q[3];
+cz q[5], q[1];
+cz q[3], q[1];
+rz(-0.25*pi) q[1];
+h q[1];
+cz q[5], q[3];
+cz q[3], q[1];
+rz(-0.75*pi) q[3];
+h q[3];
+cz q[5], q[3];
+cz q[5], q[1];
+rz(-0.25*pi) q[5];
+h q[5];
+h q[1];
+cz q[5], q[1];
+cz q[3], q[1];
+rz(0.25*pi) q[1];
+h q[1];
+cx q[1], q[3];
+h q[6];
+h q[2];
+cz q[6], q[2];
+h q[2];
+cx q[2], q[3];
+h q[7];
+cz q[7], q[6];
+cz q[6], q[3];
+cz q[6], q[2];
+rz(0.25*pi) q[6];
+h q[6];
+cz q[7], q[2];
+cz q[6], q[2];
+cz q[3], q[2];
+rz(0.75*pi) q[2];
+h q[2];
+cz q[7], q[3];
+cz q[3], q[2];
+rz(0.25*pi) q[3];
+h q[3];
+cx q[3], q[6];
+h q[8];
+h q[8];
+rz(-0.75*pi) q[7];
+h q[7];
+h q[4];
+cz q[8], q[3];
+cz q[7], q[3];
+h q[4];
+rz(0.75*pi) q[3];
+h q[3];
+cz q[4], q[3];
+h q[4];
+cx q[4], q[8];
+rz(-0.25*pi) q[3];
+h q[3];
+cz q[8], q[3];
+rz(-0.25*pi) q[8];
+h q[8];
+cz q[8], q[4];
+cz q[4], q[3];
+rz(0.25*pi) q[4];
+h q[4];
+h q[3];
+cz q[4], q[3];
+rz(0.25*pi) q[3];
+h q[3];
+cx q[3], q[7];
+h q[0];
+cz q[7], q[3];
+cz q[3], q[0];
+rz(-0.25*pi) q[3];
+h q[3];
+cx q[3], q[7];
+rz(1*pi) q[0];
+h q[0];
+cx q[0], q[3];
+cz q[3], q[0];
+rz(0.25*pi) q[0];
+h q[0];
+cx q[0], q[3];
+rz(-0.25*pi) q[0];
+h q[0];
+cx q[0], q[6];
+h q[0];
+cz q[2], q[0];
+rz(0.25*pi) q[0];
+h q[0];
+cx q[0], q[2];
+rz(-0.25*pi) q[0];
+h q[0];
+cx q[0], q[5];
+h q[0];
+rz(0.25*pi) q[0];
+h q[0];
+cx q[0], q[1];
+h q[0];
+cz q[5], q[0];
+rz(-0.25*pi) q[0];
+h q[0];
+cx q[0], q[5];
+h q[2];
+cz q[6], q[2];
+rz(-0.25*pi) q[2];
+h q[2];
+cx q[2], q[6];
+h q[8];
+rz(0.25*pi) q[8];
+h q[8];
+h q[4];
+rz(1*pi) q[3];
+h q[3];
+cz q[8], q[4];
+rz(-0.25*pi) q[4];
+h q[4];
+rz(-0.25*pi) q[3];
+h q[3];
+h q[8];
+h q[7];
+h q[6];
+h q[5];
+cz q[8], q[4];
+rz(0.25*pi) q[8];
+h q[8];
+cz q[7], q[3];
+rz(0.25*pi) q[7];
+h q[7];
+rz(0.25*pi) q[6];
+h q[6];
+rz(0.25*pi) q[5];
+h q[5];
+h q[4];
+h q[3];
+h q[2];
+h q[1];
+h q[0];
+
+3	-60
+New best circuit with stats: Circuit with 9 qubits, 150 gates
+  1-qubit: 93
+  2-qubit: 57
+  n-qubit: 0
+  clifford: 121
+  non-clifford: 29
+
+And has qasm:
+OPENQASM 2.0;
+include "qelib1.inc";
+qreg q[9];
+h q[6];
+h q[5];
+h q[6];
+h q[5];
+cz q[6], q[5];
+h q[5];
+h q[1];
+cz q[6], q[1];
+cz q[5], q[1];
+h q[1];
+cx q[1], q[6];
+h q[8];
+cz q[6], q[1];
+cz q[5], q[1];
+rz(-0.25*pi) q[1];
+h q[1];
+cz q[8], q[6];
+cz q[6], q[5];
+cz q[6], q[1];
+rz(-0.75*pi) q[6];
+h q[6];
+cz q[8], q[5];
+cz q[6], q[5];
+cz q[5], q[1];
+rz(-0.25*pi) q[5];
+h q[5];
+h q[1];
+cz q[8], q[1];
+cz q[6], q[1];
+cz q[5], q[1];
+rz(0.25*pi) q[1];
+h q[1];
+cx q[1], q[6];
+h q[2];
+cz q[8], q[2];
+h q[2];
+cz q[8], q[6];
+h q[7];
+cz q[6], q[2];
+rz(-0.25*pi) q[6];
+h q[6];
+cz q[8], q[2];
+cz q[8], q[6];
+cz q[8], q[7];
+rz(-0.75*pi) q[8];
+h q[8];
+cz q[8], q[2];
+cz q[7], q[2];
+cz q[6], q[2];
+rz(-0.25*pi) q[2];
+h q[2];
+h q[6];
+cz q[8], q[6];
+cz q[7], q[6];
+cz q[6], q[2];
+rz(0.25*pi) q[6];
+h q[6];
+cx q[6], q[8];
+rz(0.25*pi) q[7];
+h q[7];
+h q[4];
+cz q[8], q[4];
+cz q[8], q[7];
+rz(-0.25*pi) q[8];
+h q[8];
+h q[3];
+cz q[8], q[3];
+cz q[4], q[3];
+h q[3];
+cx q[3], q[4];
+rz(-0.25*pi) q[3];
+h q[3];
+cz q[8], q[3];
+rz(-0.25*pi) q[8];
+h q[8];
+cz q[8], q[4];
+cz q[4], q[3];
+rz(0.25*pi) q[4];
+h q[4];
+h q[3];
+cz q[4], q[3];
+rz(0.25*pi) q[3];
+h q[3];
+cx q[3], q[7];
+h q[0];
+cz q[7], q[3];
+cz q[3], q[0];
+rz(-0.25*pi) q[3];
+h q[3];
+cx q[3], q[7];
+h q[0];
+cx q[0], q[3];
+cz q[3], q[0];
+rz(-0.25*pi) q[0];
+h q[0];
+cx q[0], q[3];
+rz(-0.25*pi) q[0];
+h q[0];
+cx q[0], q[6];
+h q[0];
+cz q[2], q[0];
+rz(0.25*pi) q[0];
+h q[0];
+cx q[0], q[2];
+rz(-0.25*pi) q[0];
+h q[0];
+cx q[0], q[5];
+h q[0];
+rz(0.25*pi) q[0];
+h q[0];
+cx q[0], q[1];
+h q[0];
+cz q[5], q[0];
+rz(-0.25*pi) q[0];
+h q[0];
+cx q[0], q[5];
+h q[2];
+cz q[6], q[2];
+rz(-0.25*pi) q[2];
+h q[2];
+cx q[2], q[6];
+h q[8];
+rz(0.25*pi) q[8];
+h q[8];
+h q[4];
+h q[3];
+cz q[8], q[4];
+rz(-0.25*pi) q[4];
+h q[4];
+rz(-0.25*pi) q[3];
+h q[3];
+h q[8];
+h q[7];
+h q[6];
+h q[5];
+cz q[8], q[4];
+rz(0.25*pi) q[8];
+h q[8];
+cz q[7], q[3];
+rz(0.25*pi) q[7];
+h q[7];
+rz(0.25*pi) q[6];
+h q[6];
+rz(0.25*pi) q[5];
+h q[5];
+h q[4];
+h q[3];
+h q[2];
+h q[1];
+h q[0];
+
+4	-24
+New best circuit with stats: Circuit with 9 qubits, 151 gates
+  1-qubit: 94
+  2-qubit: 57
+  n-qubit: 0
+  clifford: 121
+  non-clifford: 30
+
+And has qasm:
+OPENQASM 2.0;
+include "qelib1.inc";
+qreg q[9];
+h q[6];
+h q[5];
+h q[0];
+cz q[6], q[0];
+h q[6];
+cz q[5], q[0];
+h q[5];
+cz q[6], q[5];
+cz q[5], q[0];
+rz(-0.25*pi) q[5];
+h q[5];
+h q[7];
+cz q[6], q[0];
+cz q[5], q[0];
+h q[2];
+rz(0.25*pi) q[0];
+h q[0];
+cz q[7], q[6];
+cz q[7], q[2];
+cz q[6], q[0];
+rz(-0.25*pi) q[6];
+h q[6];
+h q[2];
+h q[8];
+cz q[7], q[6];
+cz q[6], q[2];
+rz(-0.25*pi) q[6];
+h q[6];
+cz q[8], q[7];
+cz q[7], q[2];
+cz q[7], q[6];
+rz(-0.75*pi) q[7];
+h q[7];
+cz q[8], q[2];
+cz q[7], q[2];
+cz q[6], q[2];
+rz(-0.25*pi) q[2];
+h q[2];
+h q[6];
+cz q[8], q[6];
+cz q[7], q[6];
+cz q[6], q[2];
+rz(0.25*pi) q[6];
+h q[6];
+cx q[6], q[7];
+h q[4];
+h q[3];
+cz q[8], q[7];
+cz q[7], q[3];
+rz(-0.25*pi) q[7];
+h q[7];
+h q[4];
+cz q[8], q[7];
+cz q[8], q[4];
+rz(-0.75*pi) q[8];
+h q[8];
+cz q[8], q[3];
+cz q[7], q[3];
+cz q[4], q[3];
+rz(-0.25*pi) q[3];
+h q[3];
+h q[7];
+cz q[8], q[7];
+cz q[7], q[4];
+cz q[7], q[3];
+rz(0.25*pi) q[7];
+h q[7];
+cx q[7], q[8];
+h q[1];
+cz q[8], q[1];
+cz q[4], q[1];
+h q[1];
+cx q[1], q[4];
+rz(-0.25*pi) q[1];
+h q[1];
+cz q[8], q[1];
+rz(-0.25*pi) q[8];
+h q[8];
+cz q[8], q[4];
+cz q[4], q[1];
+rz(0.25*pi) q[4];
+h q[4];
+h q[1];
+cz q[4], q[1];
+rz(0.25*pi) q[1];
+h q[1];
+rz(-0.25*pi) q[1];
+h q[1];
+cx q[1], q[7];
+h q[1];
+cz q[3], q[1];
+rz(0.25*pi) q[1];
+h q[1];
+cx q[1], q[3];
+rz(-0.25*pi) q[1];
+h q[1];
+cx q[1], q[6];
+h q[1];
+cz q[2], q[1];
+rz(0.25*pi) q[1];
+h q[1];
+cx q[1], q[2];
+rz(-0.25*pi) q[1];
+h q[1];
+cx q[1], q[5];
+h q[1];
+cz q[1], q[0];
+rz(0.25*pi) q[1];
+h q[1];
+cx q[1], q[5];
+h q[2];
+cz q[6], q[2];
+rz(-0.25*pi) q[2];
+h q[2];
+cx q[2], q[6];
+h q[3];
+cz q[7], q[3];
+rz(-0.25*pi) q[3];
+h q[3];
+cx q[3], q[7];
+h q[0];
+cz q[5], q[0];
+rz(-0.25*pi) q[0];
+h q[0];
+cx q[0], q[5];
+h q[8];
+rz(0.25*pi) q[8];
+h q[8];
+h q[4];
+cz q[8], q[4];
+rz(-0.25*pi) q[4];
+h q[4];
+h q[8];
+h q[7];
+h q[6];
+h q[5];
+cz q[8], q[4];
+rz(0.25*pi) q[8];
+h q[8];
+rz(0.25*pi) q[7];
+h q[7];
+rz(0.25*pi) q[6];
+h q[6];
+cz q[5], q[1];
+rz(0.25*pi) q[5];
+h q[5];
+h q[4];
+h q[3];
+h q[2];
+h q[1];
+h q[0];
+
+5	28
+New best circuit with stats: Circuit with 9 qubits, 141 gates
+  1-qubit: 92
+  2-qubit: 49
+  n-qubit: 0
+  clifford: 113
+  non-clifford: 28
+
+And has qasm:
+OPENQASM 2.0;
+include "qelib1.inc";
+qreg q[9];
+h q[5];
+h q[0];
+h q[5];
+h q[0];
+cz q[5], q[0];
+h q[1];
+h q[0];
+cz q[1], q[0];
+h q[1];
+cx q[1], q[5];
+h q[6];
+h q[2];
+cz q[6], q[2];
+cz q[5], q[0];
+h q[2];
+cz q[1], q[0];
+rz(-0.25*pi) q[0];
+h q[0];
+cz q[5], q[1];
+cz q[2], q[1];
+cz q[1], q[0];
+rz(-0.75*pi) q[1];
+h q[1];
+cz q[5], q[2];
+cz q[5], q[1];
+cz q[5], q[0];
+rz(-0.25*pi) q[5];
+h q[5];
+h q[0];
+cz q[5], q[0];
+cz q[2], q[0];
+rz(0.25*pi) q[0];
+h q[0];
+cx q[0], q[1];
+cz q[6], q[0];
+cz q[6], q[2];
+rz(0.25*pi) q[6];
+h q[6];
+h q[7];
+cz q[6], q[2];
+h q[3];
+cz q[2], q[0];
+rz(0.75*pi) q[2];
+h q[2];
+cz q[7], q[0];
+cz q[7], q[3];
+h q[3];
+cz q[2], q[0];
+rz(0.25*pi) q[0];
+h q[0];
+cz q[7], q[0];
+cz q[3], q[0];
+rz(-0.25*pi) q[0];
+h q[0];
+cz q[7], q[3];
+cz q[7], q[0];
+rz(-0.75*pi) q[7];
+h q[7];
+cz q[7], q[3];
+cz q[3], q[0];
+rz(-0.25*pi) q[3];
+h q[3];
+h q[0];
+cz q[3], q[0];
+rz(0.25*pi) q[0];
+h q[0];
+cx q[0], q[7];
+h q[8];
+h q[8];
+cz q[8], q[0];
+h q[8];
+h q[4];
+cz q[8], q[4];
+rz(-0.25*pi) q[8];
+h q[8];
+h q[4];
+cz q[8], q[4];
+rz(0.25*pi) q[4];
+h q[4];
+cz q[4], q[0];
+rz(0.25*pi) q[0];
+h q[0];
+rz(-0.25*pi) q[0];
+h q[0];
+cx q[0], q[7];
+h q[0];
+cz q[3], q[0];
+rz(0.25*pi) q[0];
+h q[0];
+cx q[0], q[3];
+cz q[2], q[0];
+rz(0.25*pi) q[0];
+h q[0];
+cx q[0], q[2];
+h q[2];
+cz q[6], q[2];
+rz(-0.25*pi) q[2];
+h q[2];
+cx q[2], q[6];
+rz(-0.25*pi) q[0];
+h q[0];
+cx q[0], q[5];
+h q[0];
+rz(0.25*pi) q[0];
+h q[0];
+cx q[0], q[1];
+h q[3];
+cz q[7], q[3];
+rz(-0.25*pi) q[3];
+h q[3];
+cx q[3], q[7];
+h q[0];
+cz q[5], q[0];
+rz(-0.25*pi) q[0];
+h q[0];
+cx q[0], q[5];
+h q[8];
+rz(0.25*pi) q[8];
+h q[8];
+h q[4];
+cz q[8], q[4];
+rz(-0.25*pi) q[4];
+h q[4];
+h q[8];
+h q[7];
+h q[6];
+h q[5];
+cz q[8], q[4];
+rz(0.25*pi) q[8];
+h q[8];
+rz(0.25*pi) q[7];
+h q[7];
+rz(0.25*pi) q[6];
+h q[6];
+rz(0.25*pi) q[5];
+h q[5];
+h q[4];
+h q[3];
+h q[2];
+h q[1];
+h q[0];
+
+6	57
+New best circuit with stats: Circuit with 9 qubits, 124 gates
+  1-qubit: 82
+  2-qubit: 42
+  n-qubit: 0
+  clifford: 100
+  non-clifford: 24
+
+And has qasm:
+OPENQASM 2.0;
+include "qelib1.inc";
+qreg q[9];
+h q[5];
+h q[0];
+h q[6];
+cz q[5], q[0];
+h q[5];
+h q[2];
+h q[1];
+cz q[6], q[2];
+cz q[5], q[1];
+h q[2];
+h q[1];
+cz q[6], q[0];
+cz q[6], q[2];
+rz(0.25*pi) q[6];
+h q[6];
+cz q[5], q[1];
+cz q[2], q[1];
+rz(0.25*pi) q[1];
+h q[1];
+h q[7];
+cz q[6], q[2];
+cz q[5], q[1];
+cz q[5], q[2];
+rz(0.75*pi) q[5];
+h q[5];
+h q[3];
+rz(0.75*pi) q[2];
+h q[2];
+cz q[7], q[0];
+cz q[7], q[3];
+cz q[5], q[0];
+h q[3];
+cz q[2], q[0];
+rz(0.5*pi) q[0];
+h q[0];
+cz q[7], q[0];
+cz q[3], q[0];
+rz(-0.25*pi) q[0];
+h q[0];
+cz q[7], q[3];
+cz q[7], q[0];
+rz(-0.75*pi) q[7];
+h q[7];
+cz q[7], q[3];
+cz q[3], q[0];
+rz(-0.25*pi) q[3];
+h q[3];
+h q[0];
+cz q[3], q[0];
+rz(0.25*pi) q[0];
+h q[0];
+cx q[0], q[7];
+h q[4];
+h q[4];
+h q[8];
+cz q[4], q[0];
+h q[4];
+cz q[8], q[4];
+h q[8];
+rz(-0.25*pi) q[4];
+h q[4];
+cz q[8], q[4];
+rz(0.25*pi) q[8];
+h q[8];
+cz q[8], q[0];
+rz(0.25*pi) q[0];
+h q[0];
+rz(-0.25*pi) q[0];
+h q[0];
+cx q[0], q[7];
+h q[0];
+cz q[3], q[0];
+rz(0.25*pi) q[0];
+h q[0];
+cx q[0], q[3];
+cz q[2], q[0];
+rz(0.25*pi) q[0];
+h q[0];
+cx q[0], q[2];
+rz(-0.25*pi) q[0];
+h q[0];
+cx q[0], q[5];
+h q[0];
+rz(0.25*pi) q[0];
+h q[0];
+cx q[0], q[1];
+h q[0];
+cz q[5], q[0];
+rz(-0.25*pi) q[0];
+h q[0];
+cx q[0], q[5];
+h q[3];
+cz q[7], q[3];
+rz(-0.25*pi) q[3];
+h q[3];
+cx q[3], q[7];
+h q[4];
+cz q[8], q[4];
+rz(0.25*pi) q[4];
+h q[4];
+cx q[4], q[8];
+h q[2];
+cz q[6], q[2];
+rz(-0.25*pi) q[2];
+h q[2];
+cx q[2], q[6];
+h q[8];
+h q[7];
+h q[6];
+h q[5];
+cz q[8], q[4];
+rz(0.25*pi) q[8];
+h q[8];
+rz(0.25*pi) q[7];
+h q[7];
+rz(0.25*pi) q[6];
+h q[6];
+rz(0.25*pi) q[5];
+h q[5];
+h q[4];
+h q[3];
+h q[2];
+h q[1];
+h q[0];
+
+7	81
+New best circuit with stats: Circuit with 9 qubits, 128 gates
+  1-qubit: 85
+  2-qubit: 43
+  n-qubit: 0
+  clifford: 103
+  non-clifford: 25
+
+And has qasm:
+OPENQASM 2.0;
+include "qelib1.inc";
+qreg q[9];
+h q[5];
+h q[6];
+rz(1*pi) q[5];
+h q[5];
+h q[2];
+h q[1];
+h q[0];
+cz q[6], q[0];
+h q[6];
+cz q[5], q[0];
+cz q[2], q[1];
+h q[2];
+rz(0.25*pi) q[0];
+h q[0];
+cz q[6], q[5];
+cz q[6], q[2];
+cz q[6], q[0];
+rz(-0.25*pi) q[6];
+h q[6];
+h q[7];
+cz q[6], q[5];
+rz(0.25*pi) q[6];
+h q[6];
+cz q[5], q[2];
+h q[3];
+cz q[2], q[1];
+rz(0.25*pi) q[2];
+h q[2];
+cz q[7], q[3];
+h q[7];
+cz q[6], q[1];
+cz q[3], q[1];
+cz q[2], q[1];
+rz(0.75*pi) q[1];
+h q[1];
+cz q[7], q[3];
+cz q[7], q[1];
+rz(-0.25*pi) q[7];
+h q[7];
+h q[8];
+cz q[7], q[3];
+cz q[3], q[1];
+rz(0.25*pi) q[3];
+h q[3];
+h q[8];
+cz q[3], q[1];
+rz(-0.25*pi) q[1];
+h q[1];
+cz q[8], q[1];
+h q[8];
+h q[4];
+cz q[8], q[4];
+rz(-0.25*pi) q[8];
+h q[8];
+h q[4];
+cz q[8], q[4];
+rz(0.25*pi) q[4];
+h q[4];
+cz q[4], q[1];
+rz(0.25*pi) q[1];
+h q[1];
+cx q[1], q[6];
+cx q[1], q[2];
+rz(-0.25*pi) q[1];
+h q[1];
+cx q[1], q[7];
+h q[1];
+cz q[3], q[1];
+rz(0.25*pi) q[1];
+h q[1];
+cx q[1], q[7];
+cx q[1], q[2];
+rz(-0.25*pi) q[1];
+h q[1];
+cx q[1], q[2];
+h q[1];
+cz q[6], q[1];
+rz(0.25*pi) q[1];
+h q[1];
+cx q[1], q[5];
+cx q[1], q[2];
+h q[3];
+cz q[7], q[3];
+rz(-0.25*pi) q[3];
+h q[3];
+cx q[3], q[7];
+rz(0.75*pi) q[5];
+h q[5];
+h q[8];
+rz(0.25*pi) q[8];
+h q[8];
+cz q[5], q[1];
+cz q[1], q[0];
+rz(0.25*pi) q[1];
+h q[1];
+h q[4];
+rz(1*pi) q[0];
+h q[0];
+cz q[8], q[4];
+cz q[5], q[0];
+rz(-0.25*pi) q[4];
+h q[4];
+cz q[1], q[0];
+rz(-0.25*pi) q[0];
+h q[0];
+h q[8];
+h q[7];
+h q[6];
+rz(1*pi) q[5];
+h q[5];
+cz q[8], q[4];
+rz(0.25*pi) q[8];
+h q[8];
+cz q[7], q[6];
+rz(0.25*pi) q[7];
+h q[7];
+rz(0.75*pi) q[6];
+h q[6];
+cz q[5], q[0];
+rz(-0.75*pi) q[5];
+h q[5];
+h q[4];
+h q[3];
+h q[2];
+cz q[1], q[0];
+rz(1*pi) q[1];
+h q[1];
+h q[0];
+
+8	119
+New best circuit with stats: Circuit with 9 qubits, 124 gates
+  1-qubit: 83
+  2-qubit: 41
+  n-qubit: 0
+  clifford: 99
+  non-clifford: 25
+
+And has qasm:
+OPENQASM 2.0;
+include "qelib1.inc";
+qreg q[9];
+h q[6];
+h q[5];
+h q[3];
+h q[2];
+cz q[6], q[5];
+h q[6];
+rz(-0.75*pi) q[5];
+h q[5];
+cz q[3], q[2];
+h q[2];
+cz q[6], q[2];
+cz q[6], q[5];
+rz(0.75*pi) q[6];
+h q[6];
+h q[7];
+rz(0.25*pi) q[6];
+h q[6];
+h q[4];
+cz q[3], q[2];
+rz(0.25*pi) q[2];
+h q[2];
+cz q[7], q[4];
+h q[7];
+cz q[6], q[3];
+cz q[4], q[3];
+cz q[3], q[2];
+rz(0.75*pi) q[3];
+h q[3];
+h q[8];
+cz q[7], q[4];
+cz q[7], q[3];
+rz(-0.25*pi) q[7];
+h q[7];
+cz q[4], q[3];
+rz(-0.25*pi) q[3];
+h q[3];
+h q[8];
+cz q[7], q[4];
+cz q[4], q[3];
+rz(0.25*pi) q[4];
+h q[4];
+cz q[8], q[4];
+h q[8];
+h q[1];
+cz q[8], q[1];
+h q[1];
+cx q[1], q[3];
+rz(-0.25*pi) q[8];
+h q[8];
+rz(0.25*pi) q[4];
+h q[4];
+cz q[8], q[1];
+cz q[4], q[1];
+rz(0.25*pi) q[1];
+h q[1];
+cx q[1], q[6];
+cx q[1], q[2];
+rz(-0.25*pi) q[1];
+h q[1];
+cx q[1], q[7];
+h q[1];
+cz q[3], q[1];
+rz(0.25*pi) q[1];
+h q[1];
+cx q[1], q[7];
+cx q[1], q[2];
+rz(-0.25*pi) q[1];
+h q[1];
+cx q[1], q[2];
+h q[1];
+cz q[6], q[1];
+rz(0.25*pi) q[1];
+h q[1];
+cx q[1], q[6];
+cx q[1], q[5];
+cx q[1], q[2];
+h q[0];
+cz q[1], q[0];
+rz(1*pi) q[0];
+h q[0];
+cx q[0], q[5];
+h q[3];
+cz q[7], q[3];
+rz(-0.25*pi) q[3];
+h q[3];
+cx q[3], q[7];
+rz(0.25*pi) q[0];
+h q[0];
+cx q[0], q[5];
+cz q[5], q[1];
+rz(-0.25*pi) q[1];
+h q[1];
+cx q[1], q[5];
+h q[8];
+rz(0.25*pi) q[8];
+h q[8];
+h q[4];
+rz(1*pi) q[0];
+h q[0];
+cz q[8], q[4];
+rz(-0.25*pi) q[4];
+h q[4];
+rz(-0.25*pi) q[0];
+h q[0];
+h q[8];
+h q[7];
+h q[6];
+h q[5];
+cz q[8], q[4];
+rz(0.25*pi) q[8];
+h q[8];
+cz q[7], q[6];
+rz(0.25*pi) q[7];
+h q[7];
+rz(0.75*pi) q[6];
+h q[6];
+cz q[5], q[0];
+rz(0.25*pi) q[5];
+h q[5];
+h q[4];
+h q[3];
+h q[2];
+h q[1];
+h q[0];
+
+9	148
+New best circuit with stats: Circuit with 9 qubits, 114 gates
+  1-qubit: 79
+  2-qubit: 35
+  n-qubit: 0
+  clifford: 91
+  non-clifford: 23
+
+And has qasm:
+OPENQASM 2.0;
+include "qelib1.inc";
+qreg q[9];
+h q[8];
+h q[7];
+h q[8];
+rz(0.25*pi) q[7];
+h q[7];
+cz q[8], q[7];
+h q[8];
+h q[4];
+cz q[8], q[4];
+rz(-0.25*pi) q[8];
+h q[8];
+h q[4];
+cz q[8], q[4];
+h q[6];
+rz(0.25*pi) q[4];
+h q[4];
+h q[2];
+cz q[7], q[4];
+rz(0.25*pi) q[7];
+h q[7];
+cz q[6], q[2];
+h q[5];
+h q[3];
+h q[2];
+h q[1];
+cz q[7], q[6];
+cz q[6], q[3];
+cz q[6], q[2];
+rz(0.25*pi) q[6];
+h q[6];
+cz q[5], q[3];
+h q[5];
+cz q[2], q[1];
+rz(0.25*pi) q[1];
+h q[1];
+h q[0];
+cz q[7], q[0];
+cz q[6], q[2];
+cz q[5], q[1];
+cz q[5], q[2];
+rz(0.75*pi) q[5];
+h q[5];
+rz(0.75*pi) q[2];
+h q[2];
+h q[0];
+cz q[5], q[3];
+cz q[3], q[0];
+cz q[3], q[2];
+rz(-0.5*pi) q[3];
+h q[3];
+cx q[3], q[7];
+cz q[7], q[3];
+rz(0.25*pi) q[7];
+h q[7];
+cz q[3], q[0];
+rz(-0.25*pi) q[0];
+h q[0];
+cz q[7], q[3];
+cz q[3], q[0];
+rz(0.75*pi) q[3];
+h q[3];
+rz(1*pi) q[0];
+h q[0];
+cz q[3], q[0];
+rz(-0.25*pi) q[0];
+h q[0];
+cz q[2], q[0];
+rz(0.25*pi) q[0];
+h q[0];
+cx q[0], q[2];
+rz(-0.25*pi) q[0];
+h q[0];
+cx q[0], q[5];
+h q[0];
+rz(0.25*pi) q[0];
+h q[0];
+cx q[0], q[1];
+h q[0];
+cz q[5], q[0];
+rz(-0.25*pi) q[0];
+h q[0];
+cx q[0], q[5];
+h q[2];
+cz q[6], q[2];
+rz(-0.25*pi) q[2];
+h q[2];
+cx q[2], q[6];
+h q[8];
+rz(0.25*pi) q[8];
+h q[8];
+h q[4];
+cz q[8], q[4];
+rz(-0.25*pi) q[4];
+h q[4];
+h q[8];
+h q[7];
+h q[6];
+h q[5];
+cz q[8], q[4];
+rz(0.25*pi) q[8];
+h q[8];
+cz q[7], q[6];
+cz q[7], q[3];
+rz(0.25*pi) q[7];
+h q[7];
+rz(0.25*pi) q[6];
+h q[6];
+rz(0.25*pi) q[5];
+h q[5];
+h q[4];
+rz(1*pi) q[3];
+h q[3];
+h q[2];
+h q[0];
+
+10	167
+New best circuit with stats: Circuit with 9 qubits, 112 gates
+  1-qubit: 78
+  2-qubit: 34
+  n-qubit: 0
+  clifford: 89
+  non-clifford: 23
+
+And has qasm:
+OPENQASM 2.0;
+include "qelib1.inc";
+qreg q[9];
+h q[5];
+h q[0];
+h q[6];
+cz q[5], q[0];
+h q[5];
+h q[2];
+h q[1];
+cz q[6], q[2];
+cz q[5], q[1];
+h q[2];
+h q[1];
+h q[7];
+cz q[6], q[0];
+cz q[6], q[2];
+rz(0.25*pi) q[6];
+h q[6];
+cz q[5], q[1];
+h q[3];
+cz q[2], q[1];
+rz(0.25*pi) q[1];
+h q[1];
+cz q[7], q[3];
+rz(0.75*pi) q[7];
+h q[7];
+cz q[6], q[2];
+cz q[5], q[1];
+cz q[5], q[2];
+rz(0.75*pi) q[5];
+h q[5];
+h q[3];
+rz(0.75*pi) q[2];
+h q[2];
+h q[8];
+cz q[7], q[3];
+cz q[5], q[0];
+cz q[3], q[0];
+rz(-0.75*pi) q[3];
+h q[3];
+cz q[2], q[0];
+rz(0.5*pi) q[0];
+h q[0];
+h q[8];
+cz q[3], q[0];
+rz(0.75*pi) q[0];
+h q[0];
+cz q[8], q[0];
+h q[8];
+h q[4];
+cz q[8], q[4];
+rz(-0.25*pi) q[8];
+h q[8];
+h q[4];
+cz q[8], q[4];
+rz(0.25*pi) q[4];
+h q[4];
+cz q[4], q[0];
+rz(0.25*pi) q[0];
+h q[0];
+cz q[3], q[0];
+rz(0.25*pi) q[0];
+h q[0];
+cx q[0], q[3];
+cz q[2], q[0];
+rz(0.25*pi) q[0];
+h q[0];
+cx q[0], q[2];
+rz(-0.25*pi) q[0];
+h q[0];
+cx q[0], q[5];
+h q[0];
+rz(0.25*pi) q[0];
+h q[0];
+cx q[0], q[1];
+h q[0];
+cz q[5], q[0];
+rz(-0.25*pi) q[0];
+h q[0];
+cx q[0], q[5];
+h q[3];
+cz q[7], q[3];
+rz(-0.25*pi) q[3];
+h q[3];
+cx q[3], q[7];
+h q[2];
+cz q[6], q[2];
+rz(-0.25*pi) q[2];
+h q[2];
+cx q[2], q[6];
+h q[8];
+rz(0.25*pi) q[8];
+h q[8];
+h q[4];
+cz q[8], q[4];
+rz(-0.25*pi) q[4];
+h q[4];
+h q[8];
+h q[7];
+h q[6];
+h q[5];
+cz q[8], q[4];
+rz(0.25*pi) q[8];
+h q[8];
+rz(0.25*pi) q[7];
+h q[7];
+rz(0.25*pi) q[6];
+h q[6];
+rz(0.25*pi) q[5];
+h q[5];
+h q[4];
+h q[2];
+h q[1];
+h q[0];
+
+11	218
+New best circuit with stats: Circuit with 9 qubits, 125 gates
+  1-qubit: 72
+  2-qubit: 53
+  n-qubit: 0
+  clifford: 103
+  non-clifford: 22
+
+And has qasm:
+OPENQASM 2.0;
+include "qelib1.inc";
+qreg q[9];
+h q[1];
+h q[0];
+h q[1];
+h q[0];
+h q[6];
+h q[5];
+h q[2];
+cz q[1], q[0];
+h q[0];
+cz q[6], q[5];
+h q[6];
+cz q[2], q[0];
+h q[2];
+cz q[6], q[2];
+cz q[5], q[2];
+cz q[2], q[1];
+rz(0.25*pi) q[2];
+h q[2];
+h q[8];
+cz q[6], q[1];
+cz q[6], q[0];
+cz q[6], q[5];
+cz q[6], q[2];
+rz(0.75*pi) q[6];
+h q[6];
+h q[4];
+h q[3];
+cz q[8], q[3];
+cz q[8], q[4];
+rz(0.75*pi) q[8];
+h q[8];
+cz q[6], q[5];
+rz(-0.25*pi) q[5];
+h q[5];
+h q[3];
+cz q[8], q[3];
+cz q[5], q[0];
+cz q[3], q[1];
+cz q[3], q[0];
+rz(-0.75*pi) q[3];
+h q[3];
+cz q[1], q[0];
+rz(-0.25*pi) q[0];
+h q[0];
+cz q[3], q[0];
+cz q[1], q[0];
+rz(0.75*pi) q[0];
+h q[0];
+cx q[0], q[4];
+rz(0.25*pi) q[4];
+h q[4];
+cz q[4], q[0];
+rz(-0.25*pi) q[0];
+h q[0];
+cz q[3], q[0];
+rz(0.25*pi) q[0];
+h q[0];
+cx q[0], q[6];
+cx q[0], q[5];
+cx q[0], q[3];
+cx q[0], q[2];
+cz q[5], q[0];
+cz q[2], q[0];
+cz q[1], q[0];
+rz(-0.25*pi) q[0];
+h q[0];
+cx q[0], q[6];
+cx q[0], q[1];
+cz q[2], q[1];
+rz(-0.25*pi) q[1];
+h q[1];
+cx q[1], q[6];
+cx q[1], q[5];
+cx q[1], q[2];
+rz(0.25*pi) q[0];
+h q[0];
+cx q[0], q[1];
+h q[0];
+cz q[5], q[0];
+cz q[2], q[0];
+rz(-0.25*pi) q[0];
+h q[0];
+cx q[0], q[5];
+h q[7];
+cz q[8], q[7];
+h q[7];
+cx q[7], q[8];
+h q[2];
+cz q[6], q[2];
+rz(-0.25*pi) q[2];
+h q[2];
+cx q[2], q[6];
+h q[3];
+cz q[8], q[3];
+cz q[7], q[3];
+rz(-0.25*pi) q[3];
+h q[3];
+cx q[3], q[7];
+cz q[8], q[4];
+rz(0.25*pi) q[8];
+h q[8];
+h q[4];
+cz q[8], q[4];
+rz(-0.25*pi) q[4];
+h q[4];
+h q[8];
+h q[7];
+h q[6];
+cz q[6], q[5];
+h q[5];
+cz q[8], q[4];
+rz(0.25*pi) q[8];
+h q[8];
+rz(0.25*pi) q[7];
+h q[7];
+cz q[6], q[0];
+cz q[6], q[5];
+rz(-0.25*pi) q[6];
+h q[6];
+rz(0.25*pi) q[5];
+h q[5];
+h q[4];
+h q[2];
+h q[1];
+h q[0];
+
+12	290
+New best circuit with stats: Circuit with 9 qubits, 135 gates
+  1-qubit: 73
+  2-qubit: 62
+  n-qubit: 0
+  clifford: 115
+  non-clifford: 20
+
+And has qasm:
+OPENQASM 2.0;
+include "qelib1.inc";
+qreg q[9];
+h q[5];
+h q[1];
+cz q[5], q[1];
+h q[3];
+h q[1];
+h q[7];
+cz q[3], q[1];
+h q[3];
+h q[2];
+cz q[7], q[1];
+cz q[7], q[2];
+h q[6];
+cz q[5], q[1];
+cz q[3], q[1];
+h q[2];
+rz(0.75*pi) q[1];
+h q[1];
+h q[0];
+cz q[7], q[2];
+cz q[7], q[1];
+rz(0.75*pi) q[7];
+h q[7];
+cz q[6], q[0];
+h q[6];
+cz q[7], q[2];
+cz q[6], q[3];
+rz(0.25*pi) q[3];
+h q[3];
+rz(-0.75*pi) q[2];
+h q[2];
+cz q[6], q[5];
+cz q[6], q[0];
+cz q[6], q[2];
+cz q[6], q[3];
+rz(0.75*pi) q[6];
+h q[6];
+cz q[5], q[0];
+cz q[5], q[2];
+rz(-0.5*pi) q[5];
+h q[5];
+h q[4];
+cz q[6], q[0];
+cz q[5], q[0];
+h q[4];
+cz q[2], q[0];
+rz(1*pi) q[0];
+h q[0];
+cz q[4], q[0];
+h q[4];
+rz(-0.25*pi) q[4];
+h q[4];
+cz q[4], q[0];
+rz(0.25*pi) q[0];
+h q[0];
+cx q[0], q[7];
+cx q[0], q[6];
+cx q[0], q[5];
+cx q[0], q[2];
+cz q[2], q[0];
+rz(0.25*pi) q[0];
+h q[0];
+cx q[0], q[7];
+cx q[0], q[6];
+cx q[0], q[2];
+cx q[0], q[1];
+cz q[5], q[1];
+cz q[3], q[1];
+cz q[2], q[1];
+rz(-0.25*pi) q[1];
+h q[1];
+cx q[1], q[6];
+cx q[1], q[5];
+cz q[3], q[1];
+cz q[2], q[1];
+cz q[1], q[0];
+rz(0.25*pi) q[1];
+h q[1];
+cx q[1], q[6];
+cx q[1], q[3];
+h q[0];
+cz q[2], q[0];
+rz(-0.25*pi) q[0];
+h q[0];
+cx q[0], q[5];
+cx q[0], q[1];
+h q[2];
+cz q[6], q[2];
+cz q[3], q[2];
+rz(-0.25*pi) q[2];
+h q[2];
+cx q[2], q[6];
+h q[0];
+cz q[5], q[0];
+cz q[3], q[0];
+rz(-0.25*pi) q[0];
+h q[0];
+cx q[0], q[5];
+h q[8];
+h q[8];
+cz q[8], q[4];
+rz(0.25*pi) q[8];
+h q[8];
+h q[4];
+h q[3];
+cz q[8], q[4];
+cz q[7], q[3];
+cz q[5], q[3];
+rz(-0.25*pi) q[4];
+h q[4];
+cz q[3], q[0];
+cz q[3], q[1];
+rz(0.75*pi) q[3];
+h q[3];
+h q[8];
+h q[7];
+h q[6];
+cz q[6], q[5];
+h q[5];
+cz q[8], q[4];
+rz(0.25*pi) q[8];
+h q[8];
+cz q[7], q[3];
+cz q[7], q[6];
+rz(0.25*pi) q[7];
+h q[7];
+cz q[6], q[0];
+cz q[6], q[1];
+rz(-0.75*pi) q[6];
+h q[6];
+rz(0.25*pi) q[5];
+h q[5];
+h q[4];
+h q[2];
+h q[1];
+h q[0];
+
+13	318
+New best circuit with stats: Circuit with 9 qubits, 88 gates
+  1-qubit: 60
+  2-qubit: 28
+  n-qubit: 0
+  clifford: 71
+  non-clifford: 17
+
+And has qasm:
+OPENQASM 2.0;
+include "qelib1.inc";
+qreg q[9];
+h q[7];
+h q[6];
+h q[5];
+h q[4];
+cz q[7], q[6];
+h q[6];
+h q[5];
+h q[4];
+cz q[7], q[6];
+cz q[6], q[4];
+rz(0.75*pi) q[6];
+h q[6];
+cz q[5], q[4];
+h q[5];
+rz(-0.25*pi) q[4];
+h q[4];
+h q[8];
+cz q[7], q[6];
+rz(0.25*pi) q[7];
+h q[7];
+cz q[5], q[4];
+rz(-0.75*pi) q[5];
+h q[5];
+h q[4];
+h q[8];
+cz q[7], q[4];
+cz q[5], q[4];
+rz(0.25*pi) q[4];
+h q[4];
+cz q[8], q[4];
+h q[8];
+h q[3];
+cz q[8], q[3];
+rz(-0.25*pi) q[8];
+h q[8];
+rz(0.25*pi) q[4];
+h q[4];
+h q[3];
+cz q[8], q[3];
+cz q[7], q[3];
+cz q[4], q[3];
+rz(0.25*pi) q[3];
+h q[3];
+cx q[3], q[7];
+cx q[3], q[6];
+cz q[7], q[3];
+cz q[5], q[3];
+rz(-0.25*pi) q[3];
+h q[3];
+cx q[3], q[5];
+cz q[6], q[5];
+rz(-0.25*pi) q[5];
+h q[5];
+cx q[5], q[6];
+h q[2];
+h q[2];
+cz q[5], q[2];
+h q[2];
+cx q[2], q[5];
+h q[1];
+h q[8];
+rz(0.25*pi) q[8];
+h q[8];
+cz q[5], q[1];
+h q[1];
+h q[4];
+cz q[8], q[4];
+cz q[7], q[4];
+rz(-0.25*pi) q[4];
+h q[4];
+rz(0.25*pi) q[1];
+h q[1];
+h q[8];
+h q[6];
+cz q[8], q[4];
+rz(0.25*pi) q[8];
+h q[8];
+cz q[7], q[6];
+rz(-0.25*pi) q[7];
+h q[7];
+rz(0.25*pi) q[6];
+h q[6];
+cz q[5], q[1];
+rz(0.25*pi) q[5];
+h q[5];
+h q[4];
+h q[2];
+h q[1];
+
+14	329
+New best circuit with stats: Circuit with 9 qubits, 89 gates
+  1-qubit: 63
+  2-qubit: 26
+  n-qubit: 0
+  clifford: 71
+  non-clifford: 18
+
+And has qasm:
+OPENQASM 2.0;
+include "qelib1.inc";
+qreg q[9];
+h q[7];
+h q[3];
+h q[8];
+h q[7];
+h q[6];
+h q[3];
+h q[2];
+h q[8];
+cz q[7], q[3];
+rz(-0.25*pi) q[7];
+h q[7];
+cz q[6], q[2];
+h q[3];
+h q[2];
+cz q[8], q[3];
+cz q[7], q[3];
+cz q[6], q[2];
+rz(0.25*pi) q[6];
+h q[6];
+cz q[3], q[2];
+rz(-0.75*pi) q[3];
+h q[3];
+h q[7];
+cz q[7], q[3];
+rz(0.75*pi) q[7];
+h q[7];
+cz q[6], q[2];
+h q[4];
+rz(0.75*pi) q[2];
+h q[2];
+cz q[8], q[2];
+cz q[7], q[2];
+h q[4];
+rz(0.75*pi) q[2];
+h q[2];
+cz q[8], q[4];
+cz q[4], q[2];
+h q[4];
+rz(0.25*pi) q[4];
+h q[4];
+cz q[4], q[2];
+rz(0.25*pi) q[2];
+h q[2];
+cz q[7], q[2];
+rz(0.25*pi) q[2];
+h q[2];
+cx q[2], q[7];
+cx q[2], q[3];
+h q[5];
+rz(-0.25*pi) q[2];
+h q[2];
+h q[1];
+cz q[8], q[2];
+rz(0.25*pi) q[8];
+h q[8];
+cz q[5], q[1];
+h q[1];
+h q[0];
+h q[4];
+h q[2];
+cz q[8], q[4];
+cz q[6], q[2];
+cz q[5], q[2];
+rz(-0.25*pi) q[4];
+h q[4];
+rz(-0.25*pi) q[2];
+h q[2];
+rz(0.25*pi) q[1];
+h q[1];
+h q[0];
+h q[8];
+h q[7];
+h q[6];
+cz q[8], q[4];
+rz(0.25*pi) q[8];
+h q[8];
+rz(0.25*pi) q[7];
+h q[7];
+cz q[6], q[5];
+cz q[6], q[2];
+rz(0.25*pi) q[6];
+h q[6];
+cz q[5], q[1];
+cz q[5], q[0];
+rz(-0.75*pi) q[5];
+h q[5];
+h q[4];
+h q[2];
+h q[1];
+
+15	373
+New best circuit with stats: Circuit with 9 qubits, 82 gates
+  1-qubit: 60
+  2-qubit: 22
+  n-qubit: 0
+  clifford: 64
+  non-clifford: 18
+
+And has qasm:
+OPENQASM 2.0;
+include "qelib1.inc";
+qreg q[9];
+h q[7];
+h q[3];
+h q[7];
+h q[6];
+h q[3];
+h q[2];
+cz q[7], q[3];
+rz(-0.25*pi) q[7];
+h q[7];
+cz q[6], q[2];
+h q[3];
+h q[2];
+cz q[7], q[3];
+cz q[6], q[2];
+rz(0.25*pi) q[6];
+h q[6];
+cz q[3], q[2];
+rz(-0.75*pi) q[3];
+h q[3];
+h q[7];
+h q[8];
+cz q[7], q[3];
+rz(0.75*pi) q[7];
+h q[7];
+cz q[6], q[2];
+rz(0.75*pi) q[2];
+h q[2];
+h q[8];
+cz q[7], q[2];
+rz(0.75*pi) q[2];
+h q[2];
+cz q[8], q[2];
+h q[8];
+h q[4];
+cz q[8], q[4];
+rz(-0.25*pi) q[8];
+h q[8];
+h q[4];
+cz q[8], q[4];
+rz(0.25*pi) q[4];
+h q[4];
+cz q[4], q[2];
+rz(0.25*pi) q[2];
+h q[2];
+cz q[7], q[2];
+rz(0.25*pi) q[2];
+h q[2];
+cx q[2], q[7];
+cx q[2], q[3];
+h q[5];
+cx q[5], q[6];
+cz q[6], q[2];
+rz(-0.25*pi) q[2];
+h q[2];
+cx q[2], q[6];
+h q[1];
+h q[8];
+rz(0.25*pi) q[8];
+h q[8];
+cz q[5], q[1];
+h q[1];
+h q[4];
+cz q[8], q[4];
+rz(-0.25*pi) q[4];
+h q[4];
+rz(0.25*pi) q[1];
+h q[1];
+h q[8];
+h q[7];
+h q[6];
+cz q[8], q[4];
+rz(0.25*pi) q[8];
+h q[8];
+rz(0.25*pi) q[7];
+h q[7];
+rz(0.25*pi) q[6];
+h q[6];
+cz q[5], q[1];
+rz(0.25*pi) q[5];
+h q[5];
+h q[4];
+h q[1];
+
+16	389
+New best circuit with stats: Circuit with 9 qubits, 82 gates
+  1-qubit: 62
+  2-qubit: 20
+  n-qubit: 0
+  clifford: 64
+  non-clifford: 18
+
+And has qasm:
+OPENQASM 2.0;
+include "qelib1.inc";
+qreg q[9];
+h q[4];
+h q[2];
+h q[4];
+h q[2];
+cz q[4], q[2];
+h q[4];
+h q[5];
+cz q[4], q[2];
+rz(0.75*pi) q[4];
+h q[4];
+h q[3];
+h q[6];
+cz q[5], q[2];
+cz q[4], q[2];
+h q[3];
+rz(-0.25*pi) q[2];
+h q[2];
+h q[4];
+h q[6];
+cz q[4], q[2];
+cz q[4], q[3];
+rz(-0.75*pi) q[4];
+h q[4];
+rz(-0.25*pi) q[3];
+h q[3];
+cz q[6], q[4];
+h q[6];
+cz q[4], q[3];
+rz(0.25*pi) q[4];
+h q[4];
+cz q[6], q[4];
+cz q[6], q[3];
+rz(0.75*pi) q[6];
+h q[6];
+h q[3];
+h q[7];
+cz q[6], q[3];
+rz(-0.75*pi) q[3];
+h q[3];
+h q[4];
+h q[7];
+cz q[4], q[3];
+rz(0.75*pi) q[4];
+h q[4];
+h q[8];
+cz q[7], q[4];
+h q[7];
+h q[8];
+rz(-0.25*pi) q[7];
+h q[7];
+rz(0.25*pi) q[4];
+h q[4];
+h q[1];
+cz q[8], q[7];
+h q[7];
+rz(0.25*pi) q[8];
+h q[8];
+cz q[7], q[4];
+rz(0.25*pi) q[7];
+h q[7];
+cz q[5], q[1];
+h q[1];
+h q[4];
+cz q[8], q[4];
+cz q[7], q[4];
+rz(-0.25*pi) q[4];
+h q[4];
+rz(0.25*pi) q[1];
+h q[1];
+h q[8];
+cz q[8], q[4];
+rz(0.25*pi) q[8];
+h q[8];
+rz(0.25*pi) q[7];
+h q[7];
+rz(0.25*pi) q[6];
+h q[6];
+cz q[5], q[1];
+rz(0.25*pi) q[5];
+h q[5];
+h q[4];
+h q[1];
+
+17	413
+New best circuit with stats: Circuit with 9 qubits, 84 gates
+  1-qubit: 61
+  2-qubit: 23
+  n-qubit: 0
+  clifford: 67
+  non-clifford: 17
+
+And has qasm:
+OPENQASM 2.0;
+include "qelib1.inc";
+qreg q[9];
+h q[4];
+h q[2];
+h q[5];
+cz q[4], q[2];
+h q[3];
+h q[2];
+h q[6];
+cz q[5], q[2];
+cz q[4], q[2];
+h q[3];
+rz(0.75*pi) q[2];
+h q[2];
+h q[6];
+cz q[5], q[4];
+cz q[4], q[2];
+cz q[4], q[3];
+rz(0.25*pi) q[4];
+h q[4];
+rz(-0.25*pi) q[3];
+h q[3];
+cz q[6], q[4];
+h q[6];
+cz q[4], q[3];
+rz(0.25*pi) q[4];
+h q[4];
+cz q[6], q[4];
+cz q[6], q[3];
+rz(0.75*pi) q[6];
+h q[6];
+h q[3];
+h q[7];
+cz q[6], q[3];
+rz(-0.75*pi) q[3];
+h q[3];
+h q[4];
+h q[7];
+cz q[4], q[3];
+rz(0.75*pi) q[4];
+h q[4];
+cz q[7], q[4];
+h q[7];
+h q[1];
+h q[0];
+h q[8];
+rz(-0.25*pi) q[7];
+h q[7];
+rz(0.25*pi) q[4];
+h q[4];
+cz q[1], q[0];
+h q[1];
+cz q[8], q[7];
+h q[7];
+rz(0.25*pi) q[8];
+h q[8];
+cz q[7], q[4];
+rz(0.25*pi) q[7];
+h q[7];
+cz q[5], q[0];
+cz q[1], q[0];
+rz(1*pi) q[0];
+h q[0];
+h q[4];
+cz q[8], q[4];
+cz q[7], q[4];
+rz(-0.25*pi) q[4];
+h q[4];
+cz q[1], q[0];
+rz(0.25*pi) q[1];
+h q[1];
+h q[8];
+cz q[8], q[4];
+rz(0.25*pi) q[8];
+h q[8];
+rz(0.25*pi) q[7];
+h q[7];
+rz(0.25*pi) q[6];
+h q[6];
+cz q[5], q[1];
+rz(0.25*pi) q[5];
+h q[5];
+h q[4];
+h q[2];
+h q[1];
+h q[0];
+
+18	446
+New best circuit with stats: Circuit with 9 qubits, 63 gates
+  1-qubit: 46
+  2-qubit: 17
+  n-qubit: 0
+  clifford: 50
+  non-clifford: 13
+
+And has qasm:
+OPENQASM 2.0;
+include "qelib1.inc";
+qreg q[9];
+h q[3];
+h q[2];
+h q[6];
+h q[5];
+cz q[3], q[2];
+h q[2];
+h q[6];
+cz q[5], q[2];
+cz q[3], q[2];
+rz(0.75*pi) q[2];
+h q[2];
+cz q[6], q[3];
+cz q[5], q[3];
+cz q[3], q[2];
+rz(-0.75*pi) q[3];
+h q[3];
+rz(0.25*pi) q[3];
+h q[3];
+cx q[3], q[6];
+h q[7];
+h q[4];
+h q[8];
+h q[7];
+rz(0.25*pi) q[4];
+h q[4];
+h q[8];
+cz q[7], q[4];
+rz(0.25*pi) q[4];
+h q[4];
+h q[1];
+cz q[8], q[4];
+rz(0.25*pi) q[8];
+h q[8];
+h q[7];
+cz q[5], q[1];
+h q[1];
+cz q[7], q[4];
+h q[4];
+cz q[8], q[4];
+rz(-0.25*pi) q[7];
+h q[7];
+rz(-0.25*pi) q[4];
+h q[4];
+rz(0.25*pi) q[1];
+h q[1];
+h q[8];
+cz q[6], q[3];
+h q[3];
+cz q[8], q[4];
+cz q[8], q[7];
+rz(0.25*pi) q[8];
+h q[8];
+rz(0.25*pi) q[7];
+h q[7];
+cz q[6], q[3];
+rz(0.25*pi) q[6];
+h q[6];
+cz q[5], q[1];
+rz(0.25*pi) q[5];
+h q[5];
+h q[4];
+h q[2];
+h q[1];
+
+19	462
+New best circuit with stats: Circuit with 9 qubits, 52 gates
+  1-qubit: 39
+  2-qubit: 13
+  n-qubit: 0
+  clifford: 40
+  non-clifford: 12
+
+And has qasm:
+OPENQASM 2.0;
+include "qelib1.inc";
+qreg q[9];
+h q[6];
+h q[2];
+cz q[6], q[2];
+h q[5];
+h q[3];
+h q[2];
+h q[7];
+cz q[6], q[2];
+cz q[5], q[2];
+h q[3];
+rz(0.75*pi) q[2];
+h q[2];
+cz q[7], q[6];
+cz q[6], q[2];
+cz q[6], q[5];
+cz q[6], q[3];
+rz(0.25*pi) q[6];
+h q[6];
+h q[8];
+rz(0.75*pi) q[6];
+h q[6];
+h q[4];
+h q[1];
+cz q[8], q[4];
+cz q[7], q[6];
+rz(0.75*pi) q[7];
+h q[7];
+cz q[5], q[1];
+h q[4];
+h q[1];
+rz(0.25*pi) q[7];
+h q[7];
+rz(-0.25*pi) q[4];
+h q[4];
+rz(0.25*pi) q[1];
+h q[1];
+cz q[8], q[4];
+rz(0.25*pi) q[8];
+h q[8];
+rz(0.25*pi) q[7];
+h q[7];
+cz q[6], q[3];
+rz(0.25*pi) q[6];
+h q[6];
+cz q[5], q[1];
+rz(0.25*pi) q[5];
+h q[5];
+h q[4];
+rz(-0.25*pi) q[3];
+h q[3];
+h q[2];
+h q[1];
+
+20	504
+New best circuit with stats: Circuit with 9 qubits, 57 gates
+  1-qubit: 41
+  2-qubit: 16
+  n-qubit: 0
+  clifford: 44
+  non-clifford: 13
+
+And has qasm:
+OPENQASM 2.0;
+include "qelib1.inc";
+qreg q[9];
+h q[6];
+h q[2];
+cz q[6], q[2];
+h q[5];
+h q[2];
+cz q[6], q[2];
+cz q[5], q[2];
+h q[4];
+rz(0.75*pi) q[2];
+h q[2];
+cz q[6], q[2];
+cz q[6], q[5];
+cz q[6], q[4];
+rz(0.25*pi) q[6];
+h q[6];
+rz(0.75*pi) q[6];
+h q[6];
+h q[8];
+h q[7];
+cz q[6], q[4];
+rz(0.75*pi) q[4];
+h q[4];
+cz q[8], q[7];
+cz q[7], q[4];
+h q[7];
+cz q[7], q[4];
+rz(0.25*pi) q[4];
+h q[4];
+h q[1];
+cz q[7], q[4];
+rz(0.25*pi) q[7];
+h q[7];
+cz q[5], q[1];
+h q[3];
+h q[1];
+h q[4];
+cz q[7], q[4];
+rz(0.75*pi) q[4];
+h q[4];
+h q[3];
+rz(0.25*pi) q[1];
+h q[1];
+cz q[8], q[4];
+rz(0.25*pi) q[8];
+h q[8];
+rz(0.25*pi) q[7];
+h q[7];
+cz q[6], q[3];
+rz(0.25*pi) q[6];
+h q[6];
+cz q[5], q[1];
+rz(0.25*pi) q[5];
+h q[5];
+rz(-0.25*pi) q[3];
+h q[3];
+h q[2];
+h q[1];
+
+21	518
+New best circuit with stats: Circuit with 9 qubits, 51 gates
+  1-qubit: 38
+  2-qubit: 13
+  n-qubit: 0
+  clifford: 39
+  non-clifford: 12
+
+And has qasm:
+OPENQASM 2.0;
+include "qelib1.inc";
+qreg q[9];
+h q[6];
+h q[2];
+cz q[6], q[2];
+h q[5];
+h q[3];
+h q[2];
+h q[7];
+cz q[6], q[2];
+cz q[5], q[2];
+h q[3];
+rz(0.75*pi) q[2];
+h q[2];
+cz q[7], q[6];
+cz q[6], q[2];
+cz q[6], q[5];
+cz q[6], q[3];
+rz(0.25*pi) q[6];
+h q[6];
+h q[8];
+rz(0.75*pi) q[6];
+h q[6];
+h q[4];
+h q[1];
+cz q[8], q[4];
+cz q[7], q[6];
+rz(0.75*pi) q[7];
+h q[7];
+cz q[5], q[1];
+h q[4];
+h q[1];
+rz(0.25*pi) q[7];
+h q[7];
+rz(-0.25*pi) q[4];
+h q[4];
+rz(0.25*pi) q[1];
+h q[1];
+cz q[8], q[4];
+rz(0.25*pi) q[8];
+h q[8];
+rz(0.25*pi) q[7];
+cz q[6], q[3];
+rz(0.25*pi) q[6];
+h q[6];
+cz q[5], q[1];
+rz(0.25*pi) q[5];
+h q[5];
+h q[4];
+rz(-0.25*pi) q[3];
+h q[3];
+h q[2];
+h q[1];
+
+22	534
+New best circuit with stats: Circuit with 9 qubits, 56 gates
+  1-qubit: 36
+  2-qubit: 20
+  n-qubit: 0
+  clifford: 46
+  non-clifford: 10
+
+And has qasm:
+OPENQASM 2.0;
+include "qelib1.inc";
+qreg q[9];
+h q[8];
+h q[7];
+h q[6];
+h q[4];
+cz q[8], q[4];
+rz(0.75*pi) q[7];
+h q[7];
+h q[6];
+h q[5];
+h q[4];
+h q[2];
+cz q[7], q[6];
+cz q[6], q[4];
+cz q[6], q[5];
+rz(0.75*pi) q[6];
+h q[6];
+h q[2];
+cz q[7], q[2];
+cz q[6], q[2];
+cz q[4], q[2];
+h q[2];
+h q[1];
+cz q[6], q[2];
+cz q[6], q[5];
+rz(-0.25*pi) q[6];
+h q[6];
+cz q[5], q[1];
+h q[1];
+cz q[7], q[6];
+cz q[7], q[2];
+cz q[7], q[5];
+rz(-0.25*pi) q[7];
+h q[7];
+cz q[6], q[4];
+cz q[5], q[4];
+cz q[4], q[2];
+rz(-0.75*pi) q[4];
+h q[4];
+rz(0.25*pi) q[1];
+h q[1];
+cz q[8], q[4];
+rz(0.25*pi) q[8];
+h q[8];
+rz(0.25*pi) q[7];
+h q[7];
+cz q[6], q[2];
+cz q[5], q[2];
+cz q[5], q[1];
+rz(0.25*pi) q[5];
+h q[5];
+h q[4];
+rz(-0.25*pi) q[3];
+h q[3];
+rz(0.5*pi) q[2];
+h q[2];
+h q[1];
+
+23	550
+New best circuit with stats: Circuit with 9 qubits, 45 gates
+  1-qubit: 35
+  2-qubit: 10
+  n-qubit: 0
+  clifford: 33
+  non-clifford: 12
+
+And has qasm:
+OPENQASM 2.0;
+include "qelib1.inc";
+qreg q[9];
+h q[6];
+h q[2];
+cz q[6], q[2];
+h q[5];
+h q[3];
+h q[2];
+h q[7];
+cz q[6], q[2];
+cz q[5], q[2];
+h q[3];
+rz(0.75*pi) q[2];
+h q[2];
+cz q[7], q[6];
+cz q[6], q[2];
+cz q[6], q[5];
+cz q[6], q[3];
+rz(0.25*pi) q[6];
+h q[6];
+rz(0.75*pi) q[6];
+h q[6];
+cz q[7], q[6];
+rz(0.75*pi) q[7];
+h q[7];
+h q[8];
+rz(0.25*pi) q[7];
+h q[7];
+rz(-0.25*pi) q[4];
+h q[4];
+rz(0.25*pi) q[1];
+h q[1];
+cz q[8], q[4];
+rz(0.25*pi) q[8];
+h q[8];
+rz(0.25*pi) q[7];
+h q[7];
+rz(0.25*pi) q[6];
+h q[6];
+cz q[5], q[1];
+rz(0.25*pi) q[5];
+h q[5];
+h q[4];
+rz(-0.25*pi) q[3];
+h q[3];
+h q[2];
+h q[1];
+
+24	562
+New best circuit with stats: Circuit with 9 qubits, 38 gates
+  1-qubit: 32
+  2-qubit: 6
+  n-qubit: 0
+  clifford: 27
+  non-clifford: 11
+
+And has qasm:
+OPENQASM 2.0;
+include "qelib1.inc";
+qreg q[9];
+h q[8];
+h q[7];
+h q[4];
+cz q[8], q[4];
+rz(-0.25*pi) q[7];
+h q[7];
+h q[6];
+h q[4];
+h q[2];
+rz(0.25*pi) q[7];
+h q[7];
+rz(0.25*pi) q[6];
+h q[6];
+h q[5];
+rz(-0.25*pi) q[4];
+h q[4];
+h q[2];
+rz(0.25*pi) q[1];
+h q[1];
+rz(1*pi) q[6];
+h q[6];
+cz q[8], q[4];
+rz(0.25*pi) q[8];
+rz(0.25*pi) q[7];
+h q[7];
+cz q[6], q[2];
+cz q[6], q[5];
+rz(0.25*pi) q[6];
+h q[6];
+cz q[5], q[1];
+cz q[5], q[2];
+rz(-0.75*pi) q[5];
+h q[5];
+h q[4];
+rz(0.75*pi) q[3];
+h q[3];
+rz(-0.25*pi) q[2];
+h q[1];
+
+25	588
+New best circuit with stats: Circuit with 9 qubits, 28 gates
+  1-qubit: 25
+  2-qubit: 3
+  n-qubit: 0
+  clifford: 21
+  non-clifford: 7
+
+And has qasm:
+OPENQASM 2.0;
+include "qelib1.inc";
+qreg q[9];
+h q[7];
+rz(-0.25*pi) q[7];
+h q[7];
+h q[2];
+h q[8];
+rz(0.25*pi) q[7];
+h q[7];
+rz(1*pi) q[6];
+h q[6];
+h q[5];
+h q[4];
+h q[2];
+rz(0.25*pi) q[8];
+h q[8];
+rz(0.25*pi) q[7];
+h q[7];
+cz q[6], q[5];
+cz q[6], q[2];
+h q[6];
+cz q[5], q[2];
+rz(-0.5*pi) q[5];
+rz(1*pi) q[4];
+h q[4];
+rz(0.75*pi) q[3];
+h q[3];
+rz(-0.25*pi) q[2];
+rz(-0.25*pi) q[1];
+h q[1];
+
+26	591
+New best circuit with stats: Circuit with 9 qubits, 31 gates
+  1-qubit: 26
+  2-qubit: 5
+  n-qubit: 0
+  clifford: 23
+  non-clifford: 8
+
+And has qasm:
+OPENQASM 2.0;
+include "qelib1.inc";
+qreg q[9];
+h q[8];
+h q[7];
+h q[4];
+cz q[8], q[4];
+rz(-0.25*pi) q[7];
+h q[7];
+h q[4];
+h q[2];
+rz(0.25*pi) q[7];
+h q[7];
+rz(1*pi) q[6];
+h q[6];
+h q[5];
+rz(-0.25*pi) q[4];
+h q[4];
+h q[2];
+cz q[8], q[4];
+rz(0.25*pi) q[8];
+h q[8];
+rz(0.25*pi) q[7];
+h q[7];
+cz q[6], q[2];
+cz q[6], q[5];
+cz q[5], q[2];
+rz(-0.5*pi) q[5];
+h q[4];
+rz(0.75*pi) q[3];
+h q[3];
+rz(-0.25*pi) q[2];
+rz(-0.25*pi) q[1];
+h q[1];
+
+27	612
+New best circuit with stats: Circuit with 9 qubits, 28 gates
+  1-qubit: 25
+  2-qubit: 3
+  n-qubit: 0
+  clifford: 19
+  non-clifford: 9
+
+And has qasm:
+OPENQASM 2.0;
+include "qelib1.inc";
+qreg q[9];
+h q[8];
+h q[7];
+h q[6];
+h q[4];
+cz q[8], q[4];
+rz(-0.25*pi) q[7];
+h q[7];
+h q[6];
+h q[4];
+rz(0.25*pi) q[7];
+h q[7];
+cz q[6], q[4];
+h q[5];
+rz(-0.25*pi) q[4];
+h q[4];
+cz q[8], q[4];
+rz(0.25*pi) q[8];
+h q[8];
+rz(0.25*pi) q[7];
+h q[7];
+rz(1*pi) q[6];
+rz(-0.75*pi) q[5];
+h q[5];
+h q[4];
+rz(0.75*pi) q[3];
+h q[3];
+rz(-0.25*pi) q[2];
+rz(0.25*pi) q[1];
+
+28	622
+New best circuit with stats: Circuit with 9 qubits, 43 gates
+  1-qubit: 30
+  2-qubit: 13
+  n-qubit: 0
+  clifford: 34
+  non-clifford: 9
+
+And has qasm:
+OPENQASM 2.0;
+include "qelib1.inc";
+qreg q[9];
+h q[3];
+h q[1];
+h q[8];
+h q[4];
+h q[3];
+h q[1];
+cz q[8], q[1];
+h q[7];
+cz q[4], q[1];
+cz q[3], q[1];
+rz(0.25*pi) q[1];
+h q[1];
+rz(-0.25*pi) q[7];
+h q[7];
+rz(-0.25*pi) q[1];
+h q[1];
+cz q[8], q[4];
+rz(0.25*pi) q[7];
+h q[7];
+h q[5];
+cz q[4], q[1];
+h q[4];
+cz q[8], q[1];
+cz q[3], q[1];
+h q[1];
+cz q[8], q[1];
+cz q[8], q[3];
+rz(-0.75*pi) q[8];
+rz(0.25*pi) q[7];
+h q[7];
+rz(1*pi) q[6];
+cz q[5], q[1];
+rz(-0.75*pi) q[5];
+h q[5];
+cz q[4], q[1];
+cz q[4], q[3];
+h q[4];
+cz q[3], q[1];
+rz(-0.25*pi) q[3];
+h q[3];
+rz(-0.25*pi) q[2];
+rz(1*pi) q[1];
+h q[1];
+
+29	631
+New best circuit with stats: Circuit with 9 qubits, 31 gates
+  1-qubit: 27
+  2-qubit: 4
+  n-qubit: 0
+  clifford: 24
+  non-clifford: 7
+
+And has qasm:
+OPENQASM 2.0;
+include "qelib1.inc";
+qreg q[9];
+h q[7];
+h q[7];
+h q[4];
+cz q[7], q[4];
+h q[7];
+rz(-0.25*pi) q[4];
+h q[4];
+h q[2];
+h q[8];
+cz q[7], q[4];
+rz(0.25*pi) q[7];
+h q[7];
+rz(1*pi) q[6];
+h q[6];
+h q[5];
+h q[2];
+h q[4];
+rz(0.25*pi) q[8];
+rz(0.25*pi) q[7];
+h q[7];
+cz q[6], q[2];
+h q[6];
+cz q[5], q[2];
+rz(-0.5*pi) q[5];
+rz(1*pi) q[4];
+h q[4];
+rz(0.75*pi) q[3];
+h q[3];
+rz(-0.25*pi) q[2];
+rz(-0.25*pi) q[1];
+h q[1];
+
+30	638
+New best circuit with stats: Circuit with 9 qubits, 19 gates
+  1-qubit: 17
+  2-qubit: 2
+  n-qubit: 0
+  clifford: 15
+  non-clifford: 4
+
+And has qasm:
+OPENQASM 2.0;
+include "qelib1.inc";
+qreg q[9];
+h q[2];
+h q[8];
+rz(1*pi) q[6];
+h q[6];
+h q[5];
+h q[4];
+h q[2];
+rz(0.25*pi) q[8];
+cz q[6], q[5];
+h q[6];
+cz q[5], q[2];
+rz(-0.5*pi) q[5];
+rz(1*pi) q[4];
+h q[4];
+rz(0.75*pi) q[3];
+h q[3];
+rz(-0.25*pi) q[2];
+rz(-0.25*pi) q[1];
+h q[1];
+
+31	647
+New best circuit with stats: Circuit with 9 qubits, 16 gates
+  1-qubit: 14
+  2-qubit: 2
+  n-qubit: 0
+  clifford: 12
+  non-clifford: 4
+
+And has qasm:
+OPENQASM 2.0;
+include "qelib1.inc";
+qreg q[9];
+h q[2];
+h q[8];
+rz(1*pi) q[6];
+h q[6];
+h q[5];
+h q[2];
+rz(0.25*pi) q[8];
+cz q[6], q[5];
+h q[6];
+cz q[5], q[2];
+rz(-0.5*pi) q[5];
+rz(0.75*pi) q[3];
+h q[3];
+rz(-0.25*pi) q[2];
+rz(-0.25*pi) q[1];
+h q[1];
+
+32	663
+New best circuit with stats: Circuit with 9 qubits, 17 gates
+  1-qubit: 15
+  2-qubit: 2
+  n-qubit: 0
+  clifford: 13
+  non-clifford: 4
+
+And has qasm:
+OPENQASM 2.0;
+include "qelib1.inc";
+qreg q[9];
+h q[2];
+h q[8];
+rz(1*pi) q[6];
+h q[6];
+h q[5];
+h q[2];
+rz(0.25*pi) q[8];
+cz q[6], q[5];
+h q[6];
+cz q[5], q[2];
+rz(-0.5*pi) q[5];
+h q[4];
+rz(0.75*pi) q[3];
+h q[3];
+rz(-0.25*pi) q[2];
+rz(-0.25*pi) q[1];
+h q[1];
+
+33	663
+34	663
+35	666
+New best circuit with stats: Circuit with 9 qubits, 36 gates
+  1-qubit: 26
+  2-qubit: 10
+  n-qubit: 0
+  clifford: 29
+  non-clifford: 7
+
+And has qasm:
+OPENQASM 2.0;
+include "qelib1.inc";
+qreg q[9];
+h q[4];
+h q[7];
+cz q[4], q[4];
+cz q[4], q[4];
+rz(-0.25*pi) q[4];
+h q[4];
+h q[8];
+cz q[7], q[4];
+h q[6];
+rz(0.25*pi) q[4];
+h q[4];
+h q[2];
+cz q[8], q[7];
+cz q[7], q[4];
+rz(1*pi) q[7];
+h q[7];
+h q[6];
+h q[5];
+h q[2];
+h q[4];
+cz q[8], q[4];
+rz(0.25*pi) q[8];
+cz q[7], q[4];
+rz(0.25*pi) q[7];
+h q[7];
+cz q[6], q[6];
+cz q[6], q[6];
+rz(1*pi) q[6];
+cz q[5], q[2];
+rz(-0.5*pi) q[5];
+h q[4];
+rz(0.75*pi) q[3];
+h q[3];
+rz(-0.25*pi) q[2];
+rz(-0.25*pi) q[1];
+h q[1];
+
+36	669
+New best circuit with stats: Circuit with 9 qubits, 13 gates
+  1-qubit: 12
+  2-qubit: 1
+  n-qubit: 0
+  clifford: 9
+  non-clifford: 4
+
+And has qasm:
+OPENQASM 2.0;
+include "qelib1.inc";
+qreg q[9];
+h q[8];
+rz(1*pi) q[6];
+h q[6];
+h q[5];
+rz(0.25*pi) q[8];
+cz q[6], q[5];
+h q[6];
+rz(-0.5*pi) q[5];
+rz(0.75*pi) q[3];
+h q[3];
+rz(-0.25*pi) q[2];
+rz(-0.25*pi) q[1];
+h q[1];
+
+37	672
+New best circuit with stats: Circuit with 9 qubits, 9 gates
+  1-qubit: 9
+  2-qubit: 0
+  n-qubit: 0
+  clifford: 5
+  non-clifford: 4
+
+And has qasm:
+OPENQASM 2.0;
+include "qelib1.inc";
+qreg q[9];
+h q[8];
+h q[5];
+rz(0.25*pi) q[8];
+rz(1*pi) q[6];
+rz(-0.5*pi) q[5];
+rz(0.75*pi) q[3];
+h q[3];
+rz(-0.25*pi) q[2];
+rz(-0.25*pi) q[1];
+
+38	675
+New best circuit with stats: Circuit with 9 qubits, 8 gates
+  1-qubit: 8
+  2-qubit: 0
+  n-qubit: 0
+  clifford: 4
+  non-clifford: 4
+
+And has qasm:
+OPENQASM 2.0;
+include "qelib1.inc";
+qreg q[9];
+h q[8];
+h q[5];
+rz(0.25*pi) q[8];
+rz(1*pi) q[6];
+rz(-0.5*pi) q[5];
+rz(0.75*pi) q[3];
+rz(-0.25*pi) q[2];
+rz(-0.25*pi) q[1];
+
+39	678
+New best circuit with stats: Circuit with 9 qubits, 7 gates
+  1-qubit: 7
+  2-qubit: 0
+  n-qubit: 0
+  clifford: 3
+  non-clifford: 4
+
+And has qasm:
+OPENQASM 2.0;
+include "qelib1.inc";
+qreg q[9];
+h q[8];
+h q[5];
+rz(0.25*pi) q[8];
+rz(-0.5*pi) q[5];
+rz(0.75*pi) q[3];
+rz(-0.25*pi) q[2];
+rz(-0.25*pi) q[1];
+
+40	681
+New best circuit with stats: Circuit with 9 qubits, 6 gates
+  1-qubit: 6
+  2-qubit: 0
+  n-qubit: 0
+  clifford: 3
+  non-clifford: 3
+
+And has qasm:
+OPENQASM 2.0;
+include "qelib1.inc";
+qreg q[9];
+h q[8];
+h q[5];
+rz(0.25*pi) q[8];
+rz(-0.5*pi) q[5];
+rz(0.75*pi) q[3];
+rz(-0.25*pi) q[1];
+
+41	681
+42	684
+New best circuit with stats: Circuit with 9 qubits, 9 gates
+  1-qubit: 7
+  2-qubit: 2
+  n-qubit: 0
+  clifford: 6
+  non-clifford: 3
+
+And has qasm:
+OPENQASM 2.0;
+include "qelib1.inc";
+qreg q[9];
+h q[3];
+h q[5];
+h q[3];
+rz(0.25*pi) q[8];
+rz(-0.5*pi) q[5];
+cz q[3], q[3];
+cz q[3], q[3];
+rz(0.75*pi) q[3];
+rz(-0.25*pi) q[1];
+
+43	687
+New best circuit with stats: Circuit with 9 qubits, 3 gates
+  1-qubit: 3
+  2-qubit: 0
+  n-qubit: 0
+  clifford: 2
+  non-clifford: 1
+
+And has qasm:
+OPENQASM 2.0;
+include "qelib1.inc";
+qreg q[9];
+h q[5];
+rz(-0.5*pi) q[5];
+rz(-0.25*pi) q[1];
+
+44	687
+45	687
+46	687
+47	687
+48	687
+49	687
+50	687
+51	687
+52	687
+53	690
+New best circuit with stats: Circuit with 9 qubits, 2 gates
+  1-qubit: 2
+  2-qubit: 0
+  n-qubit: 0
+  clifford: 1
+  non-clifford: 1
+
+And has qasm:
+OPENQASM 2.0;
+include "qelib1.inc";
+qreg q[9];
+rz(-0.5*pi) q[5];
+rz(-0.25*pi) q[1];
+
+54	690
+55	690
+56	690
+57	690
+58	690
+59	690
+60	690
+61	690
+62	690
+63	690
+64	690
+65	690
+66	690
+67	690
+68	690
+69	690
+70	690
+71	690
+72	690
+73	690
+74	690
+75	690
+76	690
+77	690
+78	690
+79	690
+80	690
+81	690
+82	690
+83	690
+84	690
+85	690
+86	690
+87	690
+88	690
+89	690
+90	690
+91	690
+92	690
+93	690
+94	690
+95	690
+96	690
+97	690
+98	690
+99	690
+100	690
+101	690
+102	690
+103	690
+104	690
+105	690
+106	690
+107	690
+108	690
+109	690
+110	690
+111	690
+112	690
+113	690
+114	690
+115	690
+116	690
+117	690
+118	690
+119	690
+120	690
+121	690
+122	690
+123	690
+124	690
+125	690
+126	690
+127	690
+128	690
+129	690
+130	690
+131	690
+132	690
+133	690
+134	690
+135	690
+136	690
+137	690

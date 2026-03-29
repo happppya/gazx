@@ -11,20 +11,19 @@ use colored::Colorize;
 use quizx::extract::ToCircuit;
 use quizx::simplify::clifford_simp;
 
+use crate::genetic_zx::constants::GOAL_CIRCUIT;
 use crate::mutation::mutation_runner;
 
 use super::bar_styles;
 use super::models::{ExtractStatus, PopulationComponents};
-use super::parameters::{ GOAL_GRAPH };
+use super::constants::{ GOAL_GRAPH, MUTATION_RETRIES };
 
-const MUTATION_RETRIES: u32 = 10;
-
-pub fn build_population(population_size: u32, num_qubits: usize) -> Vec<Graph> {
+pub fn build_population(population_size: u32) -> Vec<Graph> {
     let mut random_population: Vec<Graph> = Vec::new();
 
     let mut random_circuit_builder = RandomCircuitBuilder {
         rng: StdRng::from_os_rng(),
-        qubits: num_qubits,
+        qubits: GOAL_CIRCUIT.num_qubits(),
         depth: 4,
         p_cnot: 0.5,
         p_cz: 0.2,
