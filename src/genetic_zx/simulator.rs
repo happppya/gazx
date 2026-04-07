@@ -124,16 +124,20 @@ pub fn sample_with_input(
         .map(|&b| if b { BasisElem::Z1 } else { BasisElem::Z0 })
         .collect();
 
+    let mut original_graph: Graph = circ.to_graph();
+    original_graph.plug_inputs(&input_basis); 
+    
     for _ in 0..qs {
-        let mut g: Graph = circ.to_graph();
         
-        g.plug_inputs(&input_basis); 
-
+        let mut g = original_graph.clone();
+        
         for x in &xs {
             g.plug_output(0, if *x { BasisElem::Z1 } else { BasisElem::Z0 });
         }
         g.plug_output(0, BasisElem::Z1);
+
         g.plug(&g.to_adjoint());
+        simplify::full_simp(&mut g);
 
         let scalar = decomp_graph(g, decomposer, driver, parallel);
         xs.push(rng.random_bool(scalar.complex_value().re.clamp(0.0, 1.0)));

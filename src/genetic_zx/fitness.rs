@@ -8,12 +8,31 @@ use std::{collections::HashMap, sync::LazyLock};
 use num_complex::Complex;
 
 use super::models::{ PopulationComponents, ExtractStatus };
-use super::constants::{ GOAL_CIRCUIT, GOAL_GRAPH, GOAL_TENSOR, GOAL_CIRCUIT_STATS };
+use super::constants::{ GOAL_CIRCUIT, GOAL_GRAPH, GOAL_CIRCUIT_STATS };
 use super::simulator;
 
-const NUM_CASES: usize = 8;
+const NUM_CASES: usize = 10;
+
+const CUSTOM_CASES: bool = true;
+
+const CUSTOM_CASES_STR: &str = r#"
+[([true, false, false, false, true], "10001"),
+ ([true, true, false, true, false], "11010"),
+ ([false, false, true, true, true], "00101"),
+ ([true, true, false, false, true], "11001"),
+ ([false, true, true, true, false], "01110"),
+ ([false, false, false, false, false], "00000"),
+ ([true, true, false, true, false], "11010"),
+ ([false, true, false, false, true], "01001"),
+ ([true, true, false, true, true], "11011"),
+ ([true, false, true, false, false], "10100")]
+"#;
 
 static TESTCASES: LazyLock<Vec<(Vec<bool>, String)>> = LazyLock::new(|| {
+    if CUSTOM_CASES {
+        return parse_custom_cases(CUSTOM_CASES_STR);
+    }
+
     let mut testcases = Vec::with_capacity(NUM_CASES);
     let mut rng = rand::rng();
     let num_qubits = GOAL_CIRCUIT.num_qubits();
@@ -23,12 +42,10 @@ static TESTCASES: LazyLock<Vec<(Vec<bool>, String)>> = LazyLock::new(|| {
     let driver = BssWithCatsDriver { random_t: false };
 
     for _ in 0..NUM_CASES {
-        // Random input state
         let input_bits: Vec<bool> = (0..num_qubits)
             .map(|_| rng.random_bool(0.5))
             .collect();
 
-        // Sample the circuit mimicking what a call to QPU would do
         let output_str = simulator::sample_with_input(
             &GOAL_CIRCUIT,
             &input_bits,
@@ -37,7 +54,10 @@ static TESTCASES: LazyLock<Vec<(Vec<bool>, String)>> = LazyLock::new(|| {
             Some(4),
         );
 
-        println!("Generated testcase | Input: {:?}, Sampled Output: {:?}", input_bits, output_str);
+        println!(
+            "Generated testcase | Input: {:?}, Sampled Output: {:?}",
+            input_bits, output_str
+        );
 
         testcases.push((input_bits, output_str));
     }
@@ -45,84 +65,47 @@ static TESTCASES: LazyLock<Vec<(Vec<bool>, String)>> = LazyLock::new(|| {
     testcases
 });
 
+fn parse_custom_cases(input: &str) -> Vec<(Vec<bool>, String)> {
+    let trimmed = input.trim()
+        .trim_start_matches('[')
+        .trim_end_matches(']');
+
+    let mut cases = Vec::new();
+
+    for entry in trimmed.split("),") {
+        let e = entry.trim()
+            .trim_start_matches('(')
+            .trim_end_matches(')');
+
+        let mut parts = e.splitn(2, "],");
+
+        // Parse boolean vector
+        let bool_part = parts.next().unwrap()
+            .trim()
+            .trim_start_matches('[');
+
+        let bools = bool_part
+            .split(',')
+            .map(|b| match b.trim() {
+                "true" => true,
+                "false" => false,
+                _ => panic!("Invalid bool"),
+            })
+            .collect::<Vec<bool>>();
+
+        // Parse output string
+        let str_part = parts.next().unwrap()
+            .trim()
+            .trim_matches('"');
+
+        cases.push((bools, str_part.to_string()));
+    }
+
+    cases
+}
+
 pub fn get_fitness_info() -> String {
     format!("NUM CASES: {}\n TESTCASES: {:?}\n GOAL CIRCUIT: {:?}\n GOAL GRAPH: {:?}\n GOAL CIRCUIT STATS: {:?}", NUM_CASES, *TESTCASES, *GOAL_CIRCUIT, *GOAL_GRAPH, *GOAL_CIRCUIT_STATS)
-}
-
-/*
-static TESTCASES: LazyLock<Vec<(Vec<bool>, Vec<bool>)>> = LazyLock::new(|| {
-    let mut testcases = vec![];
-    for (idx, &amp) in GOAL_TENSOR.iter().enumerate() {
-        if amp.norm_sqr() > 1e-4 {
-            let output = (0..GOAL_CIRCUIT.num_qubits())
-                .map(|q| (idx >> q) & 1 == 1)
-                .collect::<Vec<bool>>();
-
-            println!("created output {} with amp {}", output.iter().map(|b| if *b { "1" } else { "0" }).collect::<String>(), amp);
-
-            testcases.push((vec![false; GOAL_CIRCUIT.num_qubits()], output));
-        }
-    }
-     
-    testcases.choose_multiple(&mut rand::rng(), NUM_CASES).cloned().collect()
-
-});*/
-
-/*static GOAL_AMPLITUDES: LazyLock<Vec<f64>> = LazyLock::new(|| {
-    let mut decomposer: Decomposer<Graph> = Decomposer::empty();
-    decomposer.with_full_simp();
-    let driver = BssWithCatsDriver { random_t: false };
-
-    TESTCASES
-        .iter()
-        .map(|(input, output)| {
-            simulator::amplitude_variable(&GOAL_CIRCUIT, &GOAL_GRAPH, &mut decomposer, &driver, input, output)
-        })
-        .collect()
-});*/
-
-fn get_approximation_error_tensor(graph: &Graph, circuit: &Circuit) -> i64 {
-    let prediction: TensorF = circuit.to_tensorf();
-    let target: TensorF = GOAL_CIRCUIT.to_tensorf();
-
-    // inner product = sum over i of conj(prediction_i) * target_i
-    let inner: Complex<f64> = prediction
-        .iter()
-        .zip(target.iter())
-        .map(|(a, b)| a.conj() * b)
-        .sum();
-
-    // fidelity = |<prediction|target>|^2 = real^2 + imag^2
-    // in [0,1]
-    let fidelity = inner.norm_sqr();
-
-    // scale and convert to int
-    let scale = f64::powf(2.0, 32.0);
-    let approximation_error = ((1.0 - fidelity) * scale).round() as i64;
-
-    approximation_error
-}
-
-fn get_approximation_error_fidelity(
-    circ_u: &Circuit,
-    circ_v: &Circuit,
-    parallel: Option<usize>
-) -> i64 {
-
-    let mut decomposer: Decomposer<Graph> = Decomposer::empty();
-    decomposer.with_full_simp();
-
-    let driver = BssWithCatsDriver { random_t: false };
-
-    let mut graph_u = circ_u.to_graph::<Graph>();
-    let graph_v_adjoint = circ_v.to_graph::<Graph>().to_adjoint();
-    
-    graph_u.plug(&graph_v_adjoint);
-    graph_u.plug_inputs(&vec![BasisElem::Z0; circ_u.num_qubits()]);
-
-    let scalar = simulator::decomp_graph(graph_u, &mut decomposer, &driver, parallel);
-    let amp = scalar * scalar.conj();
-    (amp.complex_value().re * 2147483648.0).round() as i64
 }
 
 fn get_approximation_error_testcases(graph: &Graph, circuit: &Circuit) -> i64 {
@@ -136,12 +119,11 @@ fn get_approximation_error_testcases(graph: &Graph, circuit: &Circuit) -> i64 {
     let driver = BssWithCatsDriver { random_t: false };
 
     let mut total_error: f64 = 0.0;
-    
+
     for (input, output) in TESTCASES.iter() {
 
         let test_result: String = simulator::sample_with_input(circuit, input, &mut decomposer, &driver, Some(4));
         let matched = test_result == *output;
-        println!("{} matched goal {} / result {}", matched, output, test_result);
 
         total_error += if matched {
             0.0

@@ -1,13 +1,15 @@
-use std::collections::HashSet;
-use rand::{rng, seq::SliceRandom, Rng};
+use quizx::graph::GraphLike;
+use rand::{rng, Rng};
 
-use crate::genetic_zx::models::{PopulationComponents, Hyperparameters};
+use super::models::{Hyperparameters, PopulationComponents};
+use super::crossover;
 
 pub fn repopulate(
     population: &mut PopulationComponents,
     parameters: &Hyperparameters,
 ) {
     let population_size = population.graph.len();
+    let mut rng = rng();
 
     let mut indices: Vec<usize> = (0..population_size).collect();
     let elitism_count = (population_size as f64 * parameters.elitism_rate) as usize;
@@ -23,25 +25,57 @@ pub fn repopulate(
     let mut target_indices = vec![*pivot];
     target_indices.extend_from_slice(non_elites);
 
-    let mut rng = rng();
-
     for target_idx in target_indices {
-        let mut best_parent_idx = 0;
-        let mut best_fitness = population.fitness[0];
+        let parent1_idx = tournament_select(population, parameters, &mut rng);
+        let parent2_idx = tournament_select(population, parameters, &mut rng);
+        
+        let mut crossover_happened : bool = false;
 
-        // Tournament selection
-        for i in 0..parameters.tournament_size {
-            let competitor_idx = rng.random_range(0..population_size);
-            let fitness = population.fitness[competitor_idx];
+        let child_graph = if rng.random::<f64>() < parameters.crossover_rate {
+            crossover_happened = true;
+            crossover::crossover_subgraph(population, parent1_idx, parent2_idx)
+        } else {
+            population.graph[parent1_idx].clone()
+        };
 
-            if i == 0 || fitness > best_fitness {
-                best_fitness = fitness;
-                best_parent_idx = competitor_idx;
-            }
+        population.graph[target_idx] = child_graph;
+
+        if crossover_happened {
+            /*println!(
+                "Crossover: \n\tParent1 idx {}, fitness {} stats {}, \n\tParent2 idx {}, fitness {} stats {}, \n\tTarget index {} stats {}",
+                parent1_idx,
+                population.fitness[parent1_idx],
+                population.graph[parent1_idx].num_vertices(),
+                parent2_idx,
+                population.fitness[parent2_idx],
+                population.graph[parent2_idx].num_vertices(),
+                target_idx,
+                population.graph[target_idx].num_vertices(),
+            );*/
         }
-
-        // Overwrite the individual with the tournament winner
-        population.graph[target_idx] = population.graph[best_parent_idx].clone();
-        population.fitness[target_idx] = population.fitness[best_parent_idx];
+       
     }
+}
+
+fn tournament_select(
+    population: &PopulationComponents,
+    parameters: &Hyperparameters,
+    rng: &mut impl Rng,
+) -> usize {
+    let population_size = population.graph.len();
+
+    let mut best_idx = rng.random_range(0..population_size);
+    let mut best_fitness = population.fitness[best_idx];
+
+    for _ in 1..parameters.tournament_size {
+        let competitor_idx = rng.random_range(0..population_size);
+        let fitness = population.fitness[competitor_idx];
+
+        if fitness > best_fitness {
+            best_fitness = fitness;
+            best_idx = competitor_idx;
+        }
+    }
+
+    best_idx
 }

@@ -3,7 +3,7 @@ use std::time::SystemTime;
 use std::{ fs::OpenOptions };
 use std::io::{ Write };
 
-use super::{ models::{ ExtractStatus, PopulationComponents } };
+use super::{ models::{ ExtractStatus, PopulationComponents, Hyperparameters} };
 use colored::Colorize;
 
 const TAB: &'static str = "	";
@@ -84,7 +84,7 @@ impl Logger {
         }
     }
 
-    pub fn begin(&mut self, run_info: &String) {
+    pub fn begin(&mut self, fitness_run_info: &String, parameters: &Hyperparameters) {
         let now = SystemTime::now();
         
         // Setup fitness table
@@ -94,11 +94,12 @@ impl Logger {
             .expect("failed to write fitness columns");
 
         // Setup circuits log
-        writeln!(self.fitness_file, "# Log started at {:?}", now)
+        writeln!(self.circuits_file, "# Log started at {:?}", now)
             .expect("failed to write circuits header");
 
-        writeln!(self.circuits_file, "RUN INFO:\n{}", run_info).expect("failed to write run info");
-        
+        writeln!(self.circuits_file, "RUN INFO:\n{}", fitness_run_info).expect("failed to write run info");
+        writeln!(self.circuits_file, "PARAMETERS:\n{:?}", parameters).expect("failed to write parameters");
+
         writeln!(self.circuits_file, "BEST CIRCUITS LOG - Started at {:?}", now)
             .expect("failed to write circuits header");
         writeln!(self.circuits_file, "==================================================")

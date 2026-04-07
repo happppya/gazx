@@ -9,73 +9,98 @@ use workspace::genetic_zx::algorithm::init_goal_circuit;
 use workspace::genetic_zx::models::Hyperparameters;
 use workspace::mutation::mutation_runner::MutationType;
 
-use std::io::{self, Write};
+use std::io;
+use std::io::Write;
+use std::thread;
 
 fn pause() {
-    let mut input = String::new();
 
+    let mut input = String::new();
+    
     print!("press Enter to continue...");
+
     io::stdout().flush().unwrap();
     io::stdin().read_line(&mut input).unwrap();
+
 }
 
-//TODO visualizer with https://quantum.cloud.ibm.com/composer
+/// Runs a single instance of the genetic algorithm
+fn run_ga_worker(given_idx: usize, population_size: u32, generations: u32) {
 
-fn main() -> Result<(), Box<dyn std::error::Error>> {
-    let population_size: u32 = 80;
-    let generations: u32 = 10000;
-
-    init_goal_circuit("circuits/small/tof_3.qasm");
-
-    /*let (graphs, graph_millis) =
-        output::benchmark(|| genetic_util::build_population(population_size, num_qubits));*/
+    let mut worker_idx = given_idx;
+    if worker_idx == 0 {
+        worker_idx = 5;
+    }
 
     let graphs = algorithm::build_population(population_size);
 
-    let population: &mut PopulationComponents = &mut (PopulationComponents {
+    let mut population = PopulationComponents {
         graph: graphs,
         last_mutation: vec![MutationType::NoMutation; population_size as usize],
         circuit: vec![Circuit::new(0); population_size as usize],
         extract_status: vec![ExtractStatus::Success; population_size as usize],
         fitness: vec![0; population_size as usize],
         mutation_retries: vec![0; population_size as usize],
-    });
-
-    let parameters: &mut Hyperparameters = &mut Hyperparameters {
-        elitism_rate: 0.1,
-        crossover_rate: 0.5,
-        tournament_size: 3,
     };
 
-    //println!("Population build time (ms): {:?}", graph_millis);
+    let mut parameters = Hyperparameters {
+        elitism_rate: 0.1,
+        //crossover_rate: 0.1 + (worker_idx as f64 * 0.1), 
+        crossover_rate: (1f64 / 32f64) * (worker_idx as f64),
+        //crossover_rate: 0.3,
+        tournament_size: 3,  
+    };
 
-    let mut logger= results::Logger::new("results");
-    logger.begin(&results::get_fitness_info());
+    let logger_path = format!("results_{}", worker_idx);
+    let mut logger = results::Logger::new(&logger_path);
+    logger.begin(&results::get_fitness_info(), &parameters);
 
     for generation in 0..generations {
-        
-        println!("Generation {}", generation);
 
-        algorithm::mutate_and_extract(population);
+        algorithm::mutate_and_extract(&mut population);
 
-        algorithm::set_fitness_values(population);
-
-        //pause();
-
-        results::print_population(population);
+        algorithm::set_fitness_values(&mut population);
 
         algorithm::repopulate(
-            population,
-            parameters,
+            &mut population,
+            &mut parameters,
         );
 
-        //pause();
+        if generation % 25 == 0 {
+            println!("Worker {} - Generation {}", worker_idx, generation);
+            results::print_population(&mut population);
+        }
 
-        logger.log(population, generation);
-        
-        //pause();
+        logger.log(&population, generation);
 
+        //pause();
     }
+    
+    println!("Worker {} finished.", worker_idx);
+}
+
+fn main() -> Result<(), Box<dyn std::error::Error>> {
+    let num_workers: usize = 1;
+    let population_size: u32 = 80;
+    let generations: u32 = 125;
+
+    init_goal_circuit("circuits/small/tof_3.qasm");
+
+    let mut handles = vec![];
+
+    for worker_idx in 0..num_workers {
+        let handle = thread::spawn(move || {
+            run_ga_worker(worker_idx, population_size, generations);
+        });
+
+        handles.push(handle);
+    }
+
+    for handle in handles {
+        handle.join().unwrap();
+    }
+
+    println!("All workers completed");
 
     Ok(())
 }

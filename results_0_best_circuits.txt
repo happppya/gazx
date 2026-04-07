@@ -1,77 +1,102 @@
+# Log started at SystemTime { intervals: 134199902921459632 }
 RUN INFO:
-NUM CASES: 3
- TESTCASES: [([false, true, true, true, true], "01101"), ([true, false, false, false, false], "10000"), ([true, true, true, true, true], "11111")]
+NUM CASES: 10
+ TESTCASES: [([true, false, false, false, true], "10001"), ([true, true, false, true, false], "11010"), ([false, false, true, true, true], "00101"), ([true, true, false, false, true], "11001"), ([false, true, true, true, false], "01110"), ([false, false, false, false, false], "00000"), ([true, true, false, true, false], "11010"), ([false, true, false, false, true], "01001"), ([true, true, false, true, true], "11011"), ([true, false, true, false, false], "10100")]
  GOAL CIRCUIT: Circuit { nqubits: 5, gates: [Gate { t: HAD, qs: [4], phase: Phase { r: Ratio { numer: 0, denom: 1 } }, vars: Parity([], false) }, Gate { t: HAD, qs: [4], phase: Phase { r: Ratio { numer: 0, denom: 1 } }, vars: Parity([], false) }, Gate { t: HAD, qs: [4], phase: Phase { r: Ratio { numer: 0, denom: 1 } }, vars: Parity([], false) }, Gate { t: CNOT, qs: [1, 4], phase: Phase { r: Ratio { numer: 0, denom: 1 } }, vars: Parity([], false) }, Gate { t: Tdg, qs: [4], phase: Phase { r: Ratio { numer: 0, denom: 1 } }, vars: Parity([], false) }, Gate { t: CNOT, qs: [0, 4], phase: Phase { r: Ratio { numer: 0, denom: 1 } }, vars: Parity([], false) }, Gate { t: T, qs: [4], phase: Phase { r: Ratio { numer: 0, denom: 1 } }, vars: Parity([], false) }, Gate { t: CNOT, qs: [1, 4], phase: Phase { r: Ratio { numer: 0, denom: 1 } }, vars: Parity([], false) }, Gate { t: Tdg, qs: [4], phase: Phase { r: Ratio { numer: 0, denom: 1 } }, vars: Parity([], false) }, Gate { t: CNOT, qs: [0, 4], phase: Phase { r: Ratio { numer: 0, denom: 1 } }, vars: Parity([], false) }, Gate { t: T, qs: [1], phase: Phase { r: Ratio { numer: 0, denom: 1 } }, vars: Parity([], false) }, Gate { t: T, qs: [4], phase: Phase { r: Ratio { numer: 0, denom: 1 } }, vars: Parity([], false) }, Gate { t: CNOT, qs: [0, 1], phase: Phase { r: Ratio { numer: 0, denom: 1 } }, vars: Parity([], false) }, Gate { t: T, qs: [0], phase: Phase { r: Ratio { numer: 0, denom: 1 } }, vars: Parity([], false) }, Gate { t: Tdg, qs: [1], phase: Phase { r: Ratio { numer: 0, denom: 1 } }, vars: Parity([], false) }, Gate { t: CNOT, qs: [0, 1], phase: Phase { r: Ratio { numer: 0, denom: 1 } }, vars: Parity([], false) }, Gate { t: HAD, qs: [4], phase: Phase { r: Ratio { numer: 0, denom: 1 } }, vars: Parity([], false) }, Gate { t: HAD, qs: [4], phase: Phase { r: Ratio { numer: 0, denom: 1 } }, vars: Parity([], false) }, Gate { t: HAD, qs: [4], phase: Phase { r: Ratio { numer: 0, denom: 1 } }, vars: Parity([], false) }, Gate { t: HAD, qs: [3], phase: Phase { r: Ratio { numer: 0, denom: 1 } }, vars: Parity([], false) }, Gate { t: HAD, qs: [3], phase: Phase { r: Ratio { numer: 0, denom: 1 } }, vars: Parity([], false) }, Gate { t: HAD, qs: [3], phase: Phase { r: Ratio { numer: 0, denom: 1 } }, vars: Parity([], false) }, Gate { t: CNOT, qs: [4, 3], phase: Phase { r: Ratio { numer: 0, denom: 1 } }, vars: Parity([], false) }, Gate { t: Tdg, qs: [3], phase: Phase { r: Ratio { numer: 0, denom: 1 } }, vars: Parity([], false) }, Gate { t: CNOT, qs: [2, 3], phase: Phase { r: Ratio { numer: 0, denom: 1 } }, vars: Parity([], false) }, Gate { t: T, qs: [3], phase: Phase { r: Ratio { numer: 0, denom: 1 } }, vars: Parity([], false) }, Gate { t: CNOT, qs: [4, 3], phase: Phase { r: Ratio { numer: 0, denom: 1 } }, vars: Parity([], false) }, Gate { t: Tdg, qs: [3], phase: Phase { r: Ratio { numer: 0, denom: 1 } }, vars: Parity([], false) }, Gate { t: CNOT, qs: [2, 3], phase: Phase { r: Ratio { numer: 0, denom: 1 } }, vars: Parity([], false) }, Gate { t: T, qs: [4], phase: Phase { r: Ratio { numer: 0, denom: 1 } }, vars: Parity([], false) }, Gate { t: T, qs: [3], phase: Phase { r: Ratio { numer: 0, denom: 1 } }, vars: Parity([], false) }, Gate { t: CNOT, qs: [2, 4], phase: Phase { r: Ratio { numer: 0, denom: 1 } }, vars: Parity([], false) }, Gate { t: T, qs: [2], phase: Phase { r: Ratio { numer: 0, denom: 1 } }, vars: Parity([], false) }, Gate { t: Tdg, qs: [4], phase: Phase { r: Ratio { numer: 0, denom: 1 } }, vars: Parity([], false) }, Gate { t: CNOT, qs: [2, 4], phase: Phase { r: Ratio { numer: 0, denom: 1 } }, vars: Parity([], false) }, Gate { t: HAD, qs: [3], phase: Phase { r: Ratio { numer: 0, denom: 1 } }, vars: Parity([], false) }, Gate { t: HAD, qs: [3], phase: Phase { r: Ratio { numer: 0, denom: 1 } }, vars: Parity([], false) }, Gate { t: HAD, qs: [3], phase: Phase { r: Ratio { numer: 0, denom: 1 } }, vars: Parity([], false) }, Gate { t: HAD, qs: [4], phase: Phase { r: Ratio { numer: 0, denom: 1 } }, vars: Parity([], false) }, Gate { t: HAD, qs: [4], phase: Phase { r: Ratio { numer: 0, denom: 1 } }, vars: Parity([], false) }, Gate { t: HAD, qs: [4], phase: Phase { r: Ratio { numer: 0, denom: 1 } }, vars: Parity([], false) }, Gate { t: CNOT, qs: [1, 4], phase: Phase { r: Ratio { numer: 0, denom: 1 } }, vars: Parity([], false) }, Gate { t: Tdg, qs: [4], phase: Phase { r: Ratio { numer: 0, denom: 1 } }, vars: Parity([], false) }, Gate { t: CNOT, qs: [0, 4], phase: Phase { r: Ratio { numer: 0, denom: 1 } }, vars: Parity([], false) }, Gate { t: T, qs: [4], phase: Phase { r: Ratio { numer: 0, denom: 1 } }, vars: Parity([], false) }, Gate { t: CNOT, qs: [1, 4], phase: Phase { r: Ratio { numer: 0, denom: 1 } }, vars: Parity([], false) }, Gate { t: Tdg, qs: [4], phase: Phase { r: Ratio { numer: 0, denom: 1 } }, vars: Parity([], false) }, Gate { t: CNOT, qs: [0, 4], phase: Phase { r: Ratio { numer: 0, denom: 1 } }, vars: Parity([], false) }, Gate { t: T, qs: [1], phase: Phase { r: Ratio { numer: 0, denom: 1 } }, vars: Parity([], false) }, Gate { t: T, qs: [4], phase: Phase { r: Ratio { numer: 0, denom: 1 } }, vars: Parity([], false) }, Gate { t: CNOT, qs: [0, 1], phase: Phase { r: Ratio { numer: 0, denom: 1 } }, vars: Parity([], false) }, Gate { t: T, qs: [0], phase: Phase { r: Ratio { numer: 0, denom: 1 } }, vars: Parity([], false) }, Gate { t: Tdg, qs: [1], phase: Phase { r: Ratio { numer: 0, denom: 1 } }, vars: Parity([], false) }, Gate { t: CNOT, qs: [0, 1], phase: Phase { r: Ratio { numer: 0, denom: 1 } }, vars: Parity([], false) }, Gate { t: HAD, qs: [4], phase: Phase { r: Ratio { numer: 0, denom: 1 } }, vars: Parity([], false) }, Gate { t: HAD, qs: [4], phase: Phase { r: Ratio { numer: 0, denom: 1 } }, vars: Parity([], false) }, Gate { t: HAD, qs: [4], phase: Phase { r: Ratio { numer: 0, denom: 1 } }, vars: Parity([], false) }] }
  GOAL GRAPH: Graph { vdata: [Some(VData { ty: B, phase: Phase { r: Ratio { numer: 0, denom: 1 } }, vars: Parity([], false), qubit: 0.0, row: 1.0 }), Some(VData { ty: Z, phase: Phase { r: Ratio { numer: 0, denom: 1 } }, vars: Parity([], false), qubit: 0.0, row: 7.0 }), Some(VData { ty: B, phase: Phase { r: Ratio { numer: 0, denom: 1 } }, vars: Parity([], false), qubit: 1.0, row: 1.0 }), Some(VData { ty: Z, phase: Phase { r: Ratio { numer: 0, denom: 1 } }, vars: Parity([], false), qubit: 1.0, row: 5.0 }), Some(VData { ty: B, phase: Phase { r: Ratio { numer: 0, denom: 1 } }, vars: Parity([], false), qubit: 2.0, row: 1.0 }), Some(VData { ty: Z, phase: Phase { r: Ratio { numer: 0, denom: 1 } }, vars: Parity([], false), qubit: 2.0, row: 18.0 }), Some(VData { ty: B, phase: Phase { r: Ratio { numer: 0, denom: 1 } }, vars: Parity([], false), qubit: 3.0, row: 1.0 }), Some(VData { ty: Z, phase: Phase { r: Ratio { numer: 0, denom: 1 } }, vars: Parity([], false), qubit: 3.0, row: 2.0 }), Some(VData { ty: B, phase: Phase { r: Ratio { numer: 0, denom: 1 } }, vars: Parity([], false), qubit: 4.0, row: 1.0 }), Some(VData { ty: Z, phase: Phase { r: Ratio { numer: 0, denom: 1 } }, vars: Parity([], false), qubit: 4.0, row: 2.0 }), Some(VData { ty: Z, phase: Phase { r: Ratio { numer: 0, denom: 1 } }, vars: Parity([], false), qubit: 4.0, row: 3.0 }), Some(VData { ty: Z, phase: Phase { r: Ratio { numer: 0, denom: 1 } }, vars: Parity([], false), qubit: 4.0, row: 4.0 }), Some(VData { ty: X, phase: Phase { r: Ratio { numer: 0, denom: 1 } }, vars: Parity([], false), qubit: 4.0, row: 5.0 }), Some(VData { ty: Z, phase: Phase { r: Ratio { numer: 0, denom: 1 } }, vars: Parity([], false), qubit: 1.0, row: 9.0 }), Some(VData { ty: Z, phase: Phase { r: Ratio { numer: -1, denom: 4 } }, vars: Parity([], false), qubit: 4.0, row: 6.0 }), Some(VData { ty: X, phase: Phase { r: Ratio { numer: 0, denom: 1 } }, vars: Parity([], false), qubit: 4.0, row: 7.0 }), Some(VData { ty: Z, phase: Phase { r: Ratio { numer: 0, denom: 1 } }, vars: Parity([], false), qubit: 0.0, row: 11.0 }), Some(VData { ty: Z, phase: Phase { r: Ratio { numer: 1, denom: 4 } }, vars: Parity([], false), qubit: 4.0, row: 8.0 }), Some(VData { ty: X, phase: Phase { r: Ratio { numer: 0, denom: 1 } }, vars: Parity([], false), qubit: 4.0, row: 9.0 }), Some(VData { ty: Z, phase: Phase { r: Ratio { numer: 1, denom: 4 } }, vars: Parity([], false), qubit: 1.0, row: 10.0 }), Some(VData { ty: Z, phase: Phase { r: Ratio { numer: -1, denom: 4 } }, vars: Parity([], false), qubit: 4.0, row: 10.0 }), Some(VData { ty: X, phase: Phase { r: Ratio { numer: 0, denom: 1 } }, vars: Parity([], false), qubit: 4.0, row: 11.0 }), Some(VData { ty: Z, phase: Phase { r: Ratio { numer: 0, denom: 1 } }, vars: Parity([], false), qubit: 0.0, row: 12.0 }), Some(VData { ty: Z, phase: Phase { r: Ratio { numer: 1, denom: 4 } }, vars: Parity([], false), qubit: 4.0, row: 12.0 }), Some(VData { ty: X, phase: Phase { r: Ratio { numer: 0, denom: 1 } }, vars: Parity([], false), qubit: 1.0, row: 12.0 }), Some(VData { ty: Z, phase: Phase { r: Ratio { numer: 0, denom: 1 } }, vars: Parity([], false), qubit: 4.0, row: 13.0 }), Some(VData { ty: Z, phase: Phase { r: Ratio { numer: 1, denom: 4 } }, vars: Parity([], false), qubit: 0.0, row: 13.0 }), Some(VData { ty: Z, phase: Phase { r: Ratio { numer: -1, denom: 4 } }, vars: Parity([], false), qubit: 1.0, row: 13.0 }), Some(VData { ty: Z, phase: Phase { r: Ratio { numer: 0, denom: 1 } }, vars: Parity([], false), qubit: 0.0, row: 14.0 }), Some(VData { ty: X, phase: Phase { r: Ratio { numer: 0, denom: 1 } }, vars: Parity([], false), qubit: 1.0, row: 14.0 }), Some(VData { ty: Z, phase: Phase { r: Ratio { numer: 0, denom: 1 } }, vars: Parity([], false), qubit: 0.0, row: 31.0 }), Some(VData { ty: Z, phase: Phase { r: Ratio { numer: 0, denom: 1 } }, vars: Parity([], false), qubit: 1.0, row: 29.0 }), Some(VData { ty: Z, phase: Phase { r: Ratio { numer: 0, denom: 1 } }, vars: Parity([], false), qubit: 4.0, row: 14.0 }), Some(VData { ty: Z, phase: Phase { r: Ratio { numer: 0, denom: 1 } }, vars: Parity([], false), qubit: 4.0, row: 15.0 }), Some(VData { ty: Z, phase: Phase { r: Ratio { numer: 0, denom: 1 } }, vars: Parity([], false), qubit: 4.0, row: 16.0 }), Some(VData { ty: Z, phase: Phase { r: Ratio { numer: 0, denom: 1 } }, vars: Parity([], false), qubit: 3.0, row: 3.0 }), Some(VData { ty: Z, phase: Phase { r: Ratio { numer: 0, denom: 1 } }, vars: Parity([], false), qubit: 3.0, row: 4.0 }), Some(VData { ty: X, phase: Phase { r: Ratio { numer: 0, denom: 1 } }, vars: Parity([], false), qubit: 3.0, row: 16.0 }), Some(VData { ty: Z, phase: Phase { r: Ratio { numer: 0, denom: 1 } }, vars: Parity([], false), qubit: 4.0, row: 20.0 }), Some(VData { ty: Z, phase: Phase { r: Ratio { numer: -1, denom: 4 } }, vars: Parity([], false), qubit: 3.0, row: 17.0 }), Some(VData { ty: X, phase: Phase { r: Ratio { numer: 0, denom: 1 } }, vars: Parity([], false), qubit: 3.0, row: 18.0 }), Some(VData { ty: Z, phase: Phase { r: Ratio { numer: 0, denom: 1 } }, vars: Parity([], false), qubit: 2.0, row: 22.0 }), Some(VData { ty: Z, phase: Phase { r: Ratio { numer: 1, denom: 4 } }, vars: Parity([], false), qubit: 3.0, row: 19.0 }), Some(VData { ty: X, phase: Phase { r: Ratio { numer: 0, denom: 1 } }, vars: Parity([], false), qubit: 3.0, row: 20.0 }), Some(VData { ty: Z, phase: Phase { r: Ratio { numer: 1, denom: 4 } }, vars: Parity([], false), qubit: 4.0, row: 21.0 }), Some(VData { ty: Z, phase: Phase { r: Ratio { numer: -1, denom: 4 } }, vars: Parity([], false), qubit: 3.0, row: 21.0 }), Some(VData { ty: X, phase: Phase { r: Ratio { numer: 0, denom: 1 } }, vars: Parity([], false), qubit: 3.0, row: 22.0 }), Some(VData { ty: Z, phase: Phase { r: Ratio { numer: 0, denom: 1 } }, vars: Parity([], false), qubit: 2.0, row: 23.0 }), Some(VData { ty: Z, phase: Phase { r: Ratio { numer: 1, denom: 4 } }, vars: Parity([], false), qubit: 3.0, row: 23.0 }), Some(VData { ty: X, phase: Phase { r: Ratio { numer: 0, denom: 1 } }, vars: Parity([], false), qubit: 4.0, row: 23.0 }), Some(VData { ty: Z, phase: Phase { r: Ratio { numer: 0, denom: 1 } }, vars: Parity([], false), qubit: 3.0, row: 24.0 }), Some(VData { ty: Z, phase: Phase { r: Ratio { numer: 1, denom: 4 } }, vars: Parity([], false), qubit: 2.0, row: 24.0 }), Some(VData { ty: Z, phase: Phase { r: Ratio { numer: -1, denom: 4 } }, vars: Parity([], false), qubit: 4.0, row: 24.0 }), Some(VData { ty: Z, phase: Phase { r: Ratio { numer: 0, denom: 1 } }, vars: Parity([], false), qubit: 2.0, row: 25.0 }), Some(VData { ty: X, phase: Phase { r: Ratio { numer: 0, denom: 1 } }, vars: Parity([], false), qubit: 4.0, row: 25.0 }), Some(VData { ty: B, phase: Phase { r: Ratio { numer: 0, denom: 1 } }, vars: Parity([], false), qubit: 2.0, row: 40.0 }), Some(VData { ty: Z, phase: Phase { r: Ratio { numer: 0, denom: 1 } }, vars: Parity([], false), qubit: 4.0, row: 26.0 }), Some(VData { ty: Z, phase: Phase { r: Ratio { numer: 0, denom: 1 } }, vars: Parity([], false), qubit: 3.0, row: 25.0 }), Some(VData { ty: Z, phase: Phase { r: Ratio { numer: 0, denom: 1 } }, vars: Parity([], false), qubit: 3.0, row: 26.0 }), Some(VData { ty: B, phase: Phase { r: Ratio { numer: 0, denom: 1 } }, vars: Parity([], false), qubit: 3.0, row: 40.0 }), Some(VData { ty: Z, phase: Phase { r: Ratio { numer: 0, denom: 1 } }, vars: Parity([], false), qubit: 4.0, row: 27.0 }), Some(VData { ty: Z, phase: Phase { r: Ratio { numer: 0, denom: 1 } }, vars: Parity([], false), qubit: 4.0, row: 28.0 }), Some(VData { ty: X, phase: Phase { r: Ratio { numer: 0, denom: 1 } }, vars: Parity([], false), qubit: 4.0, row: 29.0 }), Some(VData { ty: Z, phase: Phase { r: Ratio { numer: 0, denom: 1 } }, vars: Parity([], false), qubit: 1.0, row: 33.0 }), Some(VData { ty: Z, phase: Phase { r: Ratio { numer: -1, denom: 4 } }, vars: Parity([], false), qubit: 4.0, row: 30.0 }), Some(VData { ty: X, phase: Phase { r: Ratio { numer: 0, denom: 1 } }, vars: Parity([], false), qubit: 4.0, row: 31.0 }), Some(VData { ty: Z, phase: Phase { r: Ratio { numer: 0, denom: 1 } }, vars: Parity([], false), qubit: 0.0, row: 35.0 }), Some(VData { ty: Z, phase: Phase { r: Ratio { numer: 1, denom: 4 } }, vars: Parity([], false), qubit: 4.0, row: 32.0 }), Some(VData { ty: X, phase: Phase { r: Ratio { numer: 0, denom: 1 } }, vars: Parity([], false), qubit: 4.0, row: 33.0 }), Some(VData { ty: Z, phase: Phase { r: Ratio { numer: 1, denom: 4 } }, vars: Parity([], false), qubit: 1.0, row: 34.0 }), Some(VData { ty: Z, phase: Phase { r: Ratio { numer: -1, denom: 4 } }, vars: Parity([], false), qubit: 4.0, row: 34.0 }), Some(VData { ty: X, phase: Phase { r: Ratio { numer: 0, denom: 1 } }, vars: Parity([], false), qubit: 4.0, row: 35.0 }), Some(VData { ty: Z, phase: Phase { r: Ratio { numer: 0, denom: 1 } }, vars: Parity([], false), qubit: 0.0, row: 36.0 }), Some(VData { ty: Z, phase: Phase { r: Ratio { numer: 1, denom: 4 } }, vars: Parity([], false), qubit: 4.0, row: 36.0 }), Some(VData { ty: X, phase: Phase { r: Ratio { numer: 0, denom: 1 } }, vars: Parity([], false), qubit: 1.0, row: 36.0 }), Some(VData { ty: Z, phase: Phase { r: Ratio { numer: 0, denom: 1 } }, vars: Parity([], false), qubit: 4.0, row: 37.0 }), Some(VData { ty: Z, phase: Phase { r: Ratio { numer: 1, denom: 4 } }, vars: Parity([], false), qubit: 0.0, row: 37.0 }), Some(VData { ty: Z, phase: Phase { r: Ratio { numer: -1, denom: 4 } }, vars: Parity([], false), qubit: 1.0, row: 37.0 }), Some(VData { ty: Z, phase: Phase { r: Ratio { numer: 0, denom: 1 } }, vars: Parity([], false), qubit: 0.0, row: 38.0 }), Some(VData { ty: X, phase: Phase { r: Ratio { numer: 0, denom: 1 } }, vars: Parity([], false), qubit: 1.0, row: 38.0 }), Some(VData { ty: B, phase: Phase { r: Ratio { numer: 0, denom: 1 } }, vars: Parity([], false), qubit: 0.0, row: 40.0 }), Some(VData { ty: B, phase: Phase { r: Ratio { numer: 0, denom: 1 } }, vars: Parity([], false), qubit: 1.0, row: 40.0 }), Some(VData { ty: Z, phase: Phase { r: Ratio { numer: 0, denom: 1 } }, vars: Parity([], false), qubit: 4.0, row: 38.0 }), Some(VData { ty: Z, phase: Phase { r: Ratio { numer: 0, denom: 1 } }, vars: Parity([], false), qubit: 4.0, row: 39.0 }), Some(VData { ty: B, phase: Phase { r: Ratio { numer: 0, denom: 1 } }, vars: Parity([], false), qubit: 4.0, row: 40.0 })], edata: [Some([(1, N)]), Some([(0, N), (16, N), (15, N)]), Some([(3, N)]), Some([(2, N), (13, N), (12, N)]), Some([(5, N)]), Some([(4, N), (41, N), (40, N)]), Some([(7, H)]), Some([(6, H), (35, H)]), Some([(9, H)]), Some([(8, H), (10, H)]), Some([(9, H), (11, H)]), Some([(10, H), (12, N)]), Some([(11, N), (14, N), (3, N)]), Some([(3, N), (19, N), (18, N)]), Some([(12, N), (15, N)]), Some([(14, N), (17, N), (1, N)]), Some([(1, N), (22, N), (21, N)]), Some([(15, N), (18, N)]), Some([(17, N), (20, N), (13, N)]), Some([(13, N), (24, N)]), Some([(18, N), (21, N)]), Some([(20, N), (23, N), (16, N)]), Some([(16, N), (26, N), (24, N)]), Some([(21, N), (25, H)]), Some([(19, N), (27, N), (22, N)]), Some([(23, H), (32, H)]), Some([(22, N), (28, N)]), Some([(24, N), (29, N)]), Some([(26, N), (30, N), (29, N)]), Some([(27, N), (31, N), (28, N)]), Some([(28, N), (66, N), (65, N)]), Some([(29, N), (63, N), (62, N)]), Some([(25, H), (33, H)]), Some([(32, H), (34, N)]), Some([(33, N), (38, N), (37, N)]), Some([(7, H), (36, H)]), Some([(35, H), (37, N)]), Some([(36, N), (39, N), (34, N)]), Some([(34, N), (44, N), (43, N)]), Some([(37, N), (40, N)]), Some([(39, N), (42, N), (5, N)]), Some([(5, N), (47, N), (46, N)]), Some([(40, N), (43, N)]), Some([(42, N), (45, N), (38, N)]), Some([(38, N), (49, N)]), Some([(43, N), (46, N)]), Some([(45, N), (48, N), (41, N)]), Some([(41, N), (51, N), (49, N)]), Some([(46, N), (50, H)]), Some([(44, N), (52, N), (47, N)]), Some([(48, H), (57, H)]), Some([(47, N), (53, N)]), Some([(49, N), (54, N)]), Some([(51, N), (55, N), (54, N)]), Some([(52, N), (56, H), (53, N)]), Some([(53, N)]), Some([(54, H), (60, H)]), Some([(50, H), (58, H)]), Some([(57, H), (59, N)]), Some([(58, N)]), Some([(56, H), (61, H)]), Some([(60, H), (62, N)]), Some([(61, N), (64, N), (31, N)]), Some([(31, N), (69, N), (68, N)]), Some([(62, N), (65, N)]), Some([(64, N), (67, N), (30, N)]), Some([(30, N), (72, N), (71, N)]), Some([(65, N), (68, N)]), Some([(67, N), (70, N), (63, N)]), Some([(63, N), (74, N)]), Some([(68, N), (71, N)]), Some([(70, N), (73, N), (66, N)]), Some([(66, N), (76, N), (74, N)]), Some([(71, N), (75, H)]), Some([(69, N), (77, N), (72, N)]), Some([(73, H), (82, H)]), Some([(72, N), (78, N)]), Some([(74, N), (79, N)]), Some([(76, N), (80, N), (79, N)]), Some([(77, N), (81, N), (78, N)]), Some([(78, N)]), Some([(79, N)]), Some([(75, H), (83, H)]), Some([(82, H), (84, N)]), Some([(83, N)])], holes: [], inputs: [0, 2, 4, 6, 8], outputs: [80, 81, 55, 59, 84], numv: 85, nume: 98, scalar: Scalar4([512, 0, 0, 0]), scalar_factors: {} }
  GOAL CIRCUIT STATS: CircuitStats { qubits: 5, total: 57, oneq: 39, twoq: 18, moreq: 0, cliff: 36, non_cliff: 21 }
-BEST CIRCUITS LOG - Started at SystemTime { intervals: 134199810673017403 }
+PARAMETERS:
+Hyperparameters { elitism_rate: 0.1, tournament_size: 3, crossover_rate: 0.0 }
+BEST CIRCUITS LOG - Started at SystemTime { intervals: 134199902921459632 }
 ==================================================
 
 ### New best found at generation 0 ###
-Fitness Value: -98
-Stats: Circuit with 5 qubits, 78 gates
-  1-qubit: 55
-  2-qubit: 23
+Fitness Value: -15210
+Stats: Circuit with 5 qubits, 99 gates
+  1-qubit: 69
+  2-qubit: 30
   n-qubit: 0
-  clifford: 61
-  non-clifford: 17
+  clifford: 78
+  non-clifford: 21
 QASM:
 OPENQASM 2.0;
 include "qelib1.inc";
 qreg q[5];
+h q[1];
+h q[4];
+h q[1];
+h q[0];
+cz q[4], q[1];
 h q[4];
 h q[0];
+rz(-0.25*pi) q[4];
+h q[4];
+h q[3];
+cz q[1], q[0];
+rz(0.25*pi) q[1];
+h q[1];
+h q[0];
+h q[1];
+cz q[4], q[1];
 cz q[4], q[0];
 h q[3];
+rz(0.25*pi) q[1];
+h q[1];
+rz(-0.25*pi) q[0];
+h q[0];
+h q[4];
+cz q[4], q[0];
 h q[0];
 cz q[4], q[3];
-cz q[3], q[0];
-h q[3];
-rz(-0.25*pi) q[3];
-h q[3];
-h q[3];
-rz(-0.25*pi) q[3];
-h q[3];
-cz q[4], q[3];
-cz q[4], q[0];
+cz q[4], q[1];
 rz(0.25*pi) q[4];
 h q[4];
-cz q[4], q[0];
-rz(0.75*pi) q[0];
+rz(0.25*pi) q[0];
 h q[0];
-cx q[0], q[3];
-h q[2];
-cx q[2], q[3];
 h q[1];
+cz q[4], q[1];
 cz q[3], q[1];
-cz q[2], q[1];
-h q[1];
-cx q[1], q[2];
+cz q[1], q[0];
 rz(-0.25*pi) q[1];
 h q[1];
-cz q[3], q[1];
+h q[0];
+cz q[3], q[0];
+cz q[1], q[0];
+rz(0.25*pi) q[0];
+h q[0];
+cx q[0], q[4];
+h q[2];
+h q[2];
+cz q[2], q[0];
+h q[2];
+cx q[2], q[3];
+rz(-0.25*pi) q[0];
+h q[0];
+cz q[3], q[0];
 rz(-0.25*pi) q[3];
 h q[3];
 cz q[3], q[2];
-cz q[2], q[1];
+cz q[2], q[0];
 rz(0.25*pi) q[2];
 h q[2];
-h q[1];
-cz q[2], q[1];
-rz(0.25*pi) q[1];
-h q[1];
+h q[0];
+cz q[2], q[0];
+cz q[1], q[0];
+rz(0.25*pi) q[0];
+h q[0];
+cx q[0], q[1];
 rz(-0.25*pi) q[1];
-h q[1];
-cx q[1], q[4];
-h q[0];
-rz(0.25*pi) q[0];
-h q[0];
-h q[0];
-rz(0.25*pi) q[0];
-h q[0];
 h q[1];
 cz q[1], q[0];
 rz(0.25*pi) q[1];
+h q[1];
+cx q[1], q[4];
+rz(0.25*pi) q[0];
+h q[0];
+cx q[0], q[4];
+h q[1];
+cz q[4], q[1];
+rz(-0.25*pi) q[1];
 h q[1];
 cx q[1], q[4];
 h q[0];
@@ -88,7 +113,6 @@ rz(-0.25*pi) q[2];
 h q[2];
 h q[4];
 h q[3];
-cz q[4], q[1];
 rz(0.25*pi) q[4];
 h q[4];
 cz q[3], q[2];
@@ -97,5 +121,873 @@ h q[3];
 h q[2];
 h q[1];
 h q[0];
+
+--------------------------------------------------
+
+### New best found at generation 1 ###
+Fitness Value: -10098
+Stats: Circuit with 5 qubits, 78 gates
+  1-qubit: 55
+  2-qubit: 23
+  n-qubit: 0
+  clifford: 63
+  non-clifford: 15
+QASM:
+OPENQASM 2.0;
+include "qelib1.inc";
+qreg q[5];
+h q[1];
+h q[4];
+h q[1];
+h q[0];
+h q[4];
+cz q[1], q[0];
+h q[0];
+cz q[4], q[1];
+cz q[4], q[0];
+h q[4];
+rz(0.25*pi) q[1];
+h q[1];
+h q[1];
+cz q[4], q[1];
+rz(0.25*pi) q[1];
+h q[1];
+rz(-0.25*pi) q[0];
+h q[0];
+h q[0];
+cz q[4], q[1];
+cz q[4], q[0];
+rz(0.75*pi) q[4];
+h q[4];
+cz q[1], q[0];
+rz(-0.25*pi) q[0];
+h q[0];
+h q[1];
+cz q[1], q[0];
+h q[0];
+cz q[4], q[1];
+cz q[4], q[0];
+h q[3];
+rz(-0.75*pi) q[1];
+h q[1];
+rz(0.75*pi) q[0];
+h q[0];
+h q[4];
+cz q[4], q[1];
+cz q[4], q[0];
+rz(-0.75*pi) q[4];
+h q[4];
+h q[3];
+cz q[4], q[3];
+rz(0.25*pi) q[4];
+h q[4];
+h q[3];
+h q[2];
+cz q[4], q[3];
+cz q[3], q[2];
+rz(-0.25*pi) q[3];
+h q[3];
+h q[2];
+cz q[4], q[2];
+cz q[3], q[2];
+rz(0.25*pi) q[2];
+h q[2];
+h q[4];
+h q[3];
+cz q[4], q[2];
+rz(-0.25*pi) q[4];
+h q[4];
+cz q[3], q[2];
+rz(0.25*pi) q[3];
+h q[3];
+h q[2];
+cz q[4], q[2];
+cz q[3], q[2];
+rz(-0.25*pi) q[2];
+h q[2];
+h q[3];
+cz q[4], q[3];
+h q[4];
+cz q[3], q[2];
+rz(0.25*pi) q[3];
+h q[3];
+h q[2];
+h q[1];
+h q[0];
+
+--------------------------------------------------
+
+### New best found at generation 2 ###
+Fitness Value: -10095
+Stats: Circuit with 5 qubits, 77 gates
+  1-qubit: 54
+  2-qubit: 23
+  n-qubit: 0
+  clifford: 62
+  non-clifford: 15
+QASM:
+OPENQASM 2.0;
+include "qelib1.inc";
+qreg q[5];
+h q[1];
+h q[1];
+h q[0];
+h q[4];
+cz q[1], q[0];
+h q[0];
+cz q[4], q[1];
+cz q[4], q[0];
+h q[4];
+rz(0.25*pi) q[1];
+h q[1];
+h q[1];
+cz q[4], q[1];
+rz(0.25*pi) q[1];
+h q[1];
+rz(-0.25*pi) q[0];
+h q[0];
+h q[0];
+cz q[4], q[1];
+cz q[4], q[0];
+rz(0.75*pi) q[4];
+h q[4];
+cz q[1], q[0];
+rz(-0.25*pi) q[0];
+h q[0];
+h q[1];
+cz q[1], q[0];
+h q[0];
+cz q[4], q[1];
+cz q[4], q[0];
+h q[3];
+rz(-0.75*pi) q[1];
+h q[1];
+rz(0.75*pi) q[0];
+h q[0];
+h q[4];
+cz q[4], q[1];
+cz q[4], q[0];
+rz(-0.75*pi) q[4];
+h q[4];
+h q[3];
+cz q[4], q[3];
+rz(0.25*pi) q[4];
+h q[4];
+h q[3];
+h q[2];
+cz q[4], q[3];
+cz q[3], q[2];
+rz(-0.25*pi) q[3];
+h q[3];
+h q[2];
+cz q[4], q[2];
+cz q[3], q[2];
+rz(0.25*pi) q[2];
+h q[2];
+h q[4];
+h q[3];
+cz q[4], q[2];
+rz(-0.25*pi) q[4];
+h q[4];
+cz q[3], q[2];
+rz(0.25*pi) q[3];
+h q[3];
+h q[2];
+cz q[4], q[2];
+cz q[3], q[2];
+rz(-0.25*pi) q[2];
+h q[2];
+h q[3];
+cz q[4], q[3];
+h q[4];
+cz q[3], q[2];
+rz(0.25*pi) q[3];
+h q[3];
+h q[2];
+h q[1];
+h q[0];
+
+--------------------------------------------------
+
+### New best found at generation 3 ###
+Fitness Value: -2594
+Stats: Circuit with 5 qubits, 72 gates
+  1-qubit: 47
+  2-qubit: 25
+  n-qubit: 0
+  clifford: 57
+  non-clifford: 15
+QASM:
+OPENQASM 2.0;
+include "qelib1.inc";
+qreg q[5];
+h q[4];
+h q[0];
+cz q[4], q[0];
+h q[1];
+h q[0];
+cz q[4], q[1];
+cz q[1], q[0];
+h q[1];
+cz q[4], q[1];
+rz(-0.25*pi) q[1];
+h q[1];
+cz q[4], q[1];
+cz q[4], q[0];
+rz(-0.75*pi) q[4];
+h q[4];
+h q[1];
+cz q[4], q[1];
+h q[3];
+cz q[1], q[0];
+rz(0.25*pi) q[1];
+h q[1];
+cz q[3], q[0];
+h q[2];
+cz q[1], q[0];
+rz(0.75*pi) q[0];
+h q[0];
+cz q[3], q[2];
+cz q[2], q[0];
+h q[2];
+cx q[2], q[3];
+rz(-0.25*pi) q[2];
+h q[2];
+cz q[3], q[2];
+rz(0.25*pi) q[3];
+h q[3];
+cz q[3], q[0];
+rz(-0.25*pi) q[0];
+h q[0];
+cx q[0], q[2];
+rz(-0.25*pi) q[0];
+h q[0];
+cx q[0], q[4];
+rz(0.25*pi) q[0];
+h q[0];
+rz(-0.25*pi) q[0];
+h q[0];
+cx q[0], q[4];
+cx q[0], q[1];
+h q[0];
+cz q[4], q[0];
+rz(0.25*pi) q[0];
+h q[0];
+cx q[0], q[4];
+cx q[0], q[1];
+h q[3];
+cz q[3], q[2];
+rz(0.25*pi) q[3];
+h q[3];
+h q[2];
+cz q[3], q[2];
+rz(-0.25*pi) q[2];
+h q[2];
+h q[4];
+h q[3];
+rz(0.25*pi) q[4];
+h q[4];
+cz q[3], q[2];
+rz(0.25*pi) q[3];
+h q[3];
+h q[2];
+h q[1];
+h q[0];
+
+--------------------------------------------------
+
+### New best found at generation 5 ###
+Fitness Value: -2428
+Stats: Circuit with 5 qubits, 47 gates
+  1-qubit: 35
+  2-qubit: 12
+  n-qubit: 0
+  clifford: 38
+  non-clifford: 9
+QASM:
+OPENQASM 2.0;
+include "qelib1.inc";
+qreg q[5];
+h q[4];
+h q[1];
+h q[4];
+h q[1];
+cz q[4], q[1];
+h q[4];
+h q[0];
+cz q[4], q[0];
+h q[0];
+rz(0.25*pi) q[0];
+h q[0];
+cz q[4], q[0];
+rz(-0.25*pi) q[4];
+h q[4];
+h q[3];
+h q[2];
+rz(0.25*pi) q[4];
+h q[4];
+rz(0.25*pi) q[3];
+h q[3];
+h q[2];
+cz q[4], q[2];
+cz q[3], q[2];
+rz(0.25*pi) q[2];
+h q[2];
+h q[3];
+cz q[3], q[2];
+rz(-0.25*pi) q[3];
+h q[3];
+h q[4];
+cz q[4], q[2];
+cz q[4], q[3];
+rz(-0.25*pi) q[4];
+h q[4];
+h q[2];
+cz q[4], q[2];
+rz(0.25*pi) q[2];
+h q[2];
+h q[3];
+cz q[4], q[3];
+cz q[3], q[2];
+rz(-0.25*pi) q[3];
+h q[3];
+cx q[3], q[4];
+h q[4];
+h q[2];
+h q[0];
+
+--------------------------------------------------
+
+### New best found at generation 7 ###
+Fitness Value: 46
+Stats: Circuit with 5 qubits, 51 gates
+  1-qubit: 37
+  2-qubit: 14
+  n-qubit: 0
+  clifford: 42
+  non-clifford: 9
+QASM:
+OPENQASM 2.0;
+include "qelib1.inc";
+qreg q[5];
+h q[4];
+h q[1];
+h q[4];
+h q[1];
+cz q[4], q[1];
+h q[4];
+h q[0];
+cz q[4], q[0];
+h q[0];
+h q[3];
+rz(0.25*pi) q[0];
+h q[0];
+cz q[4], q[0];
+rz(-0.25*pi) q[4];
+h q[4];
+h q[3];
+cz q[4], q[3];
+rz(0.25*pi) q[4];
+h q[4];
+h q[3];
+h q[2];
+cz q[4], q[3];
+cz q[3], q[2];
+rz(-0.25*pi) q[3];
+h q[3];
+h q[2];
+cz q[4], q[2];
+cz q[3], q[2];
+rz(0.25*pi) q[2];
+h q[2];
+h q[4];
+h q[3];
+cz q[4], q[2];
+rz(-0.25*pi) q[4];
+h q[4];
+cz q[3], q[2];
+rz(0.25*pi) q[3];
+h q[3];
+h q[2];
+cz q[4], q[2];
+cz q[3], q[2];
+rz(-0.25*pi) q[2];
+h q[2];
+h q[3];
+cz q[4], q[3];
+h q[4];
+cz q[3], q[2];
+rz(0.25*pi) q[3];
+h q[3];
+h q[2];
+h q[0];
+
+--------------------------------------------------
+
+### New best found at generation 15 ###
+Fitness Value: 70
+Stats: Circuit with 5 qubits, 43 gates
+  1-qubit: 29
+  2-qubit: 14
+  n-qubit: 0
+  clifford: 36
+  non-clifford: 7
+QASM:
+OPENQASM 2.0;
+include "qelib1.inc";
+qreg q[5];
+h q[4];
+h q[3];
+h q[4];
+h q[3];
+cz q[4], q[3];
+rz(0.25*pi) q[4];
+h q[4];
+h q[3];
+h q[2];
+cz q[4], q[3];
+cz q[3], q[2];
+rz(-0.25*pi) q[3];
+h q[3];
+h q[2];
+h q[0];
+cz q[4], q[2];
+cz q[3], q[2];
+rz(0.25*pi) q[2];
+h q[2];
+h q[0];
+h q[4];
+h q[3];
+cz q[4], q[2];
+cz q[4], q[0];
+rz(-0.25*pi) q[4];
+h q[4];
+cz q[3], q[2];
+rz(0.25*pi) q[3];
+h q[3];
+h q[2];
+cz q[4], q[2];
+cz q[3], q[2];
+cz q[2], q[0];
+rz(-0.25*pi) q[2];
+h q[2];
+h q[3];
+cz q[4], q[3];
+h q[4];
+cz q[3], q[0];
+cz q[3], q[2];
+rz(0.25*pi) q[3];
+h q[3];
+h q[2];
+
+--------------------------------------------------
+
+### New best found at generation 17 ###
+Fitness Value: 74
+Stats: Circuit with 5 qubits, 44 gates
+  1-qubit: 31
+  2-qubit: 13
+  n-qubit: 0
+  clifford: 37
+  non-clifford: 7
+QASM:
+OPENQASM 2.0;
+include "qelib1.inc";
+qreg q[5];
+h q[4];
+h q[4];
+h q[3];
+h q[2];
+rz(0.25*pi) q[4];
+h q[4];
+h q[3];
+h q[2];
+cz q[4], q[2];
+cz q[3], q[2];
+rz(0.25*pi) q[2];
+h q[2];
+h q[4];
+cz q[4], q[2];
+rz(-0.25*pi) q[4];
+h q[4];
+h q[3];
+cz q[4], q[3];
+cz q[3], q[2];
+rz(-0.25*pi) q[3];
+h q[3];
+h q[1];
+h q[0];
+h q[2];
+cz q[3], q[2];
+rz(0.25*pi) q[2];
+h q[2];
+h q[1];
+h q[0];
+h q[4];
+cz q[4], q[0];
+cz q[4], q[3];
+cz q[4], q[1];
+cz q[4], q[2];
+rz(-0.25*pi) q[4];
+h q[4];
+h q[3];
+cz q[4], q[3];
+h q[4];
+cz q[3], q[1];
+cz q[3], q[0];
+rz(0.25*pi) q[3];
+h q[3];
+h q[2];
+
+--------------------------------------------------
+
+### New best found at generation 19 ###
+Fitness Value: 100
+Stats: Circuit with 5 qubits, 40 gates
+  1-qubit: 29
+  2-qubit: 11
+  n-qubit: 0
+  clifford: 33
+  non-clifford: 7
+QASM:
+OPENQASM 2.0;
+include "qelib1.inc";
+qreg q[5];
+h q[4];
+h q[4];
+h q[3];
+h q[2];
+rz(0.25*pi) q[4];
+h q[4];
+h q[3];
+h q[2];
+cz q[4], q[2];
+cz q[3], q[2];
+rz(0.25*pi) q[2];
+h q[2];
+h q[4];
+cz q[4], q[2];
+rz(-0.25*pi) q[4];
+h q[4];
+h q[3];
+cz q[4], q[3];
+cz q[3], q[2];
+rz(-0.25*pi) q[3];
+h q[3];
+h q[0];
+h q[2];
+cz q[3], q[2];
+rz(0.25*pi) q[2];
+h q[2];
+h q[0];
+h q[4];
+cz q[4], q[0];
+cz q[4], q[3];
+cz q[4], q[2];
+rz(-0.25*pi) q[4];
+h q[4];
+h q[3];
+cz q[4], q[3];
+h q[4];
+cz q[3], q[0];
+rz(0.25*pi) q[3];
+h q[3];
+h q[2];
+
+--------------------------------------------------
+
+### New best found at generation 20 ###
+Fitness Value: 106
+Stats: Circuit with 5 qubits, 38 gates
+  1-qubit: 27
+  2-qubit: 11
+  n-qubit: 0
+  clifford: 31
+  non-clifford: 7
+QASM:
+OPENQASM 2.0;
+include "qelib1.inc";
+qreg q[5];
+h q[4];
+h q[3];
+h q[4];
+h q[3];
+cz q[4], q[3];
+rz(0.25*pi) q[4];
+h q[4];
+h q[3];
+h q[2];
+cz q[4], q[3];
+cz q[3], q[2];
+rz(-0.25*pi) q[3];
+h q[3];
+h q[2];
+cz q[4], q[2];
+cz q[3], q[2];
+rz(0.25*pi) q[2];
+h q[2];
+h q[4];
+h q[3];
+cz q[4], q[2];
+rz(-0.25*pi) q[4];
+h q[4];
+cz q[3], q[2];
+rz(0.25*pi) q[3];
+h q[3];
+h q[2];
+cz q[4], q[2];
+cz q[3], q[2];
+rz(-0.25*pi) q[2];
+h q[2];
+h q[3];
+cz q[4], q[3];
+h q[4];
+cz q[3], q[2];
+rz(0.25*pi) q[3];
+h q[3];
+h q[2];
+
+--------------------------------------------------
+
+### New best found at generation 21 ###
+Fitness Value: 126
+Stats: Circuit with 5 qubits, 36 gates
+  1-qubit: 27
+  2-qubit: 9
+  n-qubit: 0
+  clifford: 29
+  non-clifford: 7
+QASM:
+OPENQASM 2.0;
+include "qelib1.inc";
+qreg q[5];
+h q[4];
+h q[4];
+h q[3];
+h q[2];
+rz(0.25*pi) q[4];
+h q[4];
+h q[3];
+h q[2];
+cz q[4], q[2];
+cz q[3], q[2];
+rz(0.25*pi) q[2];
+h q[2];
+h q[4];
+cz q[4], q[2];
+rz(-0.25*pi) q[4];
+h q[4];
+h q[3];
+cz q[4], q[3];
+cz q[3], q[2];
+rz(-0.25*pi) q[3];
+h q[3];
+h q[2];
+cz q[3], q[2];
+rz(0.25*pi) q[2];
+h q[2];
+h q[4];
+cz q[4], q[2];
+cz q[4], q[3];
+rz(-0.25*pi) q[4];
+h q[4];
+h q[3];
+cz q[4], q[3];
+h q[4];
+rz(0.25*pi) q[3];
+h q[3];
+h q[2];
+
+--------------------------------------------------
+
+### New best found at generation 38 ###
+Fitness Value: 135
+Stats: Circuit with 5 qubits, 33 gates
+  1-qubit: 24
+  2-qubit: 9
+  n-qubit: 0
+  clifford: 27
+  non-clifford: 6
+QASM:
+OPENQASM 2.0;
+include "qelib1.inc";
+qreg q[5];
+h q[3];
+h q[2];
+h q[4];
+h q[3];
+h q[2];
+cz q[4], q[2];
+h q[4];
+cz q[3], q[2];
+rz(0.25*pi) q[2];
+h q[2];
+cz q[4], q[2];
+rz(-0.25*pi) q[4];
+h q[4];
+h q[3];
+cz q[4], q[3];
+cz q[3], q[2];
+rz(-0.25*pi) q[3];
+h q[3];
+h q[2];
+cz q[3], q[2];
+rz(0.25*pi) q[2];
+h q[2];
+h q[4];
+cz q[4], q[3];
+cz q[4], q[2];
+rz(-0.25*pi) q[4];
+h q[4];
+h q[3];
+cz q[4], q[3];
+h q[4];
+rz(0.25*pi) q[3];
+h q[3];
+h q[2];
+
+--------------------------------------------------
+
+### New best found at generation 52 ###
+Fitness Value: 153
+Stats: Circuit with 5 qubits, 27 gates
+  1-qubit: 18
+  2-qubit: 9
+  n-qubit: 0
+  clifford: 23
+  non-clifford: 4
+QASM:
+OPENQASM 2.0;
+include "qelib1.inc";
+qreg q[5];
+h q[4];
+h q[3];
+h q[4];
+h q[3];
+cz q[4], q[3];
+h q[3];
+h q[2];
+cz q[4], q[2];
+cz q[3], q[2];
+h q[2];
+cx q[2], q[4];
+rz(-0.25*pi) q[3];
+h q[3];
+cz q[4], q[3];
+rz(0.25*pi) q[4];
+h q[4];
+cz q[3], q[2];
+rz(-0.25*pi) q[2];
+h q[2];
+h q[3];
+cz q[3], q[2];
+h q[2];
+cz q[4], q[2];
+cz q[4], q[3];
+h q[4];
+rz(0.25*pi) q[3];
+h q[3];
+
+--------------------------------------------------
+
+### New best found at generation 57 ###
+Fitness Value: 185
+Stats: Circuit with 5 qubits, 21 gates
+  1-qubit: 14
+  2-qubit: 7
+  n-qubit: 0
+  clifford: 17
+  non-clifford: 4
+QASM:
+OPENQASM 2.0;
+include "qelib1.inc";
+qreg q[5];
+h q[3];
+h q[2];
+h q[4];
+cz q[3], q[2];
+h q[2];
+cz q[4], q[2];
+h q[4];
+cz q[4], q[2];
+cz q[4], q[3];
+rz(-0.25*pi) q[4];
+h q[4];
+rz(-0.25*pi) q[2];
+h q[2];
+cz q[3], q[2];
+h q[2];
+cz q[4], q[2];
+cz q[4], q[3];
+h q[4];
+rz(0.25*pi) q[3];
+h q[3];
+rz(-0.25*pi) q[2];
+
+--------------------------------------------------
+
+### New best found at generation 58 ###
+Fitness Value: 188
+Stats: Circuit with 5 qubits, 20 gates
+  1-qubit: 13
+  2-qubit: 7
+  n-qubit: 0
+  clifford: 17
+  non-clifford: 3
+QASM:
+OPENQASM 2.0;
+include "qelib1.inc";
+qreg q[5];
+h q[3];
+h q[2];
+h q[4];
+cz q[3], q[2];
+h q[2];
+cz q[4], q[2];
+h q[4];
+cz q[4], q[2];
+cz q[4], q[3];
+rz(-0.25*pi) q[4];
+h q[4];
+cz q[4], q[2];
+cz q[3], q[2];
+rz(0.25*pi) q[2];
+h q[2];
+h q[4];
+cz q[3], q[2];
+rz(0.75*pi) q[3];
+h q[3];
+h q[2];
+
+--------------------------------------------------
+
+### New best found at generation 69 ###
+Fitness Value: 221
+Stats: Circuit with 5 qubits, 16 gates
+  1-qubit: 12
+  2-qubit: 4
+  n-qubit: 0
+  clifford: 14
+  non-clifford: 2
+QASM:
+OPENQASM 2.0;
+include "qelib1.inc";
+qreg q[5];
+h q[4];
+h q[3];
+cz q[4], q[3];
+h q[4];
+h q[2];
+cz q[4], q[2];
+h q[2];
+rz(-0.75*pi) q[2];
+h q[2];
+cz q[4], q[2];
+rz(0.75*pi) q[4];
+h q[4];
+cz q[4], q[3];
+h q[4];
+h q[3];
+h q[2];
 
 --------------------------------------------------

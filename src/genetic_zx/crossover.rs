@@ -5,6 +5,8 @@ use rand::{Rng, rng, seq::IndexedRandom};
 
 use super::models::PopulationComponents;
 
+const MAX_TRIES : u32 = 1;
+
 fn extract(graph: &mut Graph) -> Option<Circuit> {
     let extract_result = std::panic::catch_unwind(
         std::panic::AssertUnwindSafe(
@@ -29,7 +31,7 @@ fn extract(graph: &mut Graph) -> Option<Circuit> {
     }
 }
 
-pub fn crossover_gate_list(population: PopulationComponents, parent_a: usize, parent_b: usize) -> (Circuit, Graph) {
+pub fn crossover_gate_list(population: &PopulationComponents, parent_a: usize, parent_b: usize) -> Graph {
     let circuit_a = &population.circuit[parent_a];
     let circuit_b = &population.circuit[parent_b];
 
@@ -39,22 +41,16 @@ pub fn crossover_gate_list(population: PopulationComponents, parent_a: usize, pa
     let mut rng = rng();
 
     // Generate random split points
-    let split_point_a: usize = if gate_list_a.is_empty() { 
+    let split_point: usize = if gate_list_a.is_empty() { 
         0 
     } else {
         rng.random_range(0..=gate_list_a.len()) 
     };
     
-    let split_point_b = if gate_list_b.is_empty() { 
-        0 
-    } else {
-        rng.random_range(0..=gate_list_b.len()) 
-    };
-    
     // Recombine gates
     let mut gate_vec = Vec::new();
-    gate_vec.extend(gate_list_a.iter().take(split_point_a).cloned());
-    gate_vec.extend(gate_list_b.iter().skip(split_point_b).cloned());
+    gate_vec.extend(gate_list_a.iter().take(split_point).cloned());
+    gate_vec.extend(gate_list_b.iter().skip(split_point).cloned());
 
     let gate_vec_deque = VecDeque::from(gate_vec);
 
@@ -63,16 +59,16 @@ pub fn crossover_gate_list(population: PopulationComponents, parent_a: usize, pa
 
     new_circuit.gates = gate_vec_deque;
     
-    (new_circuit.clone(), new_circuit.to_graph())
+    new_circuit.to_graph()
 }
 
-pub fn crossover_subgraph(population: &PopulationComponents, parent_a: usize, parent_b: usize) -> (Circuit, Graph) {
+pub fn crossover_subgraph(population: &PopulationComponents, parent_a: usize, parent_b: usize) -> Graph {
     let mut rng = rand::rng();
 
     let graph_b = &population.graph[parent_b];
     let verts_b = graph_b.vertex_vec();
 
-    for _ in 0..10 {
+    for tries in 0..MAX_TRIES {
         let mut graph_a = population.graph[parent_a].clone();
 
         // Select and remove random vertices from Graph A
@@ -117,12 +113,16 @@ pub fn crossover_subgraph(population: &PopulationComponents, parent_a: usize, pa
             }
         }
 
+        if tries == MAX_TRIES - 1 {
+            return graph_a;
+        }
+
         let mut extract_graph = graph_a.clone();
-        if let Some(new_circuit) = extract(&mut extract_graph) {
-            return (new_circuit, graph_a);
+        if let Some(_new_circuit) = extract(&mut extract_graph) {
+            return extract_graph;
         }
         
     }
 
-    (population.circuit[parent_a].clone(), population.graph[parent_a].clone())
+    population.graph[parent_a].clone()
 }

@@ -22,10 +22,6 @@ pub static GOAL_CIRCUIT: LazyLock<&Circuit> = LazyLock::new(|| {
     get_goal_circuit()
 });
 
-pub static GOAL_TENSOR: LazyLock<TensorF> = LazyLock::new(|| { 
-    get_goal_circuit().to_tensorf() 
-});
-
 pub static GOAL_GRAPH: LazyLock<Graph> = LazyLock::new(|| {
     get_goal_circuit().to_graph_with_options(false, false)
 });
