@@ -26,13 +26,14 @@ pub fn repopulate(
     target_indices.extend_from_slice(non_elites);
 
     for target_idx in target_indices {
-        let parent1_idx = tournament_select(population, parameters, &mut rng);
-        let parent2_idx = tournament_select(population, parameters, &mut rng);
+        let parent1_idx: usize = tournament_select(population, parameters, &mut rng);
         
         let mut crossover_happened : bool = false;
 
         let child_graph = if rng.random::<f64>() < parameters.crossover_rate {
             crossover_happened = true;
+            
+            let parent2_idx: usize = tournament_select(population, parameters, &mut rng);
             crossover::crossover_subgraph(population, parent1_idx, parent2_idx)
         } else {
             population.graph[parent1_idx].clone()
@@ -40,8 +41,8 @@ pub fn repopulate(
 
         population.graph[target_idx] = child_graph;
 
-        if crossover_happened {
-            /*println!(
+        /*if crossover_happened {
+            println!(
                 "Crossover: \n\tParent1 idx {}, fitness {} stats {}, \n\tParent2 idx {}, fitness {} stats {}, \n\tTarget index {} stats {}",
                 parent1_idx,
                 population.fitness[parent1_idx],
@@ -51,8 +52,8 @@ pub fn repopulate(
                 population.graph[parent2_idx].num_vertices(),
                 target_idx,
                 population.graph[target_idx].num_vertices(),
-            );*/
-        }
+            );
+        }*/
        
     }
 }

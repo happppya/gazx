@@ -14,6 +14,8 @@ rand_distr = "0.5.1"
 num-complex = "0.4.6"
 itertools = "0.14.0"
 num = "0.4.3"
+clap = { version = "4.6.0", features = ["derive"] }
+mimalloc = "0.1.48"
 
 [profile.dev]
 panic = "unwind"

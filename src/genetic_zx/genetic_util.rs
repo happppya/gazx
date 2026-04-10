@@ -32,19 +32,11 @@ pub fn build_population(population_size: u32) -> Vec<Graph> {
         p_s: 0.2,
     };
 
-    let progress_bar = ProgressBar::new(population_size as u64);
-
-    progress_bar.set_style(bar_styles::style_build_population());
-    progress_bar.set_message(format!("Building population with size {}", population_size));
-
     for _i in 0..population_size {
         //let graph = random_circuit_builder.build().to_graph_with_options(false, true);
         let graph = GOAL_GRAPH.clone();
         random_population.push(graph);
-        progress_bar.inc(1);
     }
-
-    progress_bar.finish();
 
     random_population
 }
@@ -88,7 +80,7 @@ pub fn mutate_and_extract(population: &mut PopulationComponents) {
                 }
                 Err(_) => {
                     population.extract_status[i] = ExtractStatus::Panic;
-                    println!("{} with {:?}", "PANIC".red(), population.last_mutation[i]);
+                    //println!("{} with {:?}", "PANIC".red(), population.last_mutation[i]);
                 }
             }
         }
@@ -107,13 +99,6 @@ pub fn mutate_population(population: &mut PopulationComponents) {
 
 pub fn extract_population(population: &mut PopulationComponents) {
     let population_size = population.graph.len();
-    let progress_bar = ProgressBar::new(population_size as u64);
-
-    progress_bar.set_style(bar_styles::style_build_population());
-    progress_bar.set_message(format!(
-        "Extracting population with size {}",
-        population_size
-    ));
 
     for (i, graph) in population.graph.iter_mut().enumerate() {
         let extract_result =
@@ -133,12 +118,10 @@ pub fn extract_population(population: &mut PopulationComponents) {
             }
             Err(_e) => {
                 population.extract_status[i] = ExtractStatus::Panic;
-                println!("{} with {:?}", "PANIC".red(), population.last_mutation[i]);
+                //println!("{} with {:?}", "PANIC".red(), population.last_mutation[i]);
             }
         }
 
-        progress_bar.inc(1);
     }
 
-    progress_bar.finish();
 }

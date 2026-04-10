@@ -3,11 +3,13 @@ use std::collections::VecDeque;
 use quizx::{
     circuit::Circuit,
     extract::ToCircuit,
-    graph::GraphLike,
-    simplify::clifford_simp,
+    graph::{GraphLike, VType},
+    simplify::{self, clifford_simp, full_simp},
     vec_graph::Graph,
 };
 use rand::{ Rng, rng, seq::IndexedRandom };
+
+use crate::mutation::mutations::full_reduce;
 
 use super::models::PopulationComponents;
 
@@ -77,6 +79,7 @@ pub fn crossover_subgraph(
     parent_a: usize,
     parent_b: usize
 ) -> Graph {
+
     let mut rng = rand::rng();
 
     let graph_b = &population.graph[parent_b];
@@ -120,25 +123,29 @@ pub fn crossover_subgraph(
 
                 // Sample without replacement to avoid duplicates
                 let unique_targets: Vec<_> = remaining_verts_a
+                    .iter()
+                    .filter(|&v| graph_a.vertex_type(*v) != VType::B).collect::<Vec<&usize>>()
                     .choose_multiple(&mut rng, edges_needed)
                     .cloned()
                     .collect();
-
+                
                 for target_v in unique_targets {
-                    if v_new != target_v {
-                        graph_a.add_edge(v_new, target_v);
+                    if v_new != *target_v {
+                        graph_a.add_edge(v_new, *target_v);
                     }
                 }
             }
         }
 
+        graph_a.pack(true);
+        
         if tries == MAX_TRIES - 1 {
-            return graph_a;
+            return graph_a.copy(false);
         }
-
+        
         let mut extract_graph = graph_a.clone();
         if let Some(_new_circuit) = extract(&mut extract_graph) {
-            return extract_graph;
+            return graph_a.copy(false);
         }
     }
 

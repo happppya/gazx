@@ -17,7 +17,7 @@ pub struct PopulationComponents {
     pub mutation_retries : Vec<u32>,
     
     pub extract_status: Vec<ExtractStatus>,
-    pub fitness: Vec<i64>,
+    pub fitness: Vec<f64>,
 }
 
 #[derive(Debug)]

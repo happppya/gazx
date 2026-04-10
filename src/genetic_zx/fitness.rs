@@ -1,4 +1,5 @@
 use itertools::sorted_unstable;
+use num::pow::Pow;
 use quizx::{
     circuit::{ self, Circuit }, cli, decompose::{BssWithCatsDriver, Decomposer, Driver}, graph::{ BasisElem, GraphLike }, scalar::Scalar4, tensor::{ TensorF, ToTensor }, vec_graph::Graph
 };
@@ -11,9 +12,9 @@ use super::models::{ PopulationComponents, ExtractStatus };
 use super::constants::{ GOAL_CIRCUIT, GOAL_GRAPH, GOAL_CIRCUIT_STATS };
 use super::simulator;
 
-const NUM_CASES: usize = 10;
+const NUM_CASES: usize = 16;
 
-const CUSTOM_CASES: bool = true;
+const CUSTOM_CASES: bool = false;
 
 const CUSTOM_CASES_STR: &str = r#"
 [([true, false, false, false, true], "10001"),
@@ -52,11 +53,6 @@ static TESTCASES: LazyLock<Vec<(Vec<bool>, String)>> = LazyLock::new(|| {
             &mut decomposer,
             &driver,
             Some(4),
-        );
-
-        println!(
-            "Generated testcase | Input: {:?}, Sampled Output: {:?}",
-            input_bits, output_str
         );
 
         testcases.push((input_bits, output_str));
@@ -108,7 +104,7 @@ pub fn get_fitness_info() -> String {
     format!("NUM CASES: {}\n TESTCASES: {:?}\n GOAL CIRCUIT: {:?}\n GOAL GRAPH: {:?}\n GOAL CIRCUIT STATS: {:?}", NUM_CASES, *TESTCASES, *GOAL_CIRCUIT, *GOAL_GRAPH, *GOAL_CIRCUIT_STATS)
 }
 
-fn get_approximation_error_testcases(graph: &Graph, circuit: &Circuit) -> i64 {
+fn get_approximation_error_testcases(graph: &Graph, circuit: &Circuit) -> f64 {
     //TODO https://github.com/Qiskit/qiskit-rs for simulation
     // maybe https://docs.rs/quantr/latest/quantr/#example
     // https://docs.rs/quizx/latest/quizx/cli/sim/struct.SimArgs.html
@@ -132,30 +128,42 @@ fn get_approximation_error_testcases(graph: &Graph, circuit: &Circuit) -> i64 {
         };
     }
 
-    // Scale and convert to i64
-    (total_error * -25000.0).round() as i64
+    if total_error > 0.45 {
+        return 1.0;
+    }
+
+    total_error = f64::powf(total_error, 0.5);
+    total_error
 
 }
 
-fn get_depth(graph: &Graph, _circuit: &Circuit) -> i64 {
-    (graph.depth() - GOAL_GRAPH.depth()) as i64
+fn normalize_diff(actual: i64, target: i64) -> f64 {
+    if target == 0 {
+        return actual as f64;
+    }
+    (actual - target) as f64 / target.abs() as f64
 }
 
-fn get_oneq_gates(_graph: &Graph, circuit: &Circuit) -> i64 {
+fn get_depth(graph: &Graph, _circuit: &Circuit) -> f64 {
+    normalize_diff(graph.depth() as i64, GOAL_GRAPH.depth() as i64)
+}
+
+fn get_oneq_gates(_graph: &Graph, circuit: &Circuit) -> f64 {
     let stats = circuit.stats();
-    (stats.oneq as i64) - (GOAL_CIRCUIT_STATS.oneq as i64)
+    normalize_diff(stats.oneq as i64, GOAL_CIRCUIT_STATS.oneq as i64)
 }
 
-fn get_complex_gates(_graph: &Graph, circuit: &Circuit) -> i64 {
+fn get_complex_gates(_graph: &Graph, circuit: &Circuit) -> f64 {
     let stats = circuit.stats();
-    (stats.twoq as i64) - (GOAL_CIRCUIT_STATS.twoq as i64)
+    normalize_diff(stats.twoq as i64, GOAL_CIRCUIT_STATS.twoq as i64)
 }
 
-fn get_input_encodings(graph: &Graph, _circuit: &Circuit) -> i64 {
-    (graph.inputs().len() as i64) - (GOAL_GRAPH.inputs().len() as i64)
+fn get_input_encodings(graph: &Graph, _circuit: &Circuit) -> f64 {
+    // TODO the inputs dont really do anything, always 5
+    normalize_diff(graph.inputs().len() as i64, GOAL_GRAPH.inputs().len() as i64)
 }
 
-fn get_fitness(population: &PopulationComponents, i: usize) -> i64 {
+fn get_fitness(population: &PopulationComponents, i: usize) -> f64 {
     let graph = &population.graph[i];
     let circuit = &population.circuit[i];
 
@@ -166,19 +174,19 @@ fn get_fitness(population: &PopulationComponents, i: usize) -> i64 {
     let input_encodings = get_input_encodings(graph, circuit);
 
     let fail_penalty = match population.extract_status[i] {
-        ExtractStatus::Success => 0,
-        ExtractStatus::Fail => -100000,
-        ExtractStatus::Panic => -100000,
+        ExtractStatus::Success => 0.0,
+        ExtractStatus::Fail => -2000.0,
+        ExtractStatus::Panic => -2000.0,
     };
 
     //println!("Getting fitness\nstats {:?}\n components DEP {} CMP {} INP {} approxError {}", circuit.stats(),depth, complex_gates, input_encodings, approximation_error);
 
     return
-        approximation_error +
-        -10 * depth +
-        -3 * oneq_gates +
-        -10 * complex_gates +
-        -10 * input_encodings +
+        -10000.0 * approximation_error +
+        -1000.0 * depth +
+        -600.0 * oneq_gates +
+        -1000.0 * complex_gates +
+        -1000.0 * input_encodings +
         fail_penalty;
 }
 

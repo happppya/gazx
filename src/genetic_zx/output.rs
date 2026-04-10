@@ -21,7 +21,7 @@ fn get_highest_fitness_index(population: &PopulationComponents) -> usize {
         .fitness
         .iter()
         .enumerate()
-        .max_by_key(|(_, &fitness)| fitness)
+        .max_by(|(_, a), (_, b)| a.partial_cmp(b).unwrap())
         .map(|(idx, _)| idx)
         .expect("population has no fitness values")
 }
@@ -59,7 +59,7 @@ pub fn print_population(population: &mut PopulationComponents) {
 pub struct Logger {
     fitness_file: File,
     circuits_file: File,
-    pub overall_highest_fitness: i64,
+    pub overall_highest_fitness: f64,
 }
 
 impl Logger {
@@ -80,7 +80,7 @@ impl Logger {
         Logger { 
             fitness_file: open_file(&fitness_path),
             circuits_file: open_file(&circuits_path),
-            overall_highest_fitness: i64::MIN,
+            overall_highest_fitness: f64::MIN,
         }
     }
 
