@@ -3,17 +3,48 @@ use std::collections::VecDeque;
 use quizx::{
     circuit::Circuit,
     extract::ToCircuit,
-    graph::{GraphLike, VType},
-    simplify::{self, clifford_simp, full_simp},
+    graph::{self, GraphLike, VType},
+    simplify::{self, clifford_simp},
     vec_graph::Graph,
 };
 use rand::{ Rng, rng, seq::IndexedRandom };
 
-use crate::mutation::mutations::full_reduce;
-
 use super::models::PopulationComponents;
 
 const MAX_TRIES: u32 = 1;
+
+#[inline]
+fn has_nonboundary_neighbors(graph: &Graph, vertex: usize) -> bool {
+
+    for neighbor_vertex in graph.neighbors(vertex) {
+        if graph.vertex_type(neighbor_vertex) != VType::Z && graph.vertex_type(neighbor_vertex) != VType::X {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+fn push_nonboundary_vertices(
+    
+    candidates : &mut Vec<usize>,
+    graph: &Graph
+
+) -> () {
+
+    for vertex in graph.vertices() {
+
+        if graph.vertex_type(vertex) != VType::Z && graph.vertex_type(vertex) != VType::X {
+            continue;
+        }
+
+        if !has_nonboundary_neighbors(graph, vertex) {
+            continue;
+        }
+
+        candidates.push(vertex);
+    }
+}
 
 fn extract(graph: &mut Graph) -> Option<Circuit> {
     let extract_result = std::panic::catch_unwind(
@@ -83,13 +114,16 @@ pub fn crossover_subgraph(
     let mut rng = rand::rng();
 
     let graph_b = &population.graph[parent_b];
-    let verts_b = graph_b.vertex_vec();
+    let mut verts_b : Vec<usize> = Vec::new();
+    push_nonboundary_vertices(&mut verts_b, &graph_b);
 
     for tries in 0..MAX_TRIES {
         let mut graph_a = population.graph[parent_a].clone();
 
         // Select and remove random vertices from Graph A
-        let verts_a = graph_a.vertex_vec();
+        let mut verts_a: Vec<usize> = Vec::new();
+        push_nonboundary_vertices(&mut verts_a, &graph_a);
+
         let num_remove = rng.random_range(1..=std::cmp::max(1, verts_a.len() / 3));
         let to_remove: Vec<_> = verts_a.choose_multiple(&mut rng, num_remove).cloned().collect();
 
@@ -98,7 +132,8 @@ pub fn crossover_subgraph(
         }
 
         // Cache the remaining vertices in A, the valid targets for stitching
-        let remaining_verts_a = graph_a.vertex_vec();
+        let mut remaining_verts_a: Vec<usize> = Vec::new();
+        push_nonboundary_vertices(&mut remaining_verts_a, &graph_a);
 
         // Select random vertices to extract from Graph B
         let num_extract = rng.random_range(1..=std::cmp::max(1, verts_b.len() / 3));
@@ -124,7 +159,8 @@ pub fn crossover_subgraph(
                 // Sample without replacement to avoid duplicates
                 let unique_targets: Vec<_> = remaining_verts_a
                     .iter()
-                    .filter(|&v| graph_a.vertex_type(*v) != VType::B).collect::<Vec<&usize>>()
+                    .filter(|&v| graph_a.vertex_type(*v) == VType::Z || graph_a.vertex_type(*v) == VType::X)
+                    .collect::<Vec<&usize>>()
                     .choose_multiple(&mut rng, edges_needed)
                     .cloned()
                     .collect();
@@ -134,18 +170,24 @@ pub fn crossover_subgraph(
                         graph_a.add_edge(v_new, *target_v);
                     }
                 }
+
             }
         }
 
         graph_a.pack(true);
         
         if tries == MAX_TRIES - 1 {
-            return graph_a.copy(false);
+            let mut result = graph_a.copy(false);
+            result.inputs_mut().clone_from(&graph_a.inputs());
+
+            return result;
         }
         
         let mut extract_graph = graph_a.clone();
         if let Some(_new_circuit) = extract(&mut extract_graph) {
-            return graph_a.copy(false);
+            let mut result = graph_a.copy(false);
+            result.inputs_mut().clone_from(&graph_a.inputs());
+            return result;
         }
     }
 

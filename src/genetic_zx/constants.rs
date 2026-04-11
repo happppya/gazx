@@ -1,5 +1,5 @@
 use std::sync::{LazyLock, OnceLock};
-use quizx::{circuit::{Circuit, CircuitStats}, tensor::{TensorF, ToTensor}, vec_graph::Graph};
+use quizx::{circuit::{Circuit, CircuitStats}, vec_graph::Graph};
 
 pub const MUTATION_RETRIES: u32 = 10;
 

@@ -57,7 +57,7 @@ if __name__ == "__main__":
     )
     
     # n_jobs=-1 uses all available CPU cores
-    study.optimize(objective, n_trials=200, n_jobs=12)
+    study.optimize(objective, n_trials=256, n_jobs=12)
 
     print("\nOptimization finish")
     print(f"Best Score: {study.best_value}")

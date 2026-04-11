@@ -1,5 +1,3 @@
-
-mod bar_styles;
 mod fitness;
 mod genetic_util;
 mod output;

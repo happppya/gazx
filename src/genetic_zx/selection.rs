@@ -1,8 +1,11 @@
 use quizx::graph::GraphLike;
+use quizx::vec_graph::Graph;
 use rand::{rng, Rng};
 
 use super::models::{Hyperparameters, PopulationComponents};
 use super::crossover;
+use super::fitness;
+use super::genetic_util;
 
 pub fn repopulate(
     population: &mut PopulationComponents,
@@ -14,47 +17,48 @@ pub fn repopulate(
     let mut indices: Vec<usize> = (0..population_size).collect();
     let elitism_count = (population_size as f64 * parameters.elitism_rate) as usize;
 
-    // Sort descending to put the best individuals at the start of the array.
+    // Sort descending to put the best individuals at the start of the array
     let (_, pivot, non_elites) = indices.select_nth_unstable_by(elitism_count, |&a, &b| {
         population.fitness[b]
             .partial_cmp(&population.fitness[a])
             .unwrap()
     });
 
-    // The individuals to replace are the pivot and everything after it
     let mut target_indices = vec![*pivot];
     target_indices.extend_from_slice(non_elites);
 
-    for target_idx in target_indices {
-        let parent1_idx: usize = tournament_select(population, parameters, &mut rng);
+    enum Child {
+        CrossedOver(Graph),
+        Cloned(usize),
+    }
+
+    // Selection and generation
+    let mut pending_children = Vec::with_capacity(target_indices.len());
+
+    for _ in 0..target_indices.len() {
+        let parent1_idx = tournament_select(population, parameters, &mut rng);
         
-        let mut crossover_happened : bool = false;
-
-        let child_graph = if rng.random::<f64>() < parameters.crossover_rate {
-            crossover_happened = true;
-            
-            let parent2_idx: usize = tournament_select(population, parameters, &mut rng);
-            crossover::crossover_subgraph(population, parent1_idx, parent2_idx)
+        if rng.random::<f64>() < parameters.crossover_rate {
+            let parent2_idx = tournament_select(population, parameters, &mut rng);
+            let new_graph = crossover::crossover_subgraph(population, parent1_idx, parent2_idx);
+            pending_children.push(Child::CrossedOver(new_graph));
         } else {
-            population.graph[parent1_idx].clone()
-        };
+            pending_children.push(Child::Cloned(parent1_idx));
+        }
+    }
 
-        population.graph[target_idx] = child_graph;
-
-        /*if crossover_happened {
-            println!(
-                "Crossover: \n\tParent1 idx {}, fitness {} stats {}, \n\tParent2 idx {}, fitness {} stats {}, \n\tTarget index {} stats {}",
-                parent1_idx,
-                population.fitness[parent1_idx],
-                population.graph[parent1_idx].num_vertices(),
-                parent2_idx,
-                population.fitness[parent2_idx],
-                population.graph[parent2_idx].num_vertices(),
-                target_idx,
-                population.graph[target_idx].num_vertices(),
-            );
-        }*/
-       
+    // Apply new individuals
+    // New fitness and circuits do not have to be applied in this step
+    for (target_idx, child) in target_indices.into_iter().zip(pending_children) {
+        match child {
+            Child::CrossedOver(new_graph) => {
+                // Apply the new graph
+                population.graph[target_idx] = new_graph;
+            }
+            Child::Cloned(parent_idx) => {
+                population.graph[target_idx] = population.graph[parent_idx].clone();
+            }
+        }
     }
 }
 

@@ -1,19 +1,9 @@
 
-use std::f64::consts::PI;
-use std::panic::AssertUnwindSafe;
 use std::sync::LazyLock;
-
-use ndarray::MathCell;
-use quizx::basic_rules;
-use quizx::circuit::*;
-use quizx::extract::*;
-use quizx::gate::GType::HAD;
-use quizx::graph;
 use quizx::simplify::*;
 use quizx::vec_graph::*;
 
 use rand::Rng;
-use rand::random;
 use rand::seq::IndexedRandom;
 use rand::seq::SliceRandom;
 use rand_distr::{ Poisson, Distribution };
@@ -95,7 +85,7 @@ pub fn add_edge(
 
             //println!("Adding edge between two VTypes {:?}, {:?}", graph.vertex_type(first_vertex), graph.vertex_type(second_vertex));
 
-            graph.add_edge_with_type(first_vertex, second_vertex, edge_type);
+            graph.add_edge_smart(first_vertex, second_vertex, edge_type);
         }
     }
 }
@@ -192,23 +182,31 @@ pub fn local_complement(graph: &mut Graph, vertex_to_remove_option: Option<usize
     }
 }
 
-pub fn pivot(graph: &mut Graph, vertex_pair_option: Option<&EdgeGeneral>) -> () {
+pub fn pivot(graph: &mut Graph, vertex_pair_option: Option<&EdgeGeneral>) {
 
-    let edge_to_remove_default: Option<(usize, usize)> = utilities::default_pivot_vertex_pair(graph, vertex_pair_option);
+    let edge_to_remove_default = utilities::default_pivot_vertex_pair(graph, vertex_pair_option);
+    
     match edge_to_remove_default {
-        Some(edge_to_remove) => {
+        Some((u, v)) => {
 
-            utilities::complement(graph, edge_to_remove.0);
-            utilities::complement(graph, edge_to_remove.1);
-            utilities::complement(graph, edge_to_remove.0);
+            if u == v {
+                return;
+            }
 
-            graph.remove_vertex(edge_to_remove.0);
-            graph.remove_vertex(edge_to_remove.1);
+            if !graph.contains_vertex(u) || !graph.contains_vertex(v) {
+                return; 
+            }
+
+            utilities::complement(graph, u);
+            utilities::complement(graph, v);
+            utilities::complement(graph, u);
+        
+            graph.remove_vertex(u);
+            graph.remove_vertex(v);
 
         },
         None => return,
     }
-
 }
 
 pub fn flip_edge(graph: &mut Graph, edge_to_flip_option: Option<&EdgeSpecified>) {

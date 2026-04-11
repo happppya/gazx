@@ -23,13 +23,13 @@ static GLOBAL: MiMalloc = MiMalloc;
 #[derive(Parser, Debug)]
 #[command(author, version, about, long_about = None)]
 struct Args {
-    #[arg(long, default_value_t = 0.1)]
+    #[arg(long, default_value_t = 0.3321)]
     elitism_rate: f64,
 
     #[arg(long, default_value_t = 0.3)]
     crossover_rate: f64,
 
-    #[arg(long, default_value_t = 4)]
+    #[arg(long, default_value_t = 5)]
     tournament_size: usize,
 
     #[arg(long, default_value_t = 100)]
@@ -98,7 +98,7 @@ fn run_ga_worker(
             println!("Worker {} - Generation {}", worker_idx, generation);
             results::print_population(&mut population);
         }
-
+        
         if let Some(logger) = &mut logger_option {
             logger.log(&population, generation);
         }

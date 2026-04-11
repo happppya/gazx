@@ -1,12 +1,9 @@
-use itertools::sorted_unstable;
-use num::pow::Pow;
-use quizx::{
-    circuit::{ self, Circuit }, cli, decompose::{BssWithCatsDriver, Decomposer, Driver}, graph::{ BasisElem, GraphLike }, scalar::Scalar4, tensor::{ TensorF, ToTensor }, vec_graph::Graph
-};
-use rand::{Rng, seq::IndexedRandom};
-use std::{collections::HashMap, sync::LazyLock};
 
-use num_complex::Complex;
+use quizx::{
+    circuit::{ Circuit }, decompose::{BssWithCatsDriver, Decomposer}, graph::{ GraphLike }, vec_graph::Graph
+};
+use rand::{Rng};
+use std::sync::LazyLock;
 
 use super::models::{ PopulationComponents, ExtractStatus };
 use super::constants::{ GOAL_CIRCUIT, GOAL_GRAPH, GOAL_CIRCUIT_STATS };
@@ -163,31 +160,42 @@ fn get_input_encodings(graph: &Graph, _circuit: &Circuit) -> f64 {
     normalize_diff(graph.inputs().len() as i64, GOAL_GRAPH.inputs().len() as i64)
 }
 
-fn get_fitness(population: &PopulationComponents, i: usize) -> f64 {
+pub fn get_fitness(population: &PopulationComponents, i: usize) -> f64 {
+
     let graph = &population.graph[i];
     let circuit = &population.circuit[i];
 
-    let approximation_error = get_approximation_error_testcases(graph, circuit);
     let depth = get_depth(graph, circuit);
-    let complex_gates = get_complex_gates(graph, circuit);
-    let oneq_gates = get_oneq_gates(graph, circuit);
     let input_encodings = get_input_encodings(graph, circuit);
 
-    let fail_penalty = match population.extract_status[i] {
-        ExtractStatus::Success => 0.0,
-        ExtractStatus::Fail => -2000.0,
-        ExtractStatus::Panic => -2000.0,
+    let graph_fitness = 
+        -1000.0 * depth + 
+        -1000.0 * input_encodings;
+
+    let circuit_fitness = match population.extract_status[i] {
+        ExtractStatus::Success => {
+            let approximation_error = get_approximation_error_testcases(graph, circuit);
+            let complex_gates = get_complex_gates(graph, circuit);
+            let oneq_gates = get_oneq_gates(graph, circuit);
+
+            -10000.0 * approximation_error +
+            -600.0 * oneq_gates +
+            -1000.0 * complex_gates
+        },
+        ExtractStatus::Fail | ExtractStatus::Panic => {
+            -15000.0
+        }
     };
+
+    let mut fitness = circuit_fitness + graph_fitness;
+    if circuit.num_gates() == 0 {
+        fitness -= 10000.0;
+    }
 
     //println!("Getting fitness\nstats {:?}\n components DEP {} CMP {} INP {} approxError {}", circuit.stats(),depth, complex_gates, input_encodings, approximation_error);
 
-    return
-        -10000.0 * approximation_error +
-        -1000.0 * depth +
-        -600.0 * oneq_gates +
-        -1000.0 * complex_gates +
-        -1000.0 * input_encodings +
-        fail_penalty;
+    return fitness;
+
 }
 
 pub fn set_fitness_values(population: &mut PopulationComponents) {
