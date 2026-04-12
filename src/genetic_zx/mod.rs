@@ -1,10 +1,12 @@
 mod fitness;
-mod genetic_util;
 mod output;
 mod selection;
-mod crossover;
 mod constants;
 mod simulator;
+
+pub mod genetic_util;
+pub mod crossover;
+pub mod models;
 
 pub mod algorithm {
   pub use super::constants::init_goal_circuit;
@@ -22,5 +24,3 @@ pub mod results {
   pub use super::output::print_population;
   pub use super::output::Logger;
 }
-
-pub mod models;

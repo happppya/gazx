@@ -2,6 +2,7 @@ use std::sync::LazyLock;
 
 use indicatif::ProgressBar;
 use quizx::circuit::Circuit;
+use quizx::graph::GraphLike;
 use quizx::{generate::RandomCircuitBuilder, vec_graph::Graph};
 
 use rand::{prelude::IndexedRandom, rng, rngs::StdRng, SeedableRng};
