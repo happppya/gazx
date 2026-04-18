@@ -57,7 +57,7 @@ pub fn update_extract_status(population : &mut PopulationComponents, target_idx 
             population.extract_status[target_idx] = ExtractStatus::Success;
             true
         }
-        Ok(Err(_)) | Err(_) => { // You can collapse identical match arms
+        Ok(Err(_)) | Err(_) => {
             population.extract_status[target_idx] = ExtractStatus::Fail;
             false
         }

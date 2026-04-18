@@ -85,7 +85,7 @@ pub fn add_edge(
 
             //println!("Adding edge between two VTypes {:?}, {:?}", graph.vertex_type(first_vertex), graph.vertex_type(second_vertex));
 
-            graph.add_edge_smart(first_vertex, second_vertex, edge_type);
+            graph.add_edge_with_type(first_vertex, second_vertex, edge_type);
         }
     }
 }
@@ -118,7 +118,7 @@ pub fn remove_edge(graph: &mut Graph, edge_to_remove_option: Option<&EdgeSpecifi
 pub fn remove_vertex(graph: &mut Graph, vertex_to_remove_option: Option<usize>) -> () {
     let vertex_to_remove = utilities::default_vertex(graph, vertex_to_remove_option);
     match vertex_to_remove {
-        Some(vertex) =>graph.remove_vertex(vertex),
+        Some(vertex) => graph.remove_vertex(vertex),
         None => return,
     }
 }

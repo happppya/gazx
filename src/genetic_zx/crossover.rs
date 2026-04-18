@@ -245,12 +245,11 @@ pub fn crossover_patch_replacement(
 ) -> Graph {
     let mut rng = rand::rng();
     let graph_b = &population.graph[parent_b];
-    let graph_a_orig = &population.graph[parent_a];
 
     let mut graph_a = Graph::new();
 
     for tries in 0..MAX_TRIES {
-        graph_a = graph_a_orig.clone();
+        graph_a = population.graph[parent_a].clone();
 
         let patch_b = match find_random_patch(graph_b, &mut rng) {
             Some(p) => p,
@@ -320,12 +319,12 @@ pub fn crossover_patch_replacement(
             graph_a.add_edge_with_type(new_v_in_a, anchor_a, b_ext_edge.edge_type);
         }
 
-        graph_a.pack(true);
-
         // Return whatever result without checking extract if we hit max limit of retries
         if tries == MAX_TRIES - 1 {
             break;
         }
+
+        graph_a.pack(true);
 
         let mut test_extract = graph_a.clone();
         if let Some(_) = extract(&mut test_extract) {
@@ -342,6 +341,8 @@ pub fn crossover_patch_replacement(
             // println!("Try {}: Extraction failed for resulting graph.", tries);
         }
     }
+
+    graph_a.pack(true);
 
     let mut result = graph_a.copy(false);
     result.inputs_mut().clone_from(&graph_a.inputs());
@@ -434,8 +435,6 @@ fn find_matching_cavity(
             for &v in &interior {
                 for n in graph.neighbors(v) {
                     if !interior.contains(&n) {
-                        // This node sits just outside the cavity. It will be the
-                        // "anchor" we stitch the new patch onto later.
                         boundary_anchors.push(n);
                     }
                 }

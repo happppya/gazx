@@ -50,9 +50,8 @@ fn main() {
 
     let result_subgraph_number2 = crossover::crossover_patch_replacement(&population, 0usize, 1usize);
     print_result(&mut population, result_subgraph_number2, 4usize);
-
+    
     let result_gate_list = crossover::crossover_gate_list(&population, 0usize, 1usize);
     print_result(&mut population, result_gate_list, 2usize);
-    
 
 }

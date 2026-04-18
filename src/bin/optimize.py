@@ -38,7 +38,7 @@ def objective(trial: optuna.Trial) -> float:
         return score
 
     except subprocess.CalledProcessError as e:
-        print(f"[Trial {trial.number}] failed with exit code {e.returncode}.")
+        print(f"[Trial {trial.number}] failed with exit code {e.returncode} and error: {e.stderr}")
         raise optuna.exceptions.TrialPruned()
     
 if __name__ == "__main__":
@@ -64,3 +64,10 @@ if __name__ == "__main__":
     print("Best Hyperparameters:")
     for key, value in study.best_params.items():
         print(f"  {key}: {value}")
+        
+    """Best Score: 1584.6153846153848
+Best Hyperparameters:
+  elitism_rate: 0.03351576195029142
+  crossover_rate: 0.025418105976301994
+  tournament_size: 5"""
+    

@@ -23,13 +23,13 @@ static GLOBAL: MiMalloc = MiMalloc;
 #[derive(Parser, Debug)]
 #[command(author, version, about, long_about = None)]
 struct Args {
-    #[arg(long, default_value_t = 0.3321)]
+    #[arg(long, default_value_t = 0.04)]
     elitism_rate: f64,
 
-    #[arg(long, default_value_t = 0.3)]
+    #[arg(long, default_value_t = 0.33)]
     crossover_rate: f64,
 
-    #[arg(long, default_value_t = 5)]
+    #[arg(long, default_value_t = 4)]
     tournament_size: usize,
 
     #[arg(long, default_value_t = 100)]

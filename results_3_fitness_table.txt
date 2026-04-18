@@ -1,3 +1,2 @@
-# Log started at SystemTime { intervals: 134203185693033090 }
+# Log started at SystemTime { intervals: 134204845020868004 }
 Generation	Highest_Fitness
-0	-6601.281054860586
