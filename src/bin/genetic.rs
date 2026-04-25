@@ -23,19 +23,19 @@ static GLOBAL: MiMalloc = MiMalloc;
 #[derive(Parser, Debug)]
 #[command(author, version, about, long_about = None)]
 struct Args {
-    #[arg(long, default_value_t = 0.04)]
+    #[arg(long, default_value_t = 0.4723)]
     elitism_rate: f64,
 
-    #[arg(long, default_value_t = 0.33)]
+    #[arg(long, default_value_t = 0.1495)]
     crossover_rate: f64,
 
-    #[arg(long, default_value_t = 4)]
+    #[arg(long, default_value_t = 7)]
     tournament_size: usize,
 
-    #[arg(long, default_value_t = 100)]
+    #[arg(long, default_value_t = 150)]
     population_size: u32,
 
-    #[arg(long, default_value_t = 100)]
+    #[arg(long, default_value_t = 500)]
     generations: u32,
 
     // Supresses all output except the final best score, which is read by Python side
@@ -121,7 +121,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         panic::set_hook(Box::new(|_| {}));
     }
 
-    init_goal_circuit("circuits/small/tof_3.qasm");
+    init_goal_circuit("circuits/small/mod5_4.qasm");
 
     let num_workers: usize = 1;
     let best_overall_score : f64;

@@ -116,21 +116,24 @@ impl Logger {
             .expect("failed to write fitness log");
         
         // Write to best circuits only if a new best is found
-        if highest_fitness > self.overall_highest_fitness {
+        let header  = if highest_fitness >= self.overall_highest_fitness {
             self.overall_highest_fitness = highest_fitness;
+            format!("### New best found at generation {} ###", generation)
+        } else {
+            format!("### No new best at generation {} ###", generation)
+        };
 
-            let qasm = population.circuit[most_fit_individual].to_qasm();
-            let stats = population.circuit[most_fit_individual].stats();
+        let qasm = population.circuit[most_fit_individual].to_qasm();
+        let stats = population.circuit[most_fit_individual].stats();
 
-            writeln!(
-                self.circuits_file,
-                "\n### New best found at generation {} ###\n\
-                Fitness Value: {}\n\
-                Stats: {}\n\
-                QASM:\n{}\n\
-                --------------------------------------------------",
-                generation, highest_fitness, stats, qasm
-            ).expect("failed to write best circuit log");
-        }
+        writeln!(
+            self.circuits_file,
+            "\n{}\n\
+            Fitness Value: {}\n\
+            Stats: {}\n\
+            QASM:\n{}\n\
+            --------------------------------------------------",
+            header, highest_fitness, stats, qasm
+        ).expect("failed to write best circuit log");
     }
 }
