@@ -23,19 +23,19 @@ static GLOBAL: MiMalloc = MiMalloc;
 #[derive(Parser, Debug)]
 #[command(author, version, about, long_about = None)]
 struct Args {
-    #[arg(long, default_value_t = 0.4723)]
+    #[arg(long, default_value_t = 0.1)]
     elitism_rate: f64,
 
-    #[arg(long, default_value_t = 0.1495)]
+    #[arg(long, default_value_t = 0.0591)]
     crossover_rate: f64,
 
-    #[arg(long, default_value_t = 7)]
+    #[arg(long, default_value_t = 6)]
     tournament_size: usize,
 
-    #[arg(long, default_value_t = 150)]
+    #[arg(long, default_value_t = 250)]
     population_size: u32,
 
-    #[arg(long, default_value_t = 500)]
+    #[arg(long, default_value_t = 1000)]
     generations: u32,
 
     // Supresses all output except the final best score, which is read by Python side

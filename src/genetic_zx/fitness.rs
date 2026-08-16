@@ -9,7 +9,7 @@ use super::models::{ PopulationComponents, ExtractStatus };
 use super::constants::{ GOAL_CIRCUIT, GOAL_GRAPH, GOAL_CIRCUIT_STATS };
 use super::simulator;
 
-const NUM_CASES: usize = 64;
+const NUM_CASES: usize = 32;
 
 const CUSTOM_CASES: bool = false;
 

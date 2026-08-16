@@ -40,7 +40,7 @@ pub fn repopulate(
         
         if rng.random::<f64>() < parameters.crossover_rate {
             let parent2_idx = tournament_select(population, parameters, &mut rng);
-            let new_graph = crossover::crossover_gate_list(population, parent1_idx, parent2_idx);
+            let new_graph = crossover::crossover_patch_replacement(population, parent1_idx, parent2_idx);
             pending_children.push(Child::CrossedOver(new_graph));
         } else {
             pending_children.push(Child::Cloned(parent1_idx));
